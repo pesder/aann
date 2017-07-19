@@ -16,14 +16,17 @@ class Main extends CI_Controller {
     public function index()
     {
         $data['site'] = $this->config_model->queryby('configkey','myname');
-        $data['list'] = $this->titletb_model->query( '6');
+        $data['list'] = $this->titletb_model->query_limit_home();
         print_r($data['site']);
-        echo "<br>";
-        print_r($data['list']);
-        //$data['lists'] = $this->titletb_model->query_limit(25);
+
         // 載入 view
         $this->load->view('header');
-        //$this->load->view('lists_index',$data);
+        // 檢查是否存在 tool_type ，若無則顯示相關資訊
+        if(empty($data['list']))
+        {
+            $this->load->view('main_nolist');
+        }
+        $this->load->view('main_index',$data);
         $this->load->view('footer');
     }
 }

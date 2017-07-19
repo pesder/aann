@@ -11,29 +11,6 @@ class Config_model extends CI_Model {
                 $this->load->database();
         }
 
-        //查詢
-        public function query($id = 0) 
-        {
-
-        	$this->db->select('*');
-        	$this->db->from('config');
-        	if ($id > 0) 
-        	{
-        		$this->db->where('configkey', $id);
-        	}
-        	$this->db->order_by('configkey','desc');
-        	//$this->db->where();
-        	$query = $this->db->get();
-        	// 回傳
-        	if ($id > 0)
-        	{
-        		return $query->row();
-        	}
-        	else
-        	{
-        		return $query->result();
-        	}
-        }
         //有限查詢
         public function query_limit($limit) 
         {

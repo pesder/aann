@@ -34,6 +34,17 @@ class Titletb_model extends CI_Model {
         		return $query->result();
         	}
         }
+        //首頁查詢
+        public function query_limit_home() 
+        {
+
+            $this->db->select('*');
+            $this->db->from('titletb');
+            $this->db->order_by('posttime','desc');
+            $this->db->limit(50);
+            $query = $this->db->get();
+            return $query->result();
+        }        
         //有限查詢
         public function query_limit($limit) 
         {
