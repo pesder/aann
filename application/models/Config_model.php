@@ -24,7 +24,6 @@ class Config_model extends CI_Model {
         	$this->db->order_by('configkey','desc');
         	//$this->db->where();
         	$query = $this->db->get();
-        	$date = $query->result();
         	// 回傳
         	if ($id > 0)
         	{
