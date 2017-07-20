@@ -12,7 +12,7 @@ class Config_model extends CI_Model {
         }
 
         //有限查詢
-        public function query_limit($limit) 
+        public function queryLimit($limit) 
         {
 
             $this->db->select('*');
@@ -23,7 +23,7 @@ class Config_model extends CI_Model {
             return $query->result();
         }
         //依條件查詢
-        public function queryby($cd1, $cd2) 
+        public function queryBy($cd1, $cd2) 
         {
 
             $this->db->select('*');

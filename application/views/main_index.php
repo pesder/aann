@@ -17,7 +17,7 @@
           <?php foreach ($list as $row): ?>
           <tr>
             <td><?=str_replace($orig_str, $rep_str, $row->type)?></td>
-            <td><?=$row->subject?></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=$row->subject?></a></td>
             <td><?=$row->partname?></td>
             <td><?=$row->posttime?></td>
             <td><?=$row->hits?></td>
@@ -25,4 +25,6 @@
         <?php endforeach; ?>
         </tbody>
       </table>
+      
     </div>
+    共 <?php echo $pages['total'] ?>篇公告，<?php echo $pages['pages']?>頁
