@@ -42,8 +42,32 @@ class Main extends CI_Controller {
         $data['site'] = $this->config_model->queryBy('configkey','myname');
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
+        $data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
         $this->titletb_model->addHit($id, $data['head']);
-
+        // 遮蔽 IP 資料
+        if(filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
+            {
+               $data['body']->ip = preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '?', $data['body']->ip);
+            } elseif (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
+            {
+               $data['body']->ip = preg_replace('/(?!\d{1,4}\:)\d/', '?', $data['body']->ip);
+            }
+        //判斷 URL
+        if (empty($data['body']->url)) {
+            $data['hasurl'] = "無";
+        } else
+        {
+            $data['hasurl'] = "有";
+            $data['annurl'] = explode(" ", $data['body']->url);
+        }
+        //判斷附件
+        if (empty($data['body']->filename)) {
+            $data['hasfile'] = "無";
+        } else
+        {
+            $data['hasfile'] = "有";
+            $data['annfile'] = explode(" ", $data['body']->filename);
+        }
         // 載入 view
         $this->load->view('header');
         // 檢查是否存在 list ，若無則顯示相關資訊
@@ -53,6 +77,15 @@ class Main extends CI_Controller {
         }
         $this->load->view('main_viewann',$data);
         $this->load->view('footer');    
+    }
+    public function download($filename = NULL,$pid,$uid) 
+    {
+        // load download helder
+        $this->load->helper('url');
+        $this->load->helper('download');
+        // read file contents
+        $data = file_get_contents(base_url('/files/' . $pid . '/' . $uid . '/' .$filename));
+        force_download($filename, $data);
     }
 }
 ?>
