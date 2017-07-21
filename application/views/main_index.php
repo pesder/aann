@@ -2,6 +2,7 @@
         $orig_str = array('1.1','2.1','3.1');
         $rep_str = array('普通','重要','急件');
     ?>
+    <div class="bg-primary text-center"><h1><?=$site->configvalue?></h1></div>
     <div>
       <table class="table table-striped">
         <thead>

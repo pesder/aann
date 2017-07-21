@@ -17,24 +17,25 @@ class Main extends CI_Controller {
 
     public function index()
     {
+        $data['function_name'] = "";
         $data['site'] = $this->config_model->queryBy('configkey','myname');
         $data['list'] = $this->titletb_model->queryLimitHome();
         $data['pages'] =$this->titletb_model->countPage(50);
-        print_r($data['site']);
-        print_r($data['pages']);
+
 
         // 載入 view
-        $this->load->view('header');
+        $this->load->view('header',$data);
         // 檢查是否存在 list ，若無則顯示相關資訊
         if(empty($data['list']))
         {
             $this->load->view('main_nolist');
         }
-        $this->load->view('main_index',$data);
+        $this->load->view('main_index');
         $this->load->view('footer');
     }
     public function viewAnn($id)
     {
+        $data['function_name'] = "瀏覽公告";
         // 載入 anntb，為公告本文資料表
         $this->load->model('anntb_model');
         $this->load->model('usertb_model');
@@ -55,6 +56,7 @@ class Main extends CI_Controller {
         //判斷 URL
         if (empty($data['body']->url)) {
             $data['hasurl'] = "無";
+            $data['annurl'] = [];
         } else
         {
             $data['hasurl'] = "有";
@@ -63,19 +65,31 @@ class Main extends CI_Controller {
         //判斷附件
         if (empty($data['body']->filename)) {
             $data['hasfile'] = "無";
+            $data['annfile'] = [];
         } else
         {
             $data['hasfile'] = "有";
             $data['annfile'] = explode(" ", $data['body']->filename);
         }
         // 載入 view
-        $this->load->view('header');
+        $this->load->view('header',$data);
         // 檢查是否存在 list ，若無則顯示相關資訊
         if(empty($data['body']))
         {
             $this->load->view('viewann_nolist');
         }
-        $this->load->view('main_viewann',$data);
+        $this->load->view('main_viewann');
+        // 有網址則載入相關 view
+        if (!empty($data['body']->url))
+        {
+            $this->load->view('main_viewann_url');
+        }
+        // 有附件則載入相關 view
+        if (!empty($data['body']->filename))
+        {
+            $this->load->view('main_viewann_file');
+        }
+        $this->load->view('main_viewann_end');
         $this->load->view('footer');    
     }
     public function download($filename = NULL,$pid,$uid) 
