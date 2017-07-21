@@ -35,13 +35,13 @@ class Titletb_model extends CI_Model {
         	}
         }
         //首頁查詢
-        public function queryLimitHome() 
+        public function queryLimitHome($limit) 
         {
 
             $this->db->select('*');
             $this->db->from('titletb');
             $this->db->order_by('posttime','desc');
-            $this->db->limit(50);
+            $this->db->limit($limit);
             $query = $this->db->get();
             if ($query->num_rows() > 0)
             {
@@ -49,13 +49,13 @@ class Titletb_model extends CI_Model {
             }
         }        
         //有限查詢
-        public function queryLimit($limit) 
+        public function queryLimit($limit, $offset) 
         {
 
             $this->db->select('*');
             $this->db->from('titletb');
             $this->db->order_by('tid','desc');
-            $this->db->limit($limit);
+            $this->db->limit($limit, $offset);
             $query = $this->db->get();
             return $query->result();
         }
@@ -96,6 +96,15 @@ class Titletb_model extends CI_Model {
             $this->db->update('titletb', $hits);
 
         }
-
+        //設定最新一篇文章
+        public function queryLastAnn() 
+        {
+            $this->db->select('tid');
+            $this->db->from('titletb');
+            $this->db->order_by('tid','desc');
+            $this->db->limit(1);
+            $query = $this->db->get();
+            return $query->row();
+        }  
 
 }

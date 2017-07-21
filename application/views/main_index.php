@@ -28,4 +28,3 @@
       </table>
       
     </div>
-    共 <?php echo $pages['total'] ?>篇公告，<?php echo $pages['pages']?>頁，目前在第 <?php echo $current?> 頁。

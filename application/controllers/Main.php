@@ -20,10 +20,12 @@ class Main extends CI_Controller {
     public function index()
     {
         $this->session->set_userdata('CurrentPage','1');
+        $totalpages = $this->titletb_model->countPage($this->annpp->configvalue);
+        $this->session->set_userdata('TotalPages', $totalpages);
         $data['function_name'] = "";
         $data['site'] = $this->title->configvalue;
-        $data['list'] = $this->titletb_model->queryLimitHome();
-        $data['pages'] = $this->titletb_model->countPage($this->annpp->configvalue);
+        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp->configvalue);
+        $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
 
 
@@ -35,6 +37,42 @@ class Main extends CI_Controller {
             $this->load->view('main_nolist');
         }
         $this->load->view('main_index');
+        $this->load->view('main_index_bott_home');
+        $this->load->view('footer');
+    }
+        // 下一頁功能
+        public function goPage($page)
+    {
+        $this->session->set_userdata('CurrentPage', $page);
+        //判斷，第1頁與其他頁的偏移量不同
+        if ($page == 1) {
+            $gooffset = 0;
+        } else {
+            $gooffset = 1 + ($page - 1) * $this->annpp->configvalue;
+        }
+        $data['function_name'] = "第 $page 頁";
+        $data['site'] = $this->title->configvalue;
+        $data['list'] = $this->titletb_model->queryLimit($this->annpp->configvalue, $gooffset);
+        $data['pages'] = $this->session->userdata('TotalPages');
+        $data['current'] = $this->session->userdata('CurrentPage');
+        
+
+
+        // 載入 view
+        $this->load->view('header',$data);
+        // 檢查是否存在 list ，若無則顯示相關資訊
+        if(empty($data['list']))
+        {
+            $this->load->view('main_nolist');
+        }
+        $this->load->view('main_index');
+        if ($page == 1){
+            $this->load->view('main_index_bott_home');
+        } elseif ($page < $this->session->userdata('TotalPages')['pages']){
+            $this->load->view('main_index_bott_mid');
+        } else {
+            $this->load->view('main_index_bott_end');
+        }
         $this->load->view('footer');
     }
     public function viewAnn($id)
