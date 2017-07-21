@@ -66,6 +66,7 @@ class Main extends CI_Controller {
             $this->load->view('main_nolist');
         }
         $this->load->view('main_index');
+        // 判斷目前所在頁面，使用對應的導覽列
         if ($page == 1){
             $this->load->view('main_index_bott_home');
         } elseif ($page < $this->session->userdata('TotalPages')['pages']){
@@ -77,10 +78,12 @@ class Main extends CI_Controller {
     }
     public function viewAnn($id)
     {
+        
         $data['function_name'] = "瀏覽公告";
         // 載入 anntb，為公告本文資料表
         $this->load->model('anntb_model');
         $this->load->model('usertb_model');
+        $this->load->model('filetb_model');
         // 查詢公告標題資訊與本文
         $data['site'] = $this->title->configvalue;
         $data['head'] = $this->titletb_model->query($id);
@@ -112,6 +115,15 @@ class Main extends CI_Controller {
         {
             $data['hasfile'] = "有";
             $data['annfile'] = explode(" ", $data['body']->filename);
+            //利用上面陣列複製出一個查詢檔名用陣列
+            $data['annfilereadable'] = $data['annfile'];
+            foreach ($data['annfilereadable'] as $name) 
+            {
+                $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name)
+                if (empty($query))      {
+                    $name = $name;
+                }
+            }
         }
         // 載入 view
         $this->load->view('header',$data);
