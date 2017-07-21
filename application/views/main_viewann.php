@@ -7,8 +7,11 @@
     echo "<br>";
     print_r($body);
     ?>
-    <div class="bg-primary text-center"><h1><?=$site->configvalue?></h1></div>
-    <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary">回首頁</a>
+    <div class="bg-primary text-center"><h1><?=$site?></h1></div>
+    <div class="text-center">
+        <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary">回首頁</a>
+    </div>
+    
     <div>
       <table class="table table-striped">
         <thead>

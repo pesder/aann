@@ -12,15 +12,19 @@ class Main extends CI_Controller {
             $this->load->model('titletb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $title = $this->config_model->queryBy('configkey','myname');
+            $this->title = $this->config_model->queryBy('configkey','myname');
+            // 讀取每頁顯示文章數
+            $this->annpp = $this->config_model->queryBy('configkey','ann_perpage');
         }
 
     public function index()
     {
+        $this->session->set_userdata('CurrentPage','1');
         $data['function_name'] = "";
-        $data['site'] = $this->config_model->queryBy('configkey','myname');
+        $data['site'] = $this->title->configvalue;
         $data['list'] = $this->titletb_model->queryLimitHome();
-        $data['pages'] =$this->titletb_model->countPage(50);
+        $data['pages'] = $this->titletb_model->countPage($this->annpp->configvalue);
+        $data['current'] = $this->session->userdata('CurrentPage');
 
 
         // 載入 view
@@ -40,7 +44,7 @@ class Main extends CI_Controller {
         $this->load->model('anntb_model');
         $this->load->model('usertb_model');
         // 查詢公告標題資訊與本文
-        $data['site'] = $this->config_model->queryBy('configkey','myname');
+        $data['site'] = $this->title->configvalue;
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
         $data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
@@ -92,7 +96,7 @@ class Main extends CI_Controller {
         $this->load->view('main_viewann_end');
         $this->load->view('footer');    
     }
-    public function download($filename = NULL,$pid,$uid) 
+    public function download($pid,$uid,$filename = NULL) 
     {
         // load download helder
         $this->load->helper('url');

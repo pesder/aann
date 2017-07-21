@@ -2,7 +2,7 @@
         $orig_str = array('1.1','2.1','3.1');
         $rep_str = array('普通','重要','急件');
     ?>
-    <div class="bg-primary text-center"><h1><?=$site->configvalue?></h1></div>
+    <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <div>
       <table class="table table-striped">
         <thead>
@@ -28,4 +28,4 @@
       </table>
       
     </div>
-    共 <?php echo $pages['total'] ?>篇公告，<?php echo $pages['pages']?>頁
+    共 <?php echo $pages['total'] ?>篇公告，<?php echo $pages['pages']?>頁，目前在第 <?php echo $current?> 頁。
