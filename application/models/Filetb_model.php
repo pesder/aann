@@ -59,11 +59,11 @@ class Filetb_model extends CI_Model {
             return $query->result();
         }
         //搜尋檔案名稱對應
-        public function mathFile($pid,$gid,$filename)
+        public function mathFile($pid,$uid,$filename)
         {
             $this->db->select('*');
             $this->db->from('filetb');
-            $this->db->like($filename);
+            //$this->db->like($filename);
             $this->db->where('partid',$pid);
             $this->db->where('userid',$uid);
             $this->db->where('filelist',$filename);

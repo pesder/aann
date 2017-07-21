@@ -26,6 +26,7 @@ class Main extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         $data['list'] = $this->titletb_model->queryLimitHome($this->annpp->configvalue);
         $data['pages'] = $this->session->userdata('TotalPages');
+        //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
 
 
@@ -89,6 +90,9 @@ class Main extends CI_Controller {
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
         $data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
+        //讀取目前所在頁
+        $data['current'] = $this->session->userdata('CurrentPage');
+        //增加點閱計數
         $this->titletb_model->addHit($id, $data['head']);
         // 遮蔽 IP 資料
         if(filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
@@ -117,11 +121,16 @@ class Main extends CI_Controller {
             $data['annfile'] = explode(" ", $data['body']->filename);
             //利用上面陣列複製出一個查詢檔名用陣列
             $data['annfilereadable'] = $data['annfile'];
-            foreach ($data['annfilereadable'] as $name) 
+            foreach ($data['annfilereadable'] as $index => $name) 
             {
-                $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name)
-                if (empty($query))      {
-                    $name = $name;
+                $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name);
+                if (empty($query))
+                {
+                    $data['annfilereadable'][$index] = $name;
+                } else 
+                {
+                    $data['annfilereadable'][$index] = $query->origname;
+                    echo "$query->origname";
                 }
             }
         }
