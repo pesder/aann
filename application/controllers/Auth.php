@@ -49,14 +49,14 @@ class Auth extends CI_Controller {
             $formdata['partid'] = $this->input->post('partid');
 			$formdata['username'] = $this->input->post('username');
 			$formdata['userpass'] = $this->input->post('userpass');
-			// 判斷若有設定 md5 加密字串，則密碼比對使用 md5
+			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryBy('configkey','pwdsalt');
             $ismd5 = $md5key->configvalue;
             if (!empty($ismd5)) {
-                $formdata['userpass'] = md5($ismd5 . $formdata['userpass']);
+                $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
             //取得使用者資料
-            $data['user'] = $this->usertb_model->queryBy('username', $formdata['username']);
+            $data['user'] = $this->usertb_model->matchPassword('username', $formdata['username']);
 			// 比對密碼
             if ($formdata['userpass'] == $data['user']['userpass'] && $formdata['partid'] == $data['user']['partid'])
             {
