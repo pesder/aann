@@ -22,8 +22,7 @@ class Auth extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         //取得單位資料
         $data['part'] = $this->parttb_model->query();
-        //取得使用者資料
-        $data['user'] = $this->usertb_model->query();
+        
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
         $options = [];
         foreach ($data['part'] as $index => $list)
@@ -51,15 +50,24 @@ class Auth extends CI_Controller {
 			$formdata['username'] = $this->input->post('username');
 			$formdata['userpass'] = $this->input->post('userpass');
 			// 判斷若有設定 md5 加密字串，則密碼比對使用 md5
-            $ismd5 = $this->config_model->queryBy('configkey','pwdsalt');
+            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
+            $ismd5 = $md5key->configvalue;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = md5($ismd5 . $formdata['userpass']);
             }
-
-			$this->repair_list_model->add($formdata);
+            //取得使用者資料
+            $data['user'] = $this->usertb_model->queryBy('username', $formdata['username']);
+			// 比對密碼
+            if ($formdata['userpass'] == $data['user']['userpass'] && $formdata['partid'] == $data['user']['partid'])
+            {
+                echo "You Pass!";
+            } else 
+            {
+                echo "You can NOT Pass!!";
+            }
 
 			// 回首頁
-			redirect('/lists');
+			//redirect('/lists');
 		};
     }
 }

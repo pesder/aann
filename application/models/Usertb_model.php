@@ -56,7 +56,7 @@ class Usertb_model extends CI_Model {
             $this->db->order_by('userid','desc');
             //$this->db->where();
             $query = $this->db->get();
-            return $query->result();
+            return $query->row_array();
         }
         //單一姓名查詢
         public function querySingleName($id) 
