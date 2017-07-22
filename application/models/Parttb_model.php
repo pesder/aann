@@ -21,7 +21,7 @@ class Parttb_model extends CI_Model {
         	{
         		$this->db->where('partid', $id);
         	}
-        	$this->db->order_by('partid','desc');
+        	$this->db->order_by('partid','asc');
         	//$this->db->where();
         	$query = $this->db->get();
         	$date = $query->result();
