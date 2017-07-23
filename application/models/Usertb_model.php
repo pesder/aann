@@ -56,6 +56,18 @@ class Usertb_model extends CI_Model {
             $this->db->order_by('userid','desc');
             //$this->db->where();
             $query = $this->db->get();
+            return $query->row();
+        }
+        //依查詢密碼
+        public function matchPassword($cd1, $cd2) 
+        {
+
+            $this->db->select('*');
+            $this->db->from('usertb');
+            $this->db->where($cd1, $cd2);
+            $this->db->order_by('userid','desc');
+            //$this->db->where();
+            $query = $this->db->get();
             return $query->row_array();
         }
         //單一姓名查詢

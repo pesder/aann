@@ -49,6 +49,7 @@ class Auth extends CI_Controller {
             $formdata['partid'] = $this->input->post('partid');
 			$formdata['username'] = $this->input->post('username');
 			$formdata['userpass'] = $this->input->post('userpass');
+            $denyreason = "";
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryBy('configkey','pwdsalt');
             $ismd5 = $md5key->configvalue;
@@ -57,12 +58,17 @@ class Auth extends CI_Controller {
             }
             //取得使用者資料
             $data['user'] = $this->usertb_model->matchPassword('username', $formdata['username']);
+            if ($formdata['partid'] != $data['user']['partid']) {
+                $denyreason = "您無法發布這個單位的公告。";
+            }
 			// 比對密碼
             if ($formdata['userpass'] == $data['user']['userpass'] && $formdata['partid'] == $data['user']['partid'])
             {
                 echo "You Pass!";
             } else 
             {
+                $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
+                echo $denyreason;
                 echo "You can NOT Pass!!";
             }
 
