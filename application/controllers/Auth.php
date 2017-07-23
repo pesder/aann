@@ -65,6 +65,13 @@ class Auth extends CI_Controller {
             if ($formdata['userpass'] == $data['user']['userpass'] && $formdata['partid'] == $data['user']['partid'])
             {
                 echo "You Pass!";
+                $result = array (
+                    'authpass' => "1";
+                    'denyreason' => $denyreason,
+                    'partid' => $data['user']['partid'],
+                    'username' => $data['user']['username'],
+                    'realname' => $data['user']['realname']
+                );
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
