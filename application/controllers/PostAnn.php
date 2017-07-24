@@ -23,6 +23,7 @@ class PostAnn extends CI_Controller {
     public function postAnnForm() 
     {
         $data['function_name'] = "發布公告表單";
+        $data['site'] = $this->title->configvalue;
         $login = $this->session->userdata('UserLogin');
         print_r($login);
         if(empty($login))
@@ -39,7 +40,13 @@ class PostAnn extends CI_Controller {
             
         } elseif ($login['authpass'] == 1)
         {
+            $typelist = array (
+                "1.1" => "普通",
+                "2.1" => "重要",
+                "3.1" => "急件"
+            );
             $data['user'] = $login;
+            $data['typelist'] = $typelist;
             //開始載入表單
             // 載入 view
 			$this->load->view('header-jquery',$data);
