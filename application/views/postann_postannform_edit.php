@@ -6,23 +6,38 @@
         <thead>
         </thead>
         <tbody>
-        <tr>
-            <td class="container-fluid"><div class="row"><div class="col-sm-6">公告等級</div></div>
-            <div class="row"><div class="col-sm-3">
-            <?php 
+        <tr class="container-fluid">
+            <td ><div class="row"><div class="col-sm-1 text-center">公告等級</div><div class="col-sm-10">連續發公告：內部公告：</div></div></td></tr>
+        <tr class="container-fluid">
+             <td ><div class="row"><div class="col-sm-1">
+             <?php 
             	$type_data = array (
 	        	'name'	=>	'type',
 		        'class'	=>	'form-control',
                 'options' => $typelist);
         	echo form_dropdown($type_data);
-            ?>
-            </div></div>
-            </td>
-            <td class="container-fluid"><div class="row"><div class="col-sm-12">連續發公告：內部公告：</div></div>
-            <div class="row"><div class="col-sm-2">標題：</div><div class="col-sm-10"></div></div></td>
-        </tr>
-        <tr>
-            <td colspan="2">★標題和內容一定要寫！</td>
+            ?></div>
+            <div class="col-sm-1 text-center">標題：</div>
+            <div class="col-sm-8">
+            <?php
+                $title_data = array (
+	        	'name'	=>	'title',
+                'id'    =>  'title',
+                'class'	=>	'form-control'
+                );
+                echo form_input($title_data);
+            ?></div></div></td></tr>
+        <tr  class="container-fluid">
+            <td><div class="row"><div class="col-sm-11">★標題和內容一定要寫！</div></div>
+            <div class="row"><div class="col-sm-11">
+            <?php
+                $comment_data = array (
+	        	'name'	=>	'comment',
+                'id'    =>  'comment',
+                'class'	=>	'form-control'
+                );
+                echo form_textarea($comment_data);
+            ?></div></div></td>
         </tr>
         </tbody>
       </table>
