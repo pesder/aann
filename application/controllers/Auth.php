@@ -8,6 +8,7 @@ class Auth extends CI_Controller {
             parent::__construct();
             $this->load->library('session');
             $this->load->helper('form');
+            $this->load->helper('url');
             // 載入列表 model
             $this->load->model('usertb_model');
             $this->load->model('parttb_model');
@@ -66,21 +67,29 @@ class Auth extends CI_Controller {
             {
                 echo "You Pass!";
                 $result = array (
-                    'authpass' => "1";
+                    'authpass' => "1",
                     'denyreason' => $denyreason,
                     'partid' => $data['user']['partid'],
                     'username' => $data['user']['username'],
                     'realname' => $data['user']['realname']
                 );
+                $this->session->set_userdata('UserLogin', $result);
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
-                echo $denyreason;
+                $result = array (
+                    'authpass' => "0",
+                    'denyreason' => $denyreason,
+                    'partid' => "",
+                    'username' => "",
+                    'realname' => ""
+                );
+                $this->session->set_userdata('UserLogin', $result);
                 echo "You can NOT Pass!!";
             }
 
 			// 回首頁
-			//redirect('/lists');
+			redirect('/PostAnn/postAnnForm');
 		};
     }
 }

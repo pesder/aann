@@ -1,0 +1,2 @@
+<div class="bg-warning text-center"><h1><?php echo "歡迎，" . $user['realname']?></h1></div>
+<div class="text-center">   <a href="<?=config_item('base_url');?>/index.php/Main/Auth/postAnnAuth" class="btn btn-primary">回到帳號密碼認證頁</a> </div>
