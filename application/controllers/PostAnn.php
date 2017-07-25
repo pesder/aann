@@ -70,10 +70,63 @@ class PostAnn extends CI_Controller {
 
 		} else
         {
+            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
+            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
+            $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            $data['user'] = $login;
+            // 接收表單
+            // 先接收標題、內文
+            $formdata['type'] = $this->input->post('type');
+            $formdata['title'] = $this->input->post('title');
+            $formdata['comment'] = $this->input->post('comment');
+            $formdata['annday'] = $this->input->post('dueday');
+            print_r($formdata['type']);
+            print_r($formdata['title']);
+            print_r($formdata['comment']);
 
+            for ($i = 0; $i < $data['ulfilenum']->configvalue; $i++)
+            {
+                $j = $i + 1;
+                $file = "file" . $j;
+                $infile = "ulfile" . $j;
+                $formdata[$file] = $this->input->post($infile);
+                print_r($formdata[$file]);
+            }
+            // 收集 URL
+            for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
+            {
+                $j = $i + 1;
+                $url = "url" . $j;
+                $inurl = "url" . $j;
+                $formdata[$url] = $this->input->post($inurl);
+                print_r($formdata[$url]);
+            }
         }
         }
         
     }
+    public function do_upload($pid,$uid, $file)
+        {
+                $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
+                $config['allowed_types']        = 'gif|jpg|png|doc';
+                $config['max_size']             = 100;
+                $config['max_width']            = 1024;
+                $config['max_height']           = 768;
+
+                $this->load->library('upload', $config);
+
+                if ( ! $this->upload->do_upload($file))
+                {
+                        $error = array('error' => $this->upload->display_errors());
+
+                        
+                }
+                else
+                {
+                        $data = array('upload_data' => $this->upload->data());
+
+                        
+                }
+        }
 }
 ?>

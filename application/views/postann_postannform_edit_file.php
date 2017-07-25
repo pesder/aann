@@ -9,7 +9,7 @@
                     for ($i = 0; $i < $ulfilenum->configvalue; $i++) {
                         $j = $i + 1;
                         $name = "附件 " . $j . "︰";
-                        $label_att = array ('class' => 'col-sm-1');
+                        $label_att = array ('class' => 'col-sm-2');
                         $urlfile_data = array (
                             'name'  =>  'urlfile' . $j,
                             'id'    =>  'urlfile' . $j,

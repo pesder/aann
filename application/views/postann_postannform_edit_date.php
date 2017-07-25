@@ -5,7 +5,7 @@
             </td>
             <td>
                 <div class="row">
-                <div class="col-sm-1">
+                <div class="col-sm-2">
                 <?php
                         $dueday = new datetime(date('Y-m-d', time()));
                         $offset = '+' . "$annday->configvalue" . "day";
@@ -20,7 +20,7 @@
 
                 ?>
                 </div>
-                </div>
+                
                     <?php
                     $but1 = array (
                      'name'  =>  'sent',
@@ -30,6 +30,7 @@
                        'accesskey'	=>	's');
                      echo form_button($but1);
                     ?>
+                </div>
             </td>
         
         </tr>

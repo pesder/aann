@@ -71,7 +71,8 @@ class Auth extends CI_Controller {
                     'denyreason' => $denyreason,
                     'partid' => $data['user']['partid'],
                     'username' => $data['user']['username'],
-                    'realname' => $data['user']['realname']
+                    'realname' => $data['user']['realname'],
+                    'userid'    =>  $data['user']['userid']
                 );
                 $this->session->set_userdata('UserLogin', $result);
             } else 
@@ -82,7 +83,8 @@ class Auth extends CI_Controller {
                     'denyreason' => $denyreason,
                     'partid' => "",
                     'username' => "",
-                    'realname' => ""
+                    'realname' => "",
+                    'userid'    =>  ""
                 );
                 $this->session->set_userdata('UserLogin', $result);
                 echo "You can NOT Pass!!";
