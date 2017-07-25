@@ -40,6 +40,14 @@ class PostAnn extends CI_Controller {
             
         } elseif ($login['authpass'] == 1)
         {
+                    // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('title', '標題', 'trim|required');
+		$this->form_validation->set_rules('comment', '內容', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
             $typelist = array (
                 "1.1" => "普通",
                 "2.1" => "重要",
@@ -59,6 +67,11 @@ class PostAnn extends CI_Controller {
             $this->load->view('postann_postannform_edit_date');
             $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
+
+		} else
+        {
+
+        }
         }
         
     }

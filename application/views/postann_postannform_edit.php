@@ -19,6 +19,7 @@
             ?></div>
             <div class="col-sm-1 text-center">標題：</div>
             <div class="col-sm-8">
+            <?=form_error('title')?>
             <?php
                 $title_data = array (
 	        	'name'	=>	'title',
@@ -30,6 +31,7 @@
         <tr >
             <td  colspan="2"><div class="row"><div class="col-sm-11">★標題和內容一定要寫！</div></div>
             <div class="row"><div class="col-sm-11">
+            <?=form_error('comment')?>
             <?php
                 $comment_data = array (
 	        	'name'	=>	'comment',

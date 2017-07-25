@@ -21,6 +21,15 @@
                 ?>
                 </div>
                 </div>
+                    <?php
+                    $but1 = array (
+                     'name'  =>  'sent',
+                      'type'  =>  'submit',
+                      'content' =>  '送出公告',
+                      'class' =>  'btn btn-primary',
+                       'accesskey'	=>	's');
+                     echo form_button($but1);
+                    ?>
             </td>
         
         </tr>
