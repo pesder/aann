@@ -47,6 +47,7 @@ class PostAnn extends CI_Controller {
             );
             $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
             $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
+            $data['annday'] = $this->config_model->queryBy('configkey','annday');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             //開始載入表單
@@ -55,6 +56,7 @@ class PostAnn extends CI_Controller {
 			$this->load->view('postann_postannform_edit');
             $this->load->view('postann_postannform_edit_file');
             $this->load->view('postann_postannform_edit_url');
+            $this->load->view('postann_postannform_edit_date');
             $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
         }
