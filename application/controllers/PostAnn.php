@@ -45,12 +45,17 @@ class PostAnn extends CI_Controller {
                 "2.1" => "重要",
                 "3.1" => "急件"
             );
+            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
+            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             //開始載入表單
             // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('postann_postannform_edit');
+            $this->load->view('postann_postannform_edit_file');
+            $this->load->view('postann_postannform_edit_url');
+            $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
         }
         

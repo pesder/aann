@@ -2,14 +2,14 @@
     <div class="text-center"><p><?php echo "歡迎，" . $user['realname'] . "，您已登入帳號[" . $user['username'] . "]"?></hp1></div>
     <?=form_open('PostAnn/postAnnForm');?>
     <div>
-      <table class="table table-striped">
+      <table class="table table-striped container-fluid">
         <thead>
         </thead>
         <tbody>
-        <tr class="container-fluid">
-            <td ><div class="row"><div class="col-sm-1 text-center">公告等級</div><div class="col-sm-10">連續發公告：內部公告：</div></div></td></tr>
-        <tr class="container-fluid">
-             <td ><div class="row"><div class="col-sm-1">
+        <tr>
+            <td  colspan="2"><div class="row"><div class="col-sm-1 text-center">公告等級</div><div class="col-sm-10">連續發公告：內部公告：</div></div></td></tr>
+        <tr>
+             <td  colspan="2"><div class="row"><div class="col-sm-1">
              <?php 
             	$type_data = array (
 	        	'name'	=>	'type',
@@ -27,8 +27,8 @@
                 );
                 echo form_input($title_data);
             ?></div></div></td></tr>
-        <tr  class="container-fluid">
-            <td><div class="row"><div class="col-sm-11">★標題和內容一定要寫！</div></div>
+        <tr >
+            <td  colspan="2"><div class="row"><div class="col-sm-11">★標題和內容一定要寫！</div></div>
             <div class="row"><div class="col-sm-11">
             <?php
                 $comment_data = array (
@@ -39,10 +39,3 @@
                 echo form_textarea($comment_data);
             ?></div></div></td>
         </tr>
-        </tbody>
-      </table>
-      
-    </div>
-
-<div class="text-center">   <a href="<?=config_item('base_url');?>/index.php/Main/Auth/postAnnAuth" class="btn btn-primary">回到帳號密碼認證頁</a> </div>
-    <?=form_close()?>
