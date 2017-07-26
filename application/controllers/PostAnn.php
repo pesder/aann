@@ -85,19 +85,28 @@ class PostAnn extends CI_Controller {
             print_r($formdata['type']);
             print_r($formdata['title']);
             print_r($formdata['comment']);
+            $filelist = "";
+            $urllist = "";
 
             //處理附件
             $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
             $config['allowed_types']        = '*';
             $config['overwrite']            = true;
             $config['max_size']             = '10240';
-            $config['encrypt_name']         = true;
+            //$config['encrypt_name']         = true;
 
 
             foreach($_FILES as $key => $value) {
+                if (!empty($_FILES[$key]["name"]))
+                {
+                    $filename_ar = explode(".", $_FILES[$key]["name"]);
+                    $filename_ext = $filename_ar[count($filename_ar) - 1];
+                    $file_index = substr($key, -1);
+                    $newfilename = time() . $file_index . "." . $filename_ext;
+                    $config['file_name'] = $newfilename;
+                }
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
-
             echo "<" . $_FILES[$key]["name"] . ">";
                 if (!empty($value['name'])) {
                     if (!$this->upload->do_upload($key)) {
