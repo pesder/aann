@@ -80,6 +80,8 @@ class PostAnn extends CI_Controller {
             $formdata['title'] = $this->input->post('title');
             $formdata['comment'] = $this->input->post('comment');
             $formdata['annday'] = $this->input->post('dueday');
+            $pid = $login['partid'];
+            $uid = $login['userid'];
             print_r($formdata['type']);
             print_r($formdata['title']);
             print_r($formdata['comment']);
@@ -89,8 +91,8 @@ class PostAnn extends CI_Controller {
                 $j = $i + 1;
                 $file = "file" . $j;
                 $infile = "ulfile" . $j;
-                $formdata[$file] = $this->input->post($infile);
-                print_r($formdata[$file]);
+                $this->do_upload($pid,$uid,$infile);
+
             }
             // 收集 URL
             for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
@@ -108,7 +110,8 @@ class PostAnn extends CI_Controller {
     public function do_upload($pid,$uid, $file)
         {
                 $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
-                $config['allowed_types']        = 'gif|jpg|png|doc';
+                $config['allowed_types']        = '*';
+                $config['overwrite']            = true;
                 $config['max_size']             = 100;
                 $config['max_width']            = 1024;
                 $config['max_height']           = 768;
@@ -123,8 +126,9 @@ class PostAnn extends CI_Controller {
                 }
                 else
                 {
-                        $data = array('upload_data' => $this->upload->data());
-
+                        //$data = array('upload_data' => $this->upload->data());
+                    $data = $this->upload->data();
+                    echo $data['file_name'];
                         
                 }
         }
