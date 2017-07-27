@@ -153,6 +153,16 @@ class PostAnn extends CI_Controller {
                 'overtime'  =>  $formdata['annday'],
                 'type'      =>  $formdata['type']
             );
+            $tid = $this->titletb_model->writeTitle($titletb);
+            $anntb = array (
+                'tid'   =>  $tid,
+                'userid'    =>  $uid,
+                'ip'        =>  $this->input->ip_address(),
+                'filename'  =>  rtrim($filelist),
+                'url'       =>  rtrim($urllist),
+                'comment'   =>  $formdata['comment']
+            );
+            $this->anntb_model->writeAnn($anntb);
         }
         }
         

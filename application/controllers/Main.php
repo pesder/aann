@@ -89,6 +89,8 @@ class Main extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
+        $data['user'] = $this->usertb_model->queryBy('userid',$data['body']->userid);
+        print_r($data['user']->realname);
         $data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
@@ -130,7 +132,6 @@ class Main extends CI_Controller {
                 } else 
                 {
                     $data['annfilereadable'][$index] = $query->origname;
-                    echo "$query->origname";
                 }
             }
         }
