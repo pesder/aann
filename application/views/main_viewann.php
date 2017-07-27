@@ -11,7 +11,7 @@
             <th width = "6%">單位</th>
             <th width = "49%"><?=$head->partname ?></th>
             <th width = "10%">發公告者</th>
-            <th width = "10%"><?=$realname->realname ?></th>
+            <th width = "10%"><a href="mailto:<?=$user->email?>"><?=$user->realname ?></a></th>
             <th width = "6%">來源</th>
             <th width = "14%"><?=$body->ip?></th>
           </tr>

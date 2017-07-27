@@ -90,8 +90,8 @@ class Main extends CI_Controller {
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
         $data['user'] = $this->usertb_model->queryBy('userid',$data['body']->userid);
-        print_r($data['user']->realname);
-        $data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
+        print_r($data['user']->email);
+        //$data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
         //增加點閱計數
@@ -128,10 +128,25 @@ class Main extends CI_Controller {
                 $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name);
                 if (empty($query))
                 {
-                    $data['annfilereadable'][$index] = $name;
+                    $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                    if (is_file($filelocation))
+                    {
+                        $data['annfilereadable'][$index] = $name;
+                    } else
+                    {
+                        $data['annfilereadable'][$index] = $name . "(檔案遺失，無法正常下載)";
+                    }
                 } else 
                 {
-                    $data['annfilereadable'][$index] = $query->origname;
+                    $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                    if (is_file($filelocation))
+                    {
+                        $data['annfilereadable'][$index] = $query->origname;
+                    } else
+                    {
+                        $data['annfilereadable'][$index] = $query->origname . "(檔案遺失，無法正常下載)";
+                    }
+                    
                 }
             }
         }
