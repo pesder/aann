@@ -123,6 +123,7 @@ class Main extends CI_Controller {
             $data['annfile'] = explode(" ", $data['body']->filename);
             //利用上面陣列複製出一個查詢檔名用陣列
             $data['annfilereadable'] = $data['annfile'];
+            $data['filenotthere'] = [];
             foreach ($data['annfilereadable'] as $index => $name) 
             {
                 $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name);
@@ -132,9 +133,11 @@ class Main extends CI_Controller {
                     if (is_file($filelocation))
                     {
                         $data['annfilereadable'][$index] = $name;
+                        $data['filenotthere'][$index] = 1;
                     } else
                     {
                         $data['annfilereadable'][$index] = $name . "(檔案遺失，無法正常下載)";
+                        $data['filenotthere'][$index] = 0;
                     }
                 } else 
                 {
@@ -142,9 +145,11 @@ class Main extends CI_Controller {
                     if (is_file($filelocation))
                     {
                         $data['annfilereadable'][$index] = $query->origname;
+                        $data['filenotthere'][$index] = 1;
                     } else
                     {
                         $data['annfilereadable'][$index] = $query->origname . "(檔案遺失，無法正常下載)";
+                        $data['filenotthere'][$index] = 0;
                     }
                     
                 }
