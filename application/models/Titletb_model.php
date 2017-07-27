@@ -105,6 +105,12 @@ class Titletb_model extends CI_Model {
             $this->db->limit(1);
             $query = $this->db->get();
             return $query->row();
-        }  
+        } 
+        // 寫入公告標題對應，傳回 id 供內文使用
+        public function writeTitle($data)
+        {
+            $this->db->insert('titletb', $data);
+            return $this->db->insert_id();
+        } 
 
 }

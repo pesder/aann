@@ -73,6 +73,7 @@ class PostAnn extends CI_Controller {
             $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
             $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
             $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            
             $data['user'] = $login;
             // 接收表單
             // 先接收標題、內文
@@ -82,6 +83,7 @@ class PostAnn extends CI_Controller {
             $formdata['annday'] = $this->input->post('dueday');
             $pid = $login['partid'];
             $uid = $login['userid'];
+            $data['partname'] = $this->parttb_model->queryPartname($pid);
             print_r($formdata['type']);
             print_r($formdata['title']);
             print_r($formdata['comment']);
@@ -124,8 +126,6 @@ class PostAnn extends CI_Controller {
                         );
                         $this->filetb_model->writeFile($addfilelist);
                         $filelist = $filelist . $newfilename . " ";
-                          echo $this->upload->data('file_name');
-                          echo $this->upload->data('orig_name');
                     }
                 }
             }
@@ -143,6 +143,16 @@ class PostAnn extends CI_Controller {
                 }
                 
             }
+            echo date("Y-m-d H:i:s");
+            // 寫入主要資籵庫
+            $titletb = array (
+                'partid'    =>  $pid,
+                'partname'  =>  $data['partname']['partname'],
+                'subject'   =>  $formdata['title'],
+                'posttime'  =>  date("Y-m-d H:i:s"),
+                'overtime'  =>  $formdata['annday'],
+                'type'      =>  $formdata['type']
+            );
         }
         }
         

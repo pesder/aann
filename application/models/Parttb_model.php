@@ -58,7 +58,18 @@ class Parttb_model extends CI_Model {
             $query = $this->db->get();
             return $query->result();
         }
+        //查詢部門名稠
+        public function queryPartname($cd1) 
+        {
 
+            $this->db->select('partname');
+            $this->db->from('parttb');
+            $this->db->where('partid', $cd1);
+            $this->db->order_by('partid','desc');
+            //$this->db->where();
+            $query = $this->db->get();
+            return $query->row_array();
+        }
 
 
 }

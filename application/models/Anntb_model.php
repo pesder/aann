@@ -58,5 +58,10 @@ class Anntb_model extends CI_Model {
             $query = $this->db->get();
             return $query->result();
         }
+        // 寫入公告本文對應
+        public function writeAnn($data)
+        {
+            $this->db->insert('anntb', $data);
+        }
 
 }
