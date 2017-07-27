@@ -104,6 +104,7 @@ class PostAnn extends CI_Controller {
                     $file_index = substr($key, -1);
                     $newfilename = time() . $file_index . "." . $filename_ext;
                     $config['file_name'] = $newfilename;
+
                 }
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
@@ -113,7 +114,16 @@ class PostAnn extends CI_Controller {
                         $data["error"] = $this->upload->display_errors();
       
                     } else {
-                          $fInfo = $this->upload->data();
+                        $fInfo = $this->upload->data();
+                        // 將轉換好的檔名寫入 filetb 資料庫
+                        $addfilelist = array (
+                           'partid'    => $pid,
+                            'userid'    => $uid,
+                            'filelist'  => $newfilename,
+                            'origname'  => $_FILES[$key]["name"]
+                        );
+                        $this->filetb_model->writeFile($addfilelist);
+                        $filelist = $filelist . $newfilename . " ";
                           echo $this->upload->data('file_name');
                           echo $this->upload->data('orig_name');
                     }
@@ -129,9 +139,9 @@ class PostAnn extends CI_Controller {
                 if (!empty($this->input->post($inurl)))
                 {
                     $formdata[$url] = $this->input->post($inurl);
+                    $urllist = $urllist . $formdata[$url] . " ";
                 }
                 
-                print_r($formdata[$url]);
             }
         }
         }

@@ -1,29 +1,34 @@
         <tr>
-            <td><div class="row">
-                <div class="col-sm-2 text-center">相關連結</div>
-                </div>
+            <td>
+                <div class="text-center">相關連結</div>
+
             </td>
             <td>
-                <div class="row">
+                
                 <?php
                     for ($i = 0; $i < $urlnum->configvalue; $i++) {
                         $j = $i + 1;
                         $name = "網址 " . $j . "︰";
-                        $label_att = array ('class' => 'col-sm-2');
+                        $label_att = array ('class' => '');
                         $url_data = array (
                             'name'  =>  'url' . $j,
                             'id'    =>  'url' . $j,
-                            'class' =>  'col-sm-8'
+                            'class' =>  'form-control'
                         
                         );
-                        echo "<div class=\"col-sm-9\">";
+                        echo "<div class=\"row\">";
+                        echo "<div class=\"col-sm-1 text-right\">";
                         echo form_label($name, 'name', $label_att);
+                        echo "</div>";
+                        echo "<div class=\"col-sm-8\">";
                         echo form_input($url_data);
-                         echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                         
                     }
                 ?>
                 
-                </div>
+                
             </td>
         
         </tr>

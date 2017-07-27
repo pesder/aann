@@ -1,7 +1,6 @@
         <tr>
-            <td><div class="row">
-                <div class="col-sm-2 text-center">公告時效</div>
-                </div>
+            <td>
+                <div class="text-center">公告時效</div>
             </td>
             <td>
                 <div class="row">

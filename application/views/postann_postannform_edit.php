@@ -7,9 +7,21 @@
         </thead>
         <tbody>
         <tr>
-            <td  colspan="2"><div class="row"><div class="col-sm-1 text-center">公告等級</div><div class="col-sm-10">連續發公告：內部公告：</div></div></td></tr>
+            <td  colspan="2"><div class="row"><div class="col-sm-1 text-center">公告等級</div>
+            <div class="form-inline">
+            <div class="col-sm-10">連續發公告：
+            <?php
+                $serial = array ('0' => '否', '1' => '是');
+                $serialpost_data = array (
+                    'name'  =>  'serial',
+                    'class'	=>	'form-control',
+                    'options'   => $serial
+                );
+            echo form_dropdown($serialpost_data);    
+            ?>
+            內部公告：</div></div></div></td></tr>
         <tr>
-             <td  colspan="2"><div class="row"><div class="col-sm-1">
+             <td  colspan="2"><div class="form-group row"><div class="col-sm-1">
              <?php 
             	$type_data = array (
 	        	'name'	=>	'type',
@@ -24,7 +36,7 @@
                 $title_data = array (
 	        	'name'	=>	'title',
                 'id'    =>  'title',
-                'class'	=>	'form-control'
+                'class'	=>	'form-control col-sm-8'
                 );
                 echo form_input($title_data);
             ?></div></div></td></tr>

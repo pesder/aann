@@ -71,4 +71,10 @@ class Filetb_model extends CI_Model {
             return $query->row();
         }
 
+        // 寫入檔案對應
+        public function writeFile($data)
+        {
+            $this->db->insert('filetb', $data);
+        }
+
 }
