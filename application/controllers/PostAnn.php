@@ -95,8 +95,8 @@ class PostAnn extends CI_Controller {
             $config['max_size']             = '10240';
             //$config['encrypt_name']         = true;
 
-
             foreach($_FILES as $key => $value) {
+                // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
                 if (!empty($_FILES[$key]["name"]))
                 {
                     $filename_ar = explode(".", $_FILES[$key]["name"]);
@@ -107,7 +107,7 @@ class PostAnn extends CI_Controller {
                 }
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
-            echo "<" . $_FILES[$key]["name"] . ">";
+                //開始上傳檔案動作
                 if (!empty($value['name'])) {
                     if (!$this->upload->do_upload($key)) {
                         $data["error"] = $this->upload->display_errors();
@@ -120,52 +120,23 @@ class PostAnn extends CI_Controller {
                 }
             }
 
-            for ($i = 0; $i < $data['ulfilenum']->configvalue; $i++)
-            {
-                $j = $i + 1;
-                $file = "file" . $j;
-                $infile = "ulfile" . $j;
-                $this->do_upload($pid,$uid,$infile);
-
-            }
             // 收集 URL
             for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
             {
                 $j = $i + 1;
                 $url = "url" . $j;
                 $inurl = "url" . $j;
-                $formdata[$url] = $this->input->post($inurl);
+                if (!empty($this->input->post($inurl)))
+                {
+                    $formdata[$url] = $this->input->post($inurl);
+                }
+                
                 print_r($formdata[$url]);
             }
         }
         }
         
     }
-    public function do_upload($pid,$uid, $file)
-        {
-                $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
-                $config['allowed_types']        = '*';
-                $config['overwrite']            = true;
-                $config['max_size']             = 100;
-                $config['max_width']            = 1024;
-                $config['max_height']           = 768;
 
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
-
-                if ( ! $this->upload->do_upload($file))
-                {
-                        $error = array('error' => $this->upload->display_errors());
-
-                        
-                }
-                else
-                {
-                        //$data = array('upload_data' => $this->upload->data());
-                    $data = $this->upload->data();
-                    echo $data['file_name'];
-                        
-                }
-        }
 }
 ?>
