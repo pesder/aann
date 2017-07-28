@@ -40,7 +40,7 @@ class PostAnn extends CI_Controller {
             
         } elseif ($login['authpass'] == 1)
         {
-                    // 表單驗證
+        // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 		$this->form_validation->set_rules('title', '標題', 'trim|required');
@@ -174,6 +174,63 @@ class PostAnn extends CI_Controller {
             
         }
         
+    }
+
+    public function modify($tid,$pid,$uid)
+    {
+        $data['function_name'] = "編輯公告";
+        $data['site'] = $this->title->configvalue;
+        $login = $this->session->userdata('UserLogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if(empty($login))
+        {
+            redirect('/Auth/postAnnAuth');
+        }
+        elseif ($login['authpass'] == 0)
+        {
+            $data['message'] = $login['denyreason'];
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_postannform_deny');
+			$this->load->view('footer');
+            
+        } elseif ($login['authpass'] == 1)
+        {
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('title', '標題', 'trim|required');
+		$this->form_validation->set_rules('comment', '內容', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            $typelist = array (
+                "1.1" => "普通",
+                "2.1" => "重要",
+                "3.1" => "急件"
+            );
+            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
+            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
+            $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            $data['user'] = $login;
+            $data['typelist'] = $typelist;
+            // 載入 titletb anntb
+            $data['head'] = $this->titletb_model->query($tid);
+            $data['body'] = $this->anntb_model->query($tid);
+            //開始載入表單
+            // 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_modify');
+            $this->load->view('postann_postannform_edit_file');
+            $this->load->view('postann_postannform_edit_url');
+            $this->load->view('postann_postannform_edit_date');
+            $this->load->view('postann_postannform_edit_bott');
+			$this->load->view('footer');
+
+		} else
+        {
+        }
+        }
     }
 
 }
