@@ -92,7 +92,7 @@ class Auth extends CI_Controller {
 
 			// 回首頁
 			redirect('/PostAnn/postAnnForm');
-		};
+		}
     }
 }
 ?>

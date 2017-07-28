@@ -25,10 +25,10 @@ class PostAnn extends CI_Controller {
         $data['function_name'] = "發布公告表單";
         $data['site'] = $this->title->configvalue;
         $login = $this->session->userdata('UserLogin');
-        print_r($login);
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
-            redirect('/Main');
+            redirect('/Auth/postAnnAuth');
         }
         elseif ($login['authpass'] == 0)
         {
@@ -81,12 +81,10 @@ class PostAnn extends CI_Controller {
             $formdata['title'] = $this->input->post('title');
             $formdata['comment'] = $this->input->post('comment');
             $formdata['annday'] = $this->input->post('dueday');
+            $formdata['serial'] = $this->input->post('serial');
             $pid = $login['partid'];
             $uid = $login['userid'];
             $data['partname'] = $this->parttb_model->queryPartname($pid);
-            print_r($formdata['type']);
-            print_r($formdata['title']);
-            print_r($formdata['comment']);
             $filelist = "";
             $urllist = "";
 
@@ -163,7 +161,17 @@ class PostAnn extends CI_Controller {
                 'comment'   =>  $formdata['comment']
             );
             $this->anntb_model->writeAnn($anntb);
+            // 寫入完資料庫，判斷是否為連續公告
+            if ($formdata['serial'] == 0)
+            {
+                $this->session->set_userdata('UserLogin', "");
+                redirect('/Main');
+            } elseif ($formdata['serial'] == 1)
+            {
+                redirect('/PostAnn/postAnnForm');
+            }
         }
+            
         }
         
     }
