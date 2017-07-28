@@ -77,4 +77,10 @@ class Filetb_model extends CI_Model {
             $this->db->insert('filetb', $data);
         }
 
+        //刪除檔案對應
+        public function deleteFile($data)
+        {
+            $this->db->delete('filetb', $data);
+        }
+
 }

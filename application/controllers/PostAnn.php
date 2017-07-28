@@ -295,13 +295,26 @@ class PostAnn extends CI_Controller {
         $data['body'] = $this->anntb_model->query($tid);
         $oldfilename = $data['body']->filename .  " ";
         $delfilename = $filename . " ";
+        //利用取代將要刪除的檔案名稱從字串中移除
         $newfilename = str_replace($delfilename, "", $oldfilename);
+        //移除結尾空白避免判讀檔案錯誤
+        $newfilename = rtrim($newfilename);
         $data = array (
             'filename'  =>  $newfilename
         );
+        // 條改 anntb 檔案列表
         $this->anntb_model->modify($tid, $data);
+        // 進行檔案刪除動作
         $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
         delete_files($filepath);
+        // 刪除 filetb 中檔名對應資料
+        $filenamedel = array (
+            'partid'    =>  $pid,
+            'userid'    =>  $uid,
+            'filelist'  =>  $filename
+        );
+        $this->filetb_model->deleteFile($filenamedel);
+        // 跳回公告編輯畫面
         $returnmodify = "PostAnn/modify/" . $tid . "/" . $pid . "/" . $uid;
         redirect($returnmodify);
     }
