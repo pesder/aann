@@ -136,9 +136,10 @@ class PostAnn extends CI_Controller {
                 $j = $i + 1;
                 $url = "url" . $j;
                 $inurl = "url" . $j;
+                // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
                 if (!empty($this->input->post($inurl)))
                 {
-                    $formdata[$url] = $this->input->post($inurl);
+                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
                 
@@ -221,6 +222,16 @@ class PostAnn extends CI_Controller {
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
             $data['body'] = $this->anntb_model->query($tid);
+            //判斷 URL
+            if (empty($data['body']->url)) {
+                $data['hasurl'] = "無";
+                $data['annurl'] = [];
+            } else
+            {
+                $data['hasurl'] = "有";
+                $data['annurl'] = explode(" ", $data['body']->url);
+                //編輯介面無需判斷是否有網址註解
+            }
             //判斷附件
             $file_empty = $data['ulfilenum']->configvalue;
             if (empty($data['body']->filename)) {
@@ -277,8 +288,7 @@ class PostAnn extends CI_Controller {
             {
                 $this->load->view('postann_modify_file');
             }
-            $this->load->view('postann_postannform_edit_file');
-            $this->load->view('postann_postannform_edit_url');
+            $this->load->view('postann_modify_url');
             $this->load->view('postann_postannform_edit_date');
             $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
