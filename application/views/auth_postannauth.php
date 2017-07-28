@@ -1,3 +1,4 @@
+<div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <?=form_open('Auth/postAnnAuth');?>
 <table class="table">
 <tr>

@@ -112,6 +112,20 @@ class Main extends CI_Controller {
         {
             $data['hasurl'] = "有";
             $data['annurl'] = explode(" ", $data['body']->url);
+            $data['annurlreadable'] = $data['annurl'];
+            foreach ($data['annurlreadable'] as $index => $name) 
+            {
+                $urlhascomment = strpos($name, "!");
+                if ($urlhascomment === false)
+                {
+                    $data['annurlreadable'][$index] = $name;
+                } else
+                {
+                    $newurl = explode("!", $name);
+                    $data['annurl'][$index] = $newurl[0];
+                    $data['annurlreadable'][$index] = $newurl[1];
+                }
+            }
         }
         //判斷附件
         if (empty($data['body']->filename)) {

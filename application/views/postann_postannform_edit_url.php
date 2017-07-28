@@ -1,4 +1,9 @@
         <tr>
+            <td colspan="2">
+            相關連結如要註解請用 "!" 隔開，註解內不可再次包含 '!' 或空白 ' '，否則網址解析會有錯誤
+            </td>
+        </tr>
+        <tr>
             <td>
                 <div class="text-center">相關連結</div>
 
