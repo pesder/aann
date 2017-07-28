@@ -288,6 +288,23 @@ class PostAnn extends CI_Controller {
         }
         }
     }
+    // 附件檔案刪除功能
+    public function deleteFile($tid,$pid,$uid,$filename)
+    {
+        $this->load->helper('file');
+        $data['body'] = $this->anntb_model->query($tid);
+        $oldfilename = $data['body']->filename .  " ";
+        $delfilename = $filename . " ";
+        $newfilename = str_replace($delfilename, "", $oldfilename);
+        $data = array (
+            'filename'  =>  $newfilename
+        );
+        $this->anntb_model->modify($tid, $data);
+        $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
+        delete_files($filepath);
+        $returnmodify = "PostAnn/modify/" . $tid . "/" . $pid . "/" . $uid;
+        redirect($returnmodify);
+    }
 
 }
 ?>

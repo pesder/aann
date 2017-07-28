@@ -63,5 +63,11 @@ class Anntb_model extends CI_Model {
         {
             $this->db->insert('anntb', $data);
         }
+        // 修改
+        public function modify($tid, $data)
+        {
+            $this->db->where('tid', $tid);
+            $this->db->update('anntb', $data);
+        }
 
 }
