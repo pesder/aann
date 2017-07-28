@@ -39,7 +39,7 @@
             <th>相關附件</th>
             <th><?php print_r($hasfile);?></th>
             <th>管理</th>
-            <th>編修　　刪除</th>
+            <th><a href="<?=config_item('base_url');?>/index.php/PostAnn/modify/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>">編修</a>　　刪除</th>
           </tr>
         </thead>
         <tbody>

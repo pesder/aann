@@ -23,6 +23,7 @@ class Auth extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         //取得單位資料
         $data['part'] = $this->parttb_model->query();
+        $nowurl = $this->session->userdata('NowURL');
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
         $options = [];
@@ -91,7 +92,14 @@ class Auth extends CI_Controller {
             }
 
 			// 回首頁
-			redirect('/PostAnn/postAnnForm');
+            if (empty($nowurl))
+            {
+                redirect('/PostAnn/postAnnForm');
+            } else
+            {
+                redirect($nowurl);
+            }
+			
 		}
     }
 }

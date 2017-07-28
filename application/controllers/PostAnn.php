@@ -25,6 +25,8 @@ class PostAnn extends CI_Controller {
         $data['function_name'] = "發布公告表單";
         $data['site'] = $this->title->configvalue;
         $login = $this->session->userdata('UserLogin');
+        $urlpath = '/PostAnn/postAnnForm';
+        $this->session->set_userdata('NowURL', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -181,6 +183,8 @@ class PostAnn extends CI_Controller {
         $data['function_name'] = "編輯公告";
         $data['site'] = $this->title->configvalue;
         $login = $this->session->userdata('UserLogin');
+        $urlpath = '/PostAnn/modify/' . $tid . "/" . $pid . "/" . $uid;
+        $this->session->set_userdata('NowURL', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -217,10 +221,62 @@ class PostAnn extends CI_Controller {
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
             $data['body'] = $this->anntb_model->query($tid);
+            //判斷附件
+            $file_empty = $data['ulfilenum']->configvalue;
+            if (empty($data['body']->filename)) {
+                $data['hasfile'] = "無";
+                $data['annfile'] = [];
+                $data['file_empty'] = $file_empty;
+            } else
+            {
+                $data['hasfile'] = "有";
+                $data['annfile'] = explode(" ", $data['body']->filename);
+                $data['file_empty'] = $file_empty - count($data['annfile']);
+                //利用上面陣列複製出一個查詢檔名用陣列
+                $data['annfilereadable'] = $data['annfile'];
+                $data['filenotthere'] = [];
+                foreach ($data['annfilereadable'] as $index => $name) 
+                {
+                    $query = $this->filetb_model->mathFile($data['head']->partid,$data['body']->userid,$name);
+                    if (empty($query))
+                    {
+                        $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                        if (is_file($filelocation))
+                        {
+                            $data['annfilereadable'][$index] = $name;
+                            $data['filenotthere'][$index] = 1;
+                        } else
+                        {   
+                            $data['annfilereadable'][$index] = $name . "(檔案遺失，無法正常下載)";
+                            $data['filenotthere'][$index] = 0;
+                        }
+                    } else 
+                    {
+                        $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                        if (is_file($filelocation))
+                        {
+                            $data['annfilereadable'][$index] = $query->origname;
+                            $data['filenotthere'][$index] = 1;
+                        } else
+                        {
+                            $data['annfilereadable'][$index] = $query->origname . "(檔案遺失，無法正常下載)";
+                            $data['filenotthere'][$index] = 0;
+                        }
+                    }
+            }
+        }
             //開始載入表單
             // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('postann_modify');
+            // 有附件則載入相關 view
+            if (!empty($data['body']->filename))
+            {
+                $this->load->view('postann_modify_file_hasfile');
+            } else
+            {
+                $this->load->view('postann_modify_file');
+            }
             $this->load->view('postann_postannform_edit_file');
             $this->load->view('postann_postannform_edit_url');
             $this->load->view('postann_postannform_edit_date');
