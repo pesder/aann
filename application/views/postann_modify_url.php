@@ -11,7 +11,9 @@
             <td>
                 
                 <?php
-                    for ($i = 0; $i < $urlnum->configvalue; $i++) {
+                    
+                    $countfile = count($annurl);
+                    for ($i = 0; $i < $countfile; $i++) {
                         $j = $i + 1;
                         $name = "網址 " . $j . "︰";
                         $label_att = array ('class' => '');
@@ -28,6 +30,25 @@
                         echo "</div>";
                         echo "<div class=\"col-sm-8\">";
                         echo form_input($url_data);
+                        echo "</div>";
+                        echo "</div>";
+                         
+                    }
+                    for ($i = $countfile; $i < $urlnum->configvalue; $i++) {
+                        $j = $i + 1;
+                        $name2 = "網址 " . $j . "︰";
+                        $label_att2 = array ('class' => '');
+                        $url2_data = array (
+                            'name'  =>  'url' . $j,
+                            'id'    =>  'url' . $j,
+                            'class' =>  'form-control'
+                        );
+                        echo "<div class=\"row\">";
+                        echo "<div class=\"col-sm-1 text-right\">";
+                        echo form_label($name2, 'name', $label_att2);
+                        echo "</div>";
+                        echo "<div class=\"col-sm-8\">";
+                        echo form_input($url2_data);
                         echo "</div>";
                         echo "</div>";
                          

@@ -216,7 +216,7 @@ class PostAnn extends CI_Controller {
             );
             $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
             $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
-            $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            //$data['annday'] = $this->config_model->queryBy('configkey','annday');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             // 載入 titletb anntb
@@ -289,7 +289,7 @@ class PostAnn extends CI_Controller {
                 $this->load->view('postann_modify_file');
             }
             $this->load->view('postann_modify_url');
-            $this->load->view('postann_postannform_edit_date');
+            $this->load->view('postann_modify_date');
             $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
 
