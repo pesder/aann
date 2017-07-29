@@ -23,7 +23,7 @@ class Admin extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         $urlpath = '/Admin';
         $this->session->set_userdata('NowURL', $urlpath);
-        $login = $this->session->userdata('UserLogin');
+        $login = $this->session->userdata('AdminLogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -40,10 +40,57 @@ class Admin extends CI_Controller {
         } elseif ($login['adminauthpass'] == 1)
         {
             echo "登入完成";
+            $data['h1'] = "使用者功能";
+            $data['h1group'] = array (
+                '/Admin/createPart' =>  "建立處室"
+            );
+            $data['h2'] = "網站功能";
+            $data['h2group'] = array (
+                '/Admin/changeSiteName' =>  "網站名稱"
+            );
         // 載入 view
         $this->load->view('header',$data);
         $this->load->view('admin_index');
         $this->load->view('footer');
+        }
+    }
+    public function createPart()
+    {
+        $data['function_name'] = "建立處室";
+        $data['site'] = $this->title->configvalue;
+        $urlpath = '/Admin';
+        $this->session->set_userdata('NowURL', $urlpath);
+        $login = $this->session->userdata('AdminLogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if($login['adminauthpass'] != 1)
+        {
+            redirect('/Auth/adminAuth');
+        }
+        elseif ($login['adminauthpass'] == 1)
+        {
+                    $data['function_name'] = "超級總管檢驗帳號";
+        $data['site'] = $this->title->configvalue;
+        $nowurl = $this->session->userdata('NowURL');
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('admin_createpart');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['pid'] = $this->input->post('pid');
+            $formdata['partname'] = $this->input->post('partname');
+            $formdata['partident'] = $this->input->post('partident');
+        }
         }
     }
 }

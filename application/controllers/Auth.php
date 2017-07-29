@@ -147,7 +147,7 @@ class Auth extends CI_Controller {
                     'adminauthpass' => "1",
                     'denyreason' => $denyreason
                 );
-                $this->session->set_userdata('UserLogin', $result);
+                $this->session->set_userdata('AdminLogin', $result);
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
@@ -155,7 +155,7 @@ class Auth extends CI_Controller {
                     'adminauthpass' => "0",
                     'denyreason' => $denyreason
                 );
-                $this->session->set_userdata('UserLogin', $result);
+                $this->session->set_userdata('AdminLogin', $result);
             }
 
 			// 回首頁
