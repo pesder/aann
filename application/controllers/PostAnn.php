@@ -295,6 +295,98 @@ class PostAnn extends CI_Controller {
 
 		} else
         {
+            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
+            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum'); 
+            $data['user'] = $login;
+            // 接收表單
+            // 先接收標題、內文
+            $formdata['type'] = $this->input->post('type');
+            $formdata['title'] = $this->input->post('title');
+            $formdata['comment'] = $this->input->post('comment');
+            $formdata['annday'] = $this->input->post('dueday');
+            $pid = $login['partid'];
+            $uid = $login['userid'];
+            $data['partname'] = $this->parttb_model->queryPartname($pid);
+            $urllist = "";
+
+            //處理附件
+            $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
+            $config['allowed_types']        = '*';
+            $config['overwrite']            = true;
+            $config['max_size']             = '10240';
+            //$config['encrypt_name']         = true;
+            //取回現有的檔案列表
+            $filelist = $data['body']->$filelist . " ";
+            foreach($_FILES as $key => $value) {
+                // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
+                if (!empty($_FILES[$key]["name"]))
+                {
+                    $filename_ar = explode(".", $_FILES[$key]["name"]);
+                    $filename_ext = $filename_ar[count($filename_ar) - 1];
+                    $file_index = substr($key, -1);
+                    $newfilename = time() . $file_index . "." . $filename_ext;
+                    $config['file_name'] = $newfilename;
+
+                }
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+                //開始上傳檔案動作
+                if (!empty($value['name'])) {
+                    if (!$this->upload->do_upload($key)) {
+                        $data["error"] = $this->upload->display_errors();
+      
+                    } else {
+                        $fInfo = $this->upload->data();
+                        // 將轉換好的檔名寫入 filetb 資料庫
+                        $addfilelist = array (
+                           'partid'    => $pid,
+                            'userid'    => $uid,
+                            'filelist'  => $newfilename,
+                            'origname'  => $_FILES[$key]["name"]
+                        );
+                        $this->filetb_model->writeFile($addfilelist);
+                        $filelist = $filelist . $newfilename . " ";
+                    }
+                }
+            }
+
+            // 收集 URL
+            for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
+            {
+                $j = $i + 1;
+                $url = "url" . $j;
+                $inurl = "url" . $j;
+                // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
+                if (!empty($this->input->post($inurl)))
+                {
+                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl));
+                    $urllist = $urllist . $formdata[$url] . " ";
+                }
+                
+            }
+            $firsttime = $data['head']->posttime;
+            $newposttime = date("Y-m-d H:i:s");
+            // 寫入主要資籵庫
+            $titletb = array (
+                'partid'    =>  $pid,
+                'partname'  =>  $data['partname']['partname'],
+                'subject'   =>  $formdata['title'],
+                'posttime'  =>  $newposttime,
+                'firsttime' =>  $firsttime,
+                'overtime'  =>  $formdata['annday'],
+                'type'      =>  $formdata['type']
+            );
+            $this->titletb_model->modify($tid, $titletb);
+            $anntb = array (
+                'userid'    =>  $uid,
+                'ip'        =>  $this->input->ip_address(),
+                'filename'  =>  rtrim($filelist),
+                'url'       =>  rtrim($urllist),
+                'comment'   =>  $formdata['comment']
+            );
+            $this->anntb_model->modify($tid,$anntb);
+            // 寫入完資料庫，判斷是否為連續公告
+                redirect('/Main');
         }
         }
     }

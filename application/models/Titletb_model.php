@@ -112,5 +112,11 @@ class Titletb_model extends CI_Model {
             $this->db->insert('titletb', $data);
             return $this->db->insert_id();
         } 
+        // 更新公告標題
+        public function modify($tid, $data)
+        {
+            $this->db->where('tid', $tid);
+            $this->db->update('titletb', $data);
+        }
 
 }
