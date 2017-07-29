@@ -167,7 +167,6 @@ class PostAnn extends CI_Controller {
             // 寫入完資料庫，判斷是否為連續公告
             if ($formdata['serial'] == 0)
             {
-                $this->session->set_userdata('UserLogin', "");
                 redirect('/Main');
             } elseif ($formdata['serial'] == 1)
             {
@@ -298,14 +297,15 @@ class PostAnn extends CI_Controller {
             $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
             $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum'); 
             $data['user'] = $login;
+            // 載入 titletb anntb
+            $data['head'] = $this->titletb_model->query($tid);
+            $data['body'] = $this->anntb_model->query($tid);
             // 接收表單
             // 先接收標題、內文
             $formdata['type'] = $this->input->post('type');
             $formdata['title'] = $this->input->post('title');
             $formdata['comment'] = $this->input->post('comment');
             $formdata['annday'] = $this->input->post('dueday');
-            $pid = $login['partid'];
-            $uid = $login['userid'];
             $data['partname'] = $this->parttb_model->queryPartname($pid);
             $urllist = "";
 
@@ -316,7 +316,11 @@ class PostAnn extends CI_Controller {
             $config['max_size']             = '10240';
             //$config['encrypt_name']         = true;
             //取回現有的檔案列表
-            $filelist = $data['body']->$filelist . " ";
+            $filelist = $data['body']->filename;
+            if (!empty($filelist))
+            {
+                $filelist = $filelist . " ";
+            }
             foreach($_FILES as $key => $value) {
                 // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
                 if (!empty($_FILES[$key]["name"]))
@@ -376,8 +380,6 @@ class PostAnn extends CI_Controller {
                 'overtime'  =>  $formdata['annday'],
                 'type'      =>  $formdata['type']
             );
-            print_r($titletb);
-            print_r($tid);
             $this->titletb_model->modify($tid, $titletb);
             $anntb = array (
                 'userid'    =>  $uid,
@@ -386,10 +388,9 @@ class PostAnn extends CI_Controller {
                 'url'       =>  rtrim($urllist),
                 'comment'   =>  $formdata['comment']
             );
-            print_r($anntb);
             $this->anntb_model->modify($tid,$anntb);
             // 寫入完資料庫，判斷是否為連續公告
-            //    redirect('/Main');
+            redirect('/Main');
         }
         } else
         {
