@@ -199,7 +199,7 @@ class PostAnn extends CI_Controller {
 			$this->load->view('postann_postannform_deny');
 			$this->load->view('footer');
             
-        } elseif ($login['authpass'] == 1)
+        } elseif ($login['authpass'] == 1 && $login['partid'] == $pid && $login['userid'] == $uid)
         {
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -376,6 +376,8 @@ class PostAnn extends CI_Controller {
                 'overtime'  =>  $formdata['annday'],
                 'type'      =>  $formdata['type']
             );
+            print_r($titletb);
+            print_r($tid);
             $this->titletb_model->modify($tid, $titletb);
             $anntb = array (
                 'userid'    =>  $uid,
@@ -384,10 +386,18 @@ class PostAnn extends CI_Controller {
                 'url'       =>  rtrim($urllist),
                 'comment'   =>  $formdata['comment']
             );
+            print_r($anntb);
             $this->anntb_model->modify($tid,$anntb);
             // 寫入完資料庫，判斷是否為連續公告
-                redirect('/Main');
+            //    redirect('/Main');
         }
+        } else
+        {
+            $data['message'] = "必須是原始公告者才能修改公告";
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_postannform_deny');
+			$this->load->view('footer');
         }
     }
     // 附件檔案刪除功能
