@@ -118,8 +118,8 @@ class PostAnn extends CI_Controller {
                     } else {
                         $fInfo = $this->upload->data();
                         // 將轉換好的檔名寫入 filetb 資料庫
-                        $addfilelist = array (
-                           'partid'    => $pid,
+                        $addfilelist = array (     
+                            'partid'    => $pid,
                             'userid'    => $uid,
                             'filelist'  => $newfilename,
                             'origname'  => $_FILES[$key]["name"]
@@ -393,6 +393,60 @@ class PostAnn extends CI_Controller {
             redirect('/Main');
         }
         } else
+        {
+            $data['message'] = "必須是原始公告者才能修改公告";
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_postannform_deny');
+			$this->load->view('footer');
+        }
+    }
+    // 刪除公告功能
+    public function deleteAnn($tid,$pid,$uid)
+    {
+        $data['site'] = $this->title->configvalue;
+        $login = $this->session->userdata('UserLogin');
+        $urlpath = '/PostAnn/deleteAnn/' . $tid . "/" . $pid . "/" . $uid;
+        $this->session->set_userdata('NowURL', $urlpath);
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if(empty($login))
+        {
+            redirect('/Auth/postAnnAuth');
+        }
+        elseif ($login['authpass'] == 0)
+        {
+            $data['message'] = $login['denyreason'];
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_postannform_deny');
+			$this->load->view('footer');
+            
+        } elseif ($login['authpass'] == 1 && $login['partid'] == $pid && $login['userid'] == $uid)
+        {
+            $this->load->helper('file');
+            // 載入 anntb
+            $data['body'] = $this->anntb_model->query($tid);
+            // 取出檔案列表
+            $data['annfile'] = explode(" ", $data['body']->filename);
+            foreach ($data['annfile'] as $index => $filename)
+            {
+                // 進行檔案刪除動作
+                $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
+                delete_files($filepath);
+                // 刪除 filetb 中檔名對應資料
+                $filenamedel = array (
+                    'partid'    =>  $pid,
+                    'userid'    =>  $uid,
+                    'filelist'  =>  $filename
+                );
+                $this->filetb_model->deleteFile($filenamedel);
+            }
+            // 刪除資料庫
+            $this->anntb_model->delete($tid);
+            $this->titletb_model->delete($tid);
+            // 跳回首頁
+            redirect('Main/');
+        }  else
         {
             $data['message'] = "必須是原始公告者才能修改公告";
 			// 載入 view

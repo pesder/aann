@@ -1,7 +1,7 @@
 
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <div class="text-center">
-        <a href="<?=config_item('base_url');?>/index.php/Main/goPage/<?php echo $current?>" class="btn btn-primary">回上一頁</a><a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary">回首頁</a>
+        <a href="<?=config_item('base_url');?>/index.php/Main/goPage/<?php echo $current?>" class="btn btn-primary">回上一頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary">回首頁</a>
     </div>
     
     <div>
@@ -39,7 +39,7 @@
             <th>相關附件</th>
             <th><?php print_r($hasfile);?></th>
             <th>管理</th>
-            <th><a href="<?=config_item('base_url');?>/index.php/PostAnn/modify/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>">編修</a>　　刪除</th>
+            <th><a href="<?=config_item('base_url');?>/index.php/PostAnn/modify/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-warning">編修</a>　　<a href="<?=config_item('base_url');?>/index.php/PostAnn/deleteAnn/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger">刪除</th>
           </tr>
         </thead>
         <tbody>

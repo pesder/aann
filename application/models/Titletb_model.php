@@ -118,5 +118,11 @@ class Titletb_model extends CI_Model {
             $this->db->where('tid', $tid);
             $this->db->update('titletb', $data);
         }
+        // 刪除
+        public function delete($tid)
+        {
+            $this->db->where('tid', $tid);
+            $this->db->delete('titletb');
+        }
 
 }

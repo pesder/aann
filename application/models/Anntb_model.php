@@ -69,5 +69,11 @@ class Anntb_model extends CI_Model {
             $this->db->where('tid', $tid);
             $this->db->update('anntb', $data);
         }
+        // 刪除
+        public function delete($tid)
+        {
+            $this->db->where('tid', $tid);
+            $this->db->delete('anntb');
+        }
 
 }
