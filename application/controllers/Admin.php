@@ -42,7 +42,8 @@ class Admin extends CI_Controller {
             echo "登入完成";
             $data['h1'] = "使用者功能";
             $data['h1group'] = array (
-                '/Admin/createPart' =>  "建立處室"
+                '/Admin/createPart' =>  "建立處室",
+                '/Admin/updatePart' =>  "修改處室"
             );
             $data['h2'] = "網站功能";
             $data['h2group'] = array (
@@ -54,6 +55,7 @@ class Admin extends CI_Controller {
         $this->load->view('footer');
         }
     }
+    // 建立處室
     public function createPart()
     {
         $data['function_name'] = "建立處室";
@@ -114,6 +116,30 @@ class Admin extends CI_Controller {
             // 動作結束，回選單
             redirect('/Admin');
         }
+        }
+    }
+    // 修改處室
+    public function updatePart()
+    {
+        $data['function_name'] = "修改處室";
+        $data['site'] = $this->title->configvalue;
+        $urlpath = '/Admin';
+        $this->session->set_userdata('NowURL', $urlpath);
+        $login = $this->session->userdata('AdminLogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if($login['adminauthpass'] != 1)
+        {
+            redirect('/Auth/adminAuth');
+        }
+        elseif ($login['adminauthpass'] == 1)
+        {
+            $options = array ('' => '選擇處室');
+            $part = $this->parttb_model->query();
+            foreach($part as $index => $partname)
+            {
+                array_push($options, "$part[$index]->partid = > $part[$index]->partname");
+            }
+            print_r($options);
         }
     }
 }
