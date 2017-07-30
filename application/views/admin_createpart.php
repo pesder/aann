@@ -1,5 +1,5 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
-<?=form_open('Auth/createPart');?>
+<?=form_open('Admin/createPart');?>
 <table class="table">
 <tr>
 	<td class="text-center">處室簡碼：</td>

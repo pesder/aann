@@ -70,6 +70,21 @@ class Parttb_model extends CI_Model {
             $query = $this->db->get();
             return $query->row_array();
         }
-
-
+        // 寫入處室資料
+        public function add($data)
+        {
+            $this->db->insert('parttb', $data);
+        }
+       // 寫入處室資料 - 傳回 id
+        public function add_id($data)
+        {
+            $this->db->insert('parttb', $data);
+            return $this->db->insert_id();
+        }
+        // 更新處室
+        public function modify($partid, $data)
+        {
+            $this->db->where('partid', $partid);
+            $this->db->update('parttb', $data);
+        }
 }

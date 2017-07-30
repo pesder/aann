@@ -90,6 +90,29 @@ class Admin extends CI_Controller {
 			$formdata['pid'] = $this->input->post('pid');
             $formdata['partname'] = $this->input->post('partname');
             $formdata['partident'] = $this->input->post('partident');
+            if (!empty($formdata['pid']))
+            {
+                $parttb = array (
+                    'pid'   =>  $formdata['pid'],
+                    'partname'  =>  $formdata['partname'],
+                    'partident' =>  $formdata['partident']
+                );
+                $this->parttb_model->add($parttb);
+            } elseif (empty($formdata['pid']))
+            {
+                $parttb = array (
+                    'partname'  =>  $formdata['partname'],
+                    'partident' =>  $formdata['partident']
+                );
+                $partid = $this->parttb_model->add_id($parttb);
+                $newpid = "c" . $partid;
+                $modify = array (
+                    'pid'   =>  $newpid
+                );
+                $this->parttb_model->modify($partid, $modify);
+            }
+            // 動作結束，回選單
+            redirect('/Admin');
         }
         }
     }
