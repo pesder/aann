@@ -1,6 +1,6 @@
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <div class="text-center"><p><?php echo "歡迎，" . $user['realname'] . "，您已登入帳號[" . $user['username'] . "]"?></hp1></div>
-    <?=form_open_multipart('PostAnn/modify/' . $head->tid . "/" . $head->partid . "/" . $body->userid);?>
+    <?=form_open_multipart('PostAnn/modify/' . $head->tid);?>
     <div>
       <table class="table table-striped container-fluid">
         <thead>

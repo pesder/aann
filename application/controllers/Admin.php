@@ -22,8 +22,8 @@ class Admin extends CI_Controller {
         $data['function_name'] = "管理功能";
         $data['site'] = $this->title->configvalue;
         $urlpath = '/Admin';
-        $this->session->set_userdata('NowURL', $urlpath);
-        $login = $this->session->userdata('AdminLogin');
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -43,7 +43,7 @@ class Admin extends CI_Controller {
             $data['h1'] = "使用者功能";
             $data['h1group'] = array (
                 '/Admin/createPart' =>  "建立處室",
-                '/Admin/updatePart' =>  "修改處室"
+                '/Admin/updatePart1' =>  "修改處室"
             );
             $data['h2'] = "網站功能";
             $data['h2group'] = array (
@@ -58,11 +58,9 @@ class Admin extends CI_Controller {
     // 建立處室
     public function createPart()
     {
-        $data['function_name'] = "建立處室";
-        $data['site'] = $this->title->configvalue;
         $urlpath = '/Admin';
-        $this->session->set_userdata('NowURL', $urlpath);
-        $login = $this->session->userdata('AdminLogin');
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if($login['adminauthpass'] != 1)
         {
@@ -70,9 +68,9 @@ class Admin extends CI_Controller {
         }
         elseif ($login['adminauthpass'] == 1)
         {
-                    $data['function_name'] = "超級總管檢驗帳號";
+        $data['function_name'] = "建立處室";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('NowURL');
+        $nowurl = $this->session->userdata('nowurl');
         
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -119,13 +117,12 @@ class Admin extends CI_Controller {
         }
     }
     // 修改處室
-    public function updatePart()
+    public function updatePart1()
     {
-        $data['function_name'] = "修改處室";
-        $data['site'] = $this->title->configvalue;
+
         $urlpath = '/Admin';
-        $this->session->set_userdata('NowURL', $urlpath);
-        $login = $this->session->userdata('AdminLogin');
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if($login['adminauthpass'] != 1)
         {
@@ -133,13 +130,85 @@ class Admin extends CI_Controller {
         }
         elseif ($login['adminauthpass'] == 1)
         {
-            $options = array ('' => '選擇處室');
-            $part = $this->parttb_model->query();
-            foreach($part as $index => $partname)
+            $data['function_name'] = "選擇要修改處室";
+            $data['site'] = $this->title->configvalue;
+            $data['options'] = $this->parttb_model->queryList();
+            // 表單驗證
+		$this->form_validation->set_message('required','{field}未選');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+            // 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('admin_updatepart1');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['partid'] = $this->input->post('partid');
+            $this->session->set_userdata("modifypartid", $formdata['partid']);
+            // 跳到下一頁
+            redirect('/Admin/updatePart2');
+        }
+        }
+    }
+        public function updatePart2($partid = 0)
+    {
+
+        $urlpath = '/Admin';
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if($login['adminauthpass'] != 1)
+        {
+            redirect('/Auth/adminAuth');
+        }
+        elseif ($login['adminauthpass'] == 1)
+        {
+            $data['function_name'] = "修改處室";
+            $data['site'] = $this->title->configvalue;
+            $sessionpartid = $this->session->userdata('modifypartid');
+            if (empty($sessionpartid))
             {
-                array_push($options, "$part[$index]->partid = > $part[$index]->partname");
+                redirect('/Admin');
+            } else
+            {
+                $data['parttb'] = $this->parttb_model->query($sessionpartid);
             }
-            print_r($options);
+
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('pid', '處室簡碼', 'trim|required');
+        $this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
+        
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('admin_updatepart2');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['pid'] = $this->input->post('pid');
+            $formdata['partname'] = $this->input->post('partname');
+            $formdata['partident'] = $this->input->post('partident');
+            $parttb = array(
+                    'pid'   =>  $formdata['pid'],
+                    'partname'  =>  $formdata['partname'],
+                    'partident' =>  $formdata['partident']
+            );
+            print_r($parttb);
+            $this->parttb_model->modify($sessionpartid, $parttb);
+            redirect('/Admin');
+            $this->session->set_userdata("modifypartid", "");
+        }
         }
     }
 }

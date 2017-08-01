@@ -1,14 +1,16 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
-<?=form_open('Admin/updatePart');?>
+<?=form_open('Admin/updatePart2');?>
 <table class="table">
 <tr>
 	<td class="text-center">處室簡碼：</td>
 	<td>
 	<div class="col-xs-3">
+	<?=form_error('pid')?>
 	<?php
 	$pid_data = array (
 		'name'	=>	'pid',
-		'class'	=>	'form-control');
+		'class'	=>	'form-control',
+		'value'	=>	$parttb->pid);
 	echo form_input($pid_data);
 	?>
 	</div>
@@ -22,7 +24,8 @@
 	<?php
 		$partname_data = array (
 		'name'	=>	'partname',
-		'class'	=>	'form-control');
+		'class'	=>	'form-control',
+		'value'	=>	$parttb->partname);
 	echo form_input($partname_data);
 	?>
 	</div>★
@@ -36,10 +39,11 @@
 	<?php
 		$partident_data = array (
 		'name'	=>	'partident',
-		'class'	=>	'form-control');
+		'class'	=>	'form-control',
+		'value'	=>	$parttb->partident);
 	echo form_input($partident_data);
 	?>
-	</div>★
+	</div>
 	</td>
 </tr>
 
@@ -49,7 +53,7 @@
     $but1 = array (
       'name'  =>  'sent',
       'type'  =>  'submit',
-      'content' =>  '新增',
+      'content' =>  '送出',
       'class' =>  'btn btn-primary',
       'accesskey'	=>	's');
     echo form_button($but1);

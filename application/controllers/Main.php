@@ -22,7 +22,7 @@ class Main extends CI_Controller {
         $this->session->set_userdata('CurrentPage','1');
         $totalpages = $this->titletb_model->countPage($this->annpp->configvalue);
         $this->session->set_userdata('TotalPages', $totalpages);
-        $this->session->set_userdata('UserLogin', "");
+        $this->session->set_userdata('userlogin', "");
         $data['function_name'] = "";
         $data['site'] = $this->title->configvalue;
         $data['list'] = $this->titletb_model->queryLimitHome($this->annpp->configvalue);

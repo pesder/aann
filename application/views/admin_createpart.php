@@ -39,7 +39,7 @@
 		'class'	=>	'form-control');
 	echo form_input($partident_data);
 	?>
-	</div>★
+	</div>
 	</td>
 </tr>
 

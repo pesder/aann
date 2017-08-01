@@ -23,7 +23,7 @@ class Auth extends CI_Controller {
         $data['site'] = $this->title->configvalue;
         //取得單位資料
         $data['part'] = $this->parttb_model->query();
-        $nowurl = $this->session->userdata('NowURL');
+        $nowurl = $this->session->userdata('nowurl');
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
         $options = [];
@@ -74,7 +74,7 @@ class Auth extends CI_Controller {
                     'realname' => $data['user']['realname'],
                     'userid'    =>  $data['user']['userid']
                 );
-                $this->session->set_userdata('UserLogin', $result);
+                $this->session->set_userdata('userlogin', $result);
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
@@ -86,7 +86,7 @@ class Auth extends CI_Controller {
                     'realname' => "",
                     'userid'    =>  ""
                 );
-                $this->session->set_userdata('UserLogin', $result);
+                $this->session->set_userdata('userlogin', $result);
             }
 
 			// 回首頁
@@ -104,7 +104,7 @@ class Auth extends CI_Controller {
     {
         $data['function_name'] = "超級總管檢驗帳號";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('NowURL');
+        $nowurl = $this->session->userdata('nowurl');
         
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -147,7 +147,7 @@ class Auth extends CI_Controller {
                     'adminauthpass' => "1",
                     'denyreason' => $denyreason
                 );
-                $this->session->set_userdata('AdminLogin', $result);
+                $this->session->set_userdata('adminlogin', $result);
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
@@ -155,7 +155,7 @@ class Auth extends CI_Controller {
                     'adminauthpass' => "0",
                     'denyreason' => $denyreason
                 );
-                $this->session->set_userdata('AdminLogin', $result);
+                $this->session->set_userdata('adminlogin', $result);
             }
 
 			// 回首頁

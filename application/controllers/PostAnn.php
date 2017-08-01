@@ -24,9 +24,9 @@ class PostAnn extends CI_Controller {
     {
         $data['function_name'] = "發布公告表單";
         $data['site'] = $this->title->configvalue;
-        $login = $this->session->userdata('UserLogin');
+        $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/postAnnForm';
-        $this->session->set_userdata('NowURL', $urlpath);
+        $this->session->set_userdata('nowurl', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -178,13 +178,17 @@ class PostAnn extends CI_Controller {
         
     }
 
-    public function modify($tid,$pid,$uid)
+    public function modify($tid)
     {
         $data['function_name'] = "編輯公告";
         $data['site'] = $this->title->configvalue;
-        $login = $this->session->userdata('UserLogin');
-        $urlpath = '/PostAnn/modify/' . $tid . "/" . $pid . "/" . $uid;
-        $this->session->set_userdata('NowURL', $urlpath);
+        $login = $this->session->userdata('userlogin');
+        $data['head'] = $this->titletb_model->query($tid);
+        $data['body'] = $this->anntb_model->query($tid);
+        $pid = $data['head']->partid;
+        $uid = $data['body']->userid;
+        $urlpath = '/PostAnn/modify/' . $tid;
+        $this->session->set_userdata('nowurl', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -405,9 +409,9 @@ class PostAnn extends CI_Controller {
     public function deleteAnn($tid,$pid,$uid)
     {
         $data['site'] = $this->title->configvalue;
-        $login = $this->session->userdata('UserLogin');
+        $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/deleteAnn/' . $tid . "/" . $pid . "/" . $uid;
-        $this->session->set_userdata('NowURL', $urlpath);
+        $this->session->set_userdata('nowurl', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {

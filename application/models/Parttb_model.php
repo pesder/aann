@@ -70,6 +70,19 @@ class Parttb_model extends CI_Model {
             $query = $this->db->get();
             return $query->row_array();
         }
+        //查詢處室名稱清單
+        public function queryList() 
+        {
+        	$this->db->select('*');
+        	$this->db->from('parttb');
+        	$this->db->order_by('partid','asc');
+        	$query = $this->db->get();
+                foreach ($query->result_array() as $row)
+                {
+                    $data[$row['partid']] = $row['pid'] . "." . $row['partname'];
+                }
+                return $data;
+        }
         // 寫入處室資料
         public function add($data)
         {
