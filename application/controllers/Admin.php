@@ -39,11 +39,11 @@ class Admin extends CI_Controller {
             
         } elseif ($login['adminauthpass'] == 1)
         {
-            echo "登入完成";
             $data['h1'] = "使用者功能";
             $data['h1group'] = array (
-                '/Admin/createPart' =>  "建立處室",
-                '/Admin/updatePart1' =>  "修改處室"
+                '/Admin/createPart' =>  "新增一個處室",
+                '/Admin/updatePart1' =>  "修改處室資料",
+                '/Admin/addMenber'  =>  "新增一位組員"
             );
             $data['h2'] = "網站功能";
             $data['h2group'] = array (
@@ -58,7 +58,7 @@ class Admin extends CI_Controller {
     // 建立處室
     public function createPart()
     {
-        $urlpath = '/Admin';
+        $urlpath = '/Admin/createPart';
         $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
@@ -120,7 +120,7 @@ class Admin extends CI_Controller {
     public function updatePart1()
     {
 
-        $urlpath = '/Admin';
+        $urlpath = '/Admin/updatePart1';
         $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
@@ -158,7 +158,7 @@ class Admin extends CI_Controller {
         public function updatePart2($partid = 0)
     {
 
-        $urlpath = '/Admin';
+        $urlpath = '/Admin/updatePart2';
         $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
@@ -208,6 +208,40 @@ class Admin extends CI_Controller {
             $this->parttb_model->modify($sessionpartid, $parttb);
             redirect('/Admin');
             $this->session->set_userdata("modifypartid", "");
+        }
+        }
+    }
+        // 新增一位組員
+    public function addMenber()
+    {
+        $urlpath = '/Admin/addMenber';
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if($login['adminauthpass'] != 1)
+        {
+            redirect('/Auth/adminAuth');
+        }
+        elseif ($login['adminauthpass'] == 1)
+        {
+        $data['function_name'] = "新增組員";
+        $data['site'] = $this->title->configvalue;
+        $nowurl = $this->session->userdata('nowurl');
+        $data['options'] = $this->parttb_model->queryList();        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('admin_addmember');
+			$this->load->view('footer');
+		}
+		else
+		{
         }
         }
     }

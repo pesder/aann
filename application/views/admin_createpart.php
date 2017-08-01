@@ -1,4 +1,5 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
+<div class="bg-info text-center"><h2><?=$function_name?></h2></div>
 <?=form_open('Admin/createPart');?>
 <table class="table">
 <tr>
