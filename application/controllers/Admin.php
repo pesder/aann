@@ -44,7 +44,7 @@ class Admin extends CI_Controller {
                 '/Admin/createPart' =>  "新增一個處室",
                 '/Admin/updatePart1' =>  "修改處室資料",
                 '/Admin/addMember'  =>  "新增一位組員",
-                '/Admin/updateMember'  =>  "修改組員資料"
+                '/Admin/updateMember1'  =>  "修改組員資料"
             );
             $data['h2'] = "網站功能";
             $data['h2group'] = array (
@@ -283,9 +283,9 @@ class Admin extends CI_Controller {
         }
     }
         // 修改組員資料
-    public function updateMember()
+    public function updateMember1()
     {
-        $urlpath = '/Admin/updateMember';
+        $urlpath = '/Admin/updateMember1';
         $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
@@ -295,26 +295,36 @@ class Admin extends CI_Controller {
         }
         elseif ($login['adminauthpass'] == 1)
         {
-        $data['function_name'] = "編修組員";
+        $data['function_name'] = "選擇組員處室";
         $data['site'] = $this->title->configvalue;
         $nowurl = $this->session->userdata('nowurl');
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('username', '帳號', 'trim|required');
-        $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
-        $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
+		$this->form_validation->set_rules('partid', '處室', 'trim|required');
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
-			// 載入 view
+			$part = $this->session->userdata('partid');
+            if (!empty($part))
+            {
+                echo "Show something";
+            }
+            // 載入 view
 			$this->load->view('header-jquery',$data);
-			$this->load->view('admin_addmember');
+			$this->load->view('admin_updatemember1');
 			$this->load->view('footer');
 		}
 		else
 		{
+            $part = $this->session->userdata('partid');
+            if(empty($part)) 
+            {
+                $inputpart = $this->input->post('partid');
+                $this->session->set_userdata('partid', $inputpart);
+            }
+            redirect($urlpath);
         }
         }
     }
