@@ -43,7 +43,8 @@ class Admin extends CI_Controller {
             $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
                 '/Admin/updatePart1' =>  "修改處室資料",
-                '/Admin/addMenber'  =>  "新增一位組員"
+                '/Admin/addMember'  =>  "新增一位組員",
+                '/Admin/updateMember'  =>  "修改組員資料"
             );
             $data['h2'] = "網站功能";
             $data['h2group'] = array (
@@ -211,10 +212,10 @@ class Admin extends CI_Controller {
         }
         }
     }
-        // 新增一位組員
-    public function addMenber()
+    // 新增一位組員
+    public function addMember()
     {
-        $urlpath = '/Admin/addMenber';
+        $urlpath = '/Admin/addMember';
         $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
@@ -231,7 +232,79 @@ class Admin extends CI_Controller {
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
+		$this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
+        $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('admin_addmember');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+            $formdata['partid'] = $this->input->post('partid');
+            $formdata['username'] = $this->input->post('username');
+            $formdata['realname'] = $this->input->post('realname');
+            $formdata['userpass'] = $this->input->post('userpass');
+            $formdata['email'] = $this->input->post('email');
+            $formdata['userident'] = $this->input->post('userident');
+            $formdata['rootuid'] = $this->input->post('rootuid');
+            // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
+            $ismd5 = $md5key->configvalue;
+            if (!empty($ismd5)) {
+                $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
+            }
+            //準備寫入 usertb
+            $usertb = array (
+                'partid'    =>  $formdata['partid'],
+                'username'    =>  $formdata['username'],
+                'realname'    =>  $formdata['realname'],
+                'userpass'    =>  $formdata['userpass'],
+                'email'    =>  $formdata['email'],
+                'userident'    =>  $formdata['userident']
+            );
+            $newid = $this->usertb_model->add($usertb);
+            // 設定處室管理者
+            if($formdata['rootuid'] == 1)
+            {
+                $root = array(
+                    'rootuid'   =>  $newid
+                );
+                $this->parttb_model->modify($formdata['partid'], $root);
+            }
+            // 動作結束，回選單
+            redirect('/Admin');
+        }
+        }
+    }
+        // 修改組員資料
+    public function updateMember()
+    {
+        $urlpath = '/Admin/updateMember';
+        $this->session->set_userdata('nowurl', $urlpath);
+        $login = $this->session->userdata('adminlogin');
+        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
+        if($login['adminauthpass'] != 1)
+        {
+            redirect('/Auth/adminAuth');
+        }
+        elseif ($login['adminauthpass'] == 1)
+        {
+        $data['function_name'] = "編修組員";
+        $data['site'] = $this->title->configvalue;
+        $nowurl = $this->session->userdata('nowurl');
+        $data['options'] = $this->parttb_model->queryList();        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
+        $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{

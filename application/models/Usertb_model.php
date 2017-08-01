@@ -80,5 +80,22 @@ class Usertb_model extends CI_Model {
             return $query->row();
         }
 
-
+        // 寫入
+        public function add($data)
+        {
+            $this->db->insert('usertb', $data);
+            return $this->db->insert_id();
+        }
+        // 修改
+        public function modify($uid, $data)
+        {
+            $this->db->where('uid', $tid);
+            $this->db->update('usertb', $data);
+        }
+        // 刪除
+        public function delete($uid)
+        {
+            $this->db->where('uid', $tid);
+            $this->db->delete('usertb');
+        }
 }
