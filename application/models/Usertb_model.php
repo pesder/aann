@@ -79,6 +79,23 @@ class Usertb_model extends CI_Model {
             $query = $this->db->get();
             return $query->row();
         }
+        //查詢處室名稱清單
+        public function queryMember($pid) 
+        {
+        	$this->db->select('*');
+        	$this->db->from('usertb');
+            $this->db->where('partid', $pid);
+        	$this->db->order_by('userid','asc');
+        	$query = $this->db->get();
+            $data = [];
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $row)
+                {
+                    $data[$row['userid']] = $row['realname'] . " (" . $row['username'] . ")";
+                }
+            }
+            return $data;
+        }
 
         // 寫入
         public function add($data)

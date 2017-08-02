@@ -105,7 +105,7 @@ class Auth extends CI_Controller {
         $data['function_name'] = "超級總管檢驗帳號";
         $data['site'] = $this->title->configvalue;
         $nowurl = $this->session->userdata('nowurl');
-        
+        $result = $this->session->userdata('adminlogin');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -114,9 +114,14 @@ class Auth extends CI_Controller {
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
-			// 載入 view
+			$data['message'] = $result['denyreason'];
+            // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('auth_adminauth');
+            if ($result['adminauthpass'] == 0 )
+            {
+                $this->load->view('admin_deny');
+            }
 			$this->load->view('footer');
 		}
 		else

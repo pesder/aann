@@ -23,6 +23,11 @@ class Main extends CI_Controller {
         $totalpages = $this->titletb_model->countPage($this->annpp->configvalue);
         $this->session->set_userdata('TotalPages', $totalpages);
         $this->session->set_userdata('userlogin', "");
+                        $emptyadmin = array (
+                    'adminauthpass' => "",
+                    'denyreason' => ""
+                );
+        $this->session->set_userdata('adminlogin', $emptyadmin);
         $data['function_name'] = "";
         $data['site'] = $this->title->configvalue;
         $data['list'] = $this->titletb_model->queryLimitHome($this->annpp->configvalue);

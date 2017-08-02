@@ -15,14 +15,15 @@ class Admin extends CI_Controller {
             $this->load->model('config_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryBy('configkey','myname');
+            // 設定目前網址，供認證後跳回
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
+            //進行認證
+            $this->auth();
         }
 
-    public function index()
+    public function auth()
     {
-        $data['function_name'] = "管理功能";
-        $data['site'] = $this->title->configvalue;
-        $urlpath = '/Admin';
-        $this->session->set_userdata('nowurl', $urlpath);
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
@@ -31,44 +32,32 @@ class Admin extends CI_Controller {
         }
         elseif ($login['adminauthpass'] == 0)
         {
-            $data['message'] = $login['denyreason'];
-			// 載入 view
-			$this->load->view('header-jquery',$data);
-			$this->load->view('admin_deny');
-			$this->load->view('footer');
-            
-        } elseif ($login['adminauthpass'] == 1)
-        {
-            $data['h1'] = "使用者功能";
-            $data['h1group'] = array (
+            redirect('/Auth/adminAuth');
+        }
+    }
+    public function index()
+    {
+        $data['function_name'] = "管理功能";
+        $data['site'] = $this->title->configvalue;
+        $data['h1'] = "使用者功能";
+        $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
                 '/Admin/updatePart1' =>  "修改處室資料",
                 '/Admin/addMember'  =>  "新增一位組員",
                 '/Admin/updateMember1'  =>  "修改組員資料"
-            );
-            $data['h2'] = "網站功能";
-            $data['h2group'] = array (
+        );
+        $data['h2'] = "網站功能";
+        $data['h2group'] = array (
                 '/Admin/changeSiteName' =>  "網站名稱"
-            );
+        );
         // 載入 view
         $this->load->view('header',$data);
         $this->load->view('admin_index');
         $this->load->view('footer');
-        }
     }
     // 建立處室
     public function createPart()
     {
-        $urlpath = '/Admin/createPart';
-        $this->session->set_userdata('nowurl', $urlpath);
-        $login = $this->session->userdata('adminlogin');
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if($login['adminauthpass'] != 1)
-        {
-            redirect('/Auth/adminAuth');
-        }
-        elseif ($login['adminauthpass'] == 1)
-        {
         $data['function_name'] = "建立處室";
         $data['site'] = $this->title->configvalue;
         $nowurl = $this->session->userdata('nowurl');
@@ -115,24 +104,14 @@ class Admin extends CI_Controller {
             // 動作結束，回選單
             redirect('/Admin');
         }
-        }
     }
     // 修改處室
     public function updatePart1()
     {
-
-        $urlpath = '/Admin/updatePart1';
-        $this->session->set_userdata('nowurl', $urlpath);
-        $login = $this->session->userdata('adminlogin');
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if($login['adminauthpass'] != 1)
-        {
-            redirect('/Auth/adminAuth');
-        }
-        elseif ($login['adminauthpass'] == 1)
-        {
             $data['function_name'] = "選擇要修改處室";
             $data['site'] = $this->title->configvalue;
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
             $data['options'] = $this->parttb_model->queryList();
             // 表單驗證
 		$this->form_validation->set_message('required','{field}未選');
@@ -154,23 +133,13 @@ class Admin extends CI_Controller {
             // 跳到下一頁
             redirect('/Admin/updatePart2');
         }
-        }
     }
         public function updatePart2($partid = 0)
     {
-
-        $urlpath = '/Admin/updatePart2';
-        $this->session->set_userdata('nowurl', $urlpath);
-        $login = $this->session->userdata('adminlogin');
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if($login['adminauthpass'] != 1)
-        {
-            redirect('/Auth/adminAuth');
-        }
-        elseif ($login['adminauthpass'] == 1)
-        {
             $data['function_name'] = "修改處室";
             $data['site'] = $this->title->configvalue;
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
             $sessionpartid = $this->session->userdata('modifypartid');
             if (empty($sessionpartid))
             {
@@ -210,21 +179,10 @@ class Admin extends CI_Controller {
             redirect('/Admin');
             $this->session->set_userdata("modifypartid", "");
         }
-        }
     }
     // 新增一位組員
     public function addMember()
     {
-        $urlpath = '/Admin/addMember';
-        $this->session->set_userdata('nowurl', $urlpath);
-        $login = $this->session->userdata('adminlogin');
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if($login['adminauthpass'] != 1)
-        {
-            redirect('/Auth/adminAuth');
-        }
-        elseif ($login['adminauthpass'] == 1)
-        {
         $data['function_name'] = "新增組員";
         $data['site'] = $this->title->configvalue;
         $nowurl = $this->session->userdata('nowurl');
@@ -280,21 +238,12 @@ class Admin extends CI_Controller {
             // 動作結束，回選單
             redirect('/Admin');
         }
-        }
     }
         // 修改組員資料
     public function updateMember1()
     {
-        $urlpath = '/Admin/updateMember1';
+        $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $login = $this->session->userdata('adminlogin');
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if($login['adminauthpass'] != 1)
-        {
-            redirect('/Auth/adminAuth');
-        }
-        elseif ($login['adminauthpass'] == 1)
-        {
         $data['function_name'] = "選擇組員處室";
         $data['site'] = $this->title->configvalue;
         $nowurl = $this->session->userdata('nowurl');
@@ -307,13 +256,25 @@ class Admin extends CI_Controller {
 		if($this->form_validation->run() == FALSE) 
 		{
 			$part = $this->session->userdata('partid');
+            if (empty($part)) {
+                $data['message'] = "尚未選擇處室";
+            } else {
+                $data['userlist'] = $this->usertb_model->queryMember($part);
+                $this->session->set_userdata('partid', "");
+                if (empty($data['userlist'])) {
+                    $data['message'] = "找不到成員";
+                } else {
+                    $data['message'] = "請點選成員進入修改";
+                }
+            }
             if (!empty($part))
             {
-                echo "Show something";
+                $data['userlist'] = $this->usertb_model->queryMember($part);
             }
             // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('admin_updatemember1');
+            $this->load->view('admin_updatemember1_list');
 			$this->load->view('footer');
 		}
 		else
@@ -326,6 +287,23 @@ class Admin extends CI_Controller {
             }
             redirect($urlpath);
         }
+    }
+            // 修改組員資料
+    public function updateMember2()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "選擇組員處室";
+        $data['site'] = $this->title->configvalue;
+        $nowurl = $this->session->userdata('nowurl');
+        $data['options'] = $this->parttb_model->queryList();        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
         }
     }
 }
