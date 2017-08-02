@@ -115,4 +115,10 @@ class Usertb_model extends CI_Model {
             $this->db->where('userid', $uid);
             $this->db->delete('usertb');
         }
+        // 刪除全處室使用者
+        public function destory($partid)
+        {
+            $this->db->where('partid', $partid);
+            $this->db->delete('usertb');
+        }
 }

@@ -87,7 +87,7 @@ class Admin extends CI_Controller {
                     'partname'  =>  $formdata['partname'],
                     'partident' =>  $formdata['partident']
                 );
-                $this->parttb_model->add($parttb);
+                $partid = $this->parttb_model->add_id($parttb);
             } elseif (empty($formdata['pid']))
             {
                 $parttb = array (
@@ -101,6 +101,10 @@ class Admin extends CI_Controller {
                 );
                 $this->parttb_model->modify($partid, $modify);
             }
+            $partpath = './files/' . $partid;
+            $oldmask = umask(0);
+            mkdir($partpath, 0777);
+            umask($oldmask);
             // 動作結束，回選單
             redirect('/Admin');
         }
@@ -180,6 +184,42 @@ class Admin extends CI_Controller {
             $this->session->set_userdata("modifypartid", "");
         }
     }
+    // 刪除處室
+    public function deletePart()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "刪除處室";
+        $data['site'] = $this->title->configvalue;
+        // 從 session 取回要刪除的 partid
+        $sessionpartid = $this->session->userdata('modifypartid');
+        // 若檢查不到 partid 則跳回處室選擇畫面
+        if (empty($sessionpartid)) {
+            redirect('/Admin/updatePart1');
+        }
+        $this->load->model('titletb_model');
+        $this->load->model('anntb_model');
+        $this->load->model('filetb_model');
+        // 刪除處室
+        $this->parttb_model->delete($sessionpartid);
+        // 刪除處室所有附件
+        $this->load->helper('file');
+        $partpath = './files/' . $sessionpartid . "/";
+        delete_files($partpath, TRUE);
+        $this->filetb_model->delete($sessionpartid);
+        // 刪除使用者貼文本體
+        $userlist = $this->usertb_model->queryMember($sessionpartid);
+        foreach ($userlist as $key => $name)
+        {
+            $this->anntb_model->destory($key);
+        }
+        // 刪除處室所有使用者
+        $this->usertb_model->destory($sessionpartid);
+        // 刪除處室所有貼文標題
+        $this->titletb_model->destory($sessionpartid);
+        redirect('Admin');
+    }
+
     // 新增一位組員
     public function addMember()
     {
@@ -288,7 +328,7 @@ class Admin extends CI_Controller {
             redirect($urlpath);
         }
     }
-            // 修改組員資料
+    // 修改組員資料
     public function updateMember2($id = 0)
     {
         $urlpath = current_url();
@@ -372,6 +412,22 @@ class Admin extends CI_Controller {
             // 動作結束，回選單
             redirect('/Admin');
         }
+    }
+    // 刪除組員資料
+    public function deleteMember()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "刪除組員資料";
+        $data['site'] = $this->title->configvalue;
+        // 從 session 取回要刪除的 userid
+        $uid = $this->session->userdata('updatemember');
+        // 若檢查不到 userid 則跳回處室選擇畫面
+        if (empty($uid)) {
+            redirect('/Admin/updateMember1');
+        }
+        $this->usertb_model->delete($uid);
+        redirect('Admin');
     }
 }
 ?>

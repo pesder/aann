@@ -124,5 +124,10 @@ class Titletb_model extends CI_Model {
             $this->db->where('tid', $tid);
             $this->db->delete('titletb');
         }
-
+        // 刪除處室全部貼文
+        public function destory($partid)
+        {
+            $this->db->where('partid', $partid);
+            $this->db->delete('titletb');
+        }
 }

@@ -75,5 +75,11 @@ class Anntb_model extends CI_Model {
             $this->db->where('tid', $tid);
             $this->db->delete('anntb');
         }
+        // 刪除使用者全部貼文
+        public function destory($userid)
+        {
+            $this->db->where('userid', $userid);
+            $this->db->delete('anntb');
+        }
 
 }

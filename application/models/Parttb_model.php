@@ -103,4 +103,10 @@ class Parttb_model extends CI_Model {
             $this->db->where('partid', $partid);
             $this->db->update('parttb', $data);
         }
+        // 刪除處室
+        public function delete($partid)
+        {
+            $this->db->where('partid', $partid);
+            $this->db->delete('parttb');
+        }
 }

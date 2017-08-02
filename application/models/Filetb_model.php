@@ -82,5 +82,11 @@ class Filetb_model extends CI_Model {
         {
             $this->db->delete('filetb', $data);
         }
+        //刪除處室檔案對應
+        public function delete($partid)
+        {
+            $this->db->where('partid', $partid);
+            $this->db->delete('filetb');
+        }
 
 }
