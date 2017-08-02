@@ -106,13 +106,13 @@ class Usertb_model extends CI_Model {
         // 修改
         public function modify($uid, $data)
         {
-            $this->db->where('uid', $tid);
+            $this->db->where('userid', $uid);
             $this->db->update('usertb', $data);
         }
         // 刪除
         public function delete($uid)
         {
-            $this->db->where('uid', $tid);
+            $this->db->where('userid', $uid);
             $this->db->delete('usertb');
         }
 }

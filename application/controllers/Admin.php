@@ -60,7 +60,7 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "建立處室";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('nowurl');
+        //$nowurl = $this->session->userdata('nowurl');
         
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -70,7 +70,7 @@ class Admin extends CI_Controller {
 		if($this->form_validation->run() == FALSE) 
 		{
 			// 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('admin_createpart');
 			$this->load->view('footer');
 		}
@@ -121,7 +121,7 @@ class Admin extends CI_Controller {
 		if($this->form_validation->run() == FALSE) 
 		{
 			// 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('admin_updatepart1');
 			$this->load->view('footer');
 		}
@@ -159,7 +159,7 @@ class Admin extends CI_Controller {
 		if($this->form_validation->run() == FALSE) 
 		{
 			// 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('admin_updatepart2');
 			$this->load->view('footer');
 		}
@@ -185,7 +185,7 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "新增組員";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('nowurl');
+        //$nowurl = $this->session->userdata('nowurl');
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -197,7 +197,7 @@ class Admin extends CI_Controller {
 		if($this->form_validation->run() == FALSE) 
 		{
 			// 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('admin_addmember');
 			$this->load->view('footer');
 		}
@@ -246,7 +246,7 @@ class Admin extends CI_Controller {
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "選擇組員處室";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('nowurl');
+        //$nowurl = $this->session->userdata('nowurl');
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -272,7 +272,7 @@ class Admin extends CI_Controller {
                 $data['userlist'] = $this->usertb_model->queryMember($part);
             }
             // 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('admin_updatemember1');
             $this->load->view('admin_updatemember1_list');
 			$this->load->view('footer');
@@ -289,21 +289,88 @@ class Admin extends CI_Controller {
         }
     }
             // 修改組員資料
-    public function updateMember2()
+    public function updateMember2($id = 0)
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['function_name'] = "選擇組員處室";
+        $data['function_name'] = "修改組員資料";
         $data['site'] = $this->title->configvalue;
-        $nowurl = $this->session->userdata('nowurl');
+        //$nowurl = $this->session->userdata('nowurl');
+        if ($id != 0) {
+            $this->session->set_userdata('updatemember', $id);
+        }
+        $uid = $this->session->userdata('updatemember');
+        // 若沒有 userid 值，則跳回管理頁面
+        if (empty($uid))
+        {
+            redirect('/Admin');
+        }
+        $data['userdata'] = $this->usertb_model->query($uid);
+        $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+        $this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_updatemember2');
+			$this->load->view('footer');
+            
+        } else
+        {
+            $uid = $this->session->userdata('updatemember');
+            // 接收表單
+            $formdata['partid'] = $this->input->post('partid');
+            $formdata['username'] = $this->input->post('username');
+            $formdata['realname'] = $this->input->post('realname');
+            $formdata['userpass'] = $this->input->post('userpass');
+            $formdata['email'] = $this->input->post('email');
+            $formdata['userident'] = $this->input->post('userident');
+            $formdata['rootuid'] = $this->input->post('rootuid');
+
+            //準備寫入 usertb
+            $usertb = array (
+                'partid'    =>  $formdata['partid'],
+                'username'    =>  $formdata['username'],
+                'realname'    =>  $formdata['realname'],
+                'email'    =>  $formdata['email'],
+                'userident'    =>  $formdata['userident']
+            );
+            $this->usertb_model->modify($uid, $usertb);
+            $newid = $uid;
+            // 設定處室管理者
+            if($formdata['rootuid'] == 1)
+            {
+                $root = array(
+                    'rootuid'   =>  $newid
+                );
+                $this->parttb_model->modify($formdata['partid'], $root);
+            }
+            // 判斷，若密碼欄位有填寫，則進行密碼變更
+            if (!empty($formdata['userpass']))
+            {
+            // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
+            $ismd5 = $md5key->configvalue;
+            if (!empty($ismd5)) {
+                $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
+            }
+            $userpass = array(
+                'userpass'  =>  $formdata['userpass']
+            );
+                $this->usertb_model->modify($uid, $userpass);
+            }
+            print_r($usertb);
+            //清除 updatemember
+            $this->session->set_userdata('updatemember', "");
+            // 動作結束，回選單
+            redirect('/Admin');
         }
     }
 }

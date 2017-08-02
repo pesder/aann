@@ -77,10 +77,13 @@ class Parttb_model extends CI_Model {
         	$this->db->from('parttb');
         	$this->db->order_by('partid','asc');
         	$query = $this->db->get();
+            $data = [];
+            if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $row)
                 {
                     $data[$row['partid']] = $row['pid'] . "." . $row['partname'];
                 }
+            }
                 return $data;
         }
         // 寫入處室資料
