@@ -18,15 +18,13 @@ class PostAnn extends CI_Controller {
             $this->load->model('filetb_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryBy('configkey','myname');
+            // 設定目前網址，供認證後跳回
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
         }
-
-    public function postAnnForm() 
+    public function auth()
     {
-        $data['function_name'] = "發布公告表單";
-        $data['site'] = $this->title->configvalue;
         $login = $this->session->userdata('userlogin');
-        $urlpath = '/PostAnn/postAnnForm';
-        $this->session->set_userdata('nowurl', $urlpath);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if(empty($login))
         {
@@ -34,14 +32,16 @@ class PostAnn extends CI_Controller {
         }
         elseif ($login['authpass'] == 0)
         {
-            $data['message'] = $login['denyreason'];
-			// 載入 view
-			$this->load->view('header-jquery',$data);
-			$this->load->view('postann_postannform_deny');
-			$this->load->view('footer');
-            
-        } elseif ($login['authpass'] == 1)
-        {
+            redirect('/Auth/postAnnAuth');
+        }
+    }
+    public function postAnnForm() 
+    {
+        $data['function_name'] = "發布公告表單";
+        $data['site'] = $this->title->configvalue;
+        $login = $this->session->userdata('userlogin');
+        $urlpath = '/PostAnn/postAnnForm';
+        $this->session->set_userdata('nowurl', $urlpath);
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -61,6 +61,7 @@ class PostAnn extends CI_Controller {
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             //開始載入表單
+            $this->auth();
             // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('postann_postannform_edit');
@@ -173,8 +174,6 @@ class PostAnn extends CI_Controller {
                 redirect('/PostAnn/postAnnForm');
             }
         }
-            
-        }
         
     }
 
@@ -182,28 +181,13 @@ class PostAnn extends CI_Controller {
     {
         $data['function_name'] = "編輯公告";
         $data['site'] = $this->title->configvalue;
-        $login = $this->session->userdata('userlogin');
+        
         $data['head'] = $this->titletb_model->query($tid);
         $data['body'] = $this->anntb_model->query($tid);
         $pid = $data['head']->partid;
         $uid = $data['body']->userid;
         $urlpath = '/PostAnn/modify/' . $tid;
         $this->session->set_userdata('nowurl', $urlpath);
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if(empty($login))
-        {
-            redirect('/Auth/postAnnAuth');
-        }
-        elseif ($login['authpass'] == 0)
-        {
-            $data['message'] = $login['denyreason'];
-			// 載入 view
-			$this->load->view('header-jquery',$data);
-			$this->load->view('postann_postannform_deny');
-			$this->load->view('footer');
-            
-        } elseif ($login['authpass'] == 1 && $login['partid'] == $pid && $login['userid'] == $uid)
-        {
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -217,6 +201,7 @@ class PostAnn extends CI_Controller {
                 "2.1" => "重要",
                 "3.1" => "急件"
             );
+            $login = $this->session->userdata('userlogin');
             $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
             $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
             //$data['annday'] = $this->config_model->queryBy('configkey','annday');
@@ -280,6 +265,10 @@ class PostAnn extends CI_Controller {
             }
         }
             //開始載入表單
+            $this->auth();
+            $login = $this->session->userdata('userlogin');
+            // 檢查認證者是否為原始發文者
+            if ($login['userid'] == $uid && $login['partid'] == $pid) {
             // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('postann_modify');
@@ -295,6 +284,15 @@ class PostAnn extends CI_Controller {
             $this->load->view('postann_modify_date');
             $this->load->view('postann_postannform_edit_bott');
 			$this->load->view('footer');
+            } else
+            {
+            // 提示身分認證須為原發文者
+             $data['message'] = "必須是原始公告者才能修改公告";
+			// 載入 view
+			$this->load->view('header-jquery',$data);
+			$this->load->view('postann_postannform_deny');
+			$this->load->view('footer');
+            }
 
 		} else
         {
@@ -396,14 +394,6 @@ class PostAnn extends CI_Controller {
             // 寫入完資料庫，判斷是否為連續公告
             redirect('/Main');
         }
-        } else
-        {
-            $data['message'] = "必須是原始公告者才能修改公告";
-			// 載入 view
-			$this->load->view('header-jquery',$data);
-			$this->load->view('postann_postannform_deny');
-			$this->load->view('footer');
-        }
     }
     // 刪除公告功能
     public function deleteAnn($tid,$pid,$uid)
@@ -412,21 +402,10 @@ class PostAnn extends CI_Controller {
         $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/deleteAnn/' . $tid . "/" . $pid . "/" . $uid;
         $this->session->set_userdata('nowurl', $urlpath);
-        //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if(empty($login))
-        {
-            redirect('/Auth/postAnnAuth');
-        }
-        elseif ($login['authpass'] == 0)
-        {
-            $data['message'] = $login['denyreason'];
-			// 載入 view
-			$this->load->view('header-jquery',$data);
-			$this->load->view('postann_postannform_deny');
-			$this->load->view('footer');
-            
-        } elseif ($login['authpass'] == 1 && $login['partid'] == $pid && $login['userid'] == $uid)
-        {
+            $this->auth();
+            $login = $this->session->userdata('userlogin');
+            // 檢查認證者是否為原始發文者
+            if ($login['userid'] == $uid && $login['partid'] == $pid) {
             $this->load->helper('file');
             // 載入 anntb
             $data['body'] = $this->anntb_model->query($tid);
@@ -450,14 +429,15 @@ class PostAnn extends CI_Controller {
             $this->titletb_model->delete($tid);
             // 跳回首頁
             redirect('Main/');
-        }  else
-        {
-            $data['message'] = "必須是原始公告者才能修改公告";
+            } else
+            {
+            // 提示身分認證須為原發文者
+             $data['message'] = "必須是原始公告者才能刪除公告";
 			// 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('postann_postannform_deny');
 			$this->load->view('footer');
-        }
+            }
     }
     // 附件檔案刪除功能
     public function deleteFile($tid,$pid,$uid,$filename)

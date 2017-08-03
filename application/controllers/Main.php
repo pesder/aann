@@ -22,11 +22,15 @@ class Main extends CI_Controller {
         $this->session->set_userdata('CurrentPage','1');
         $totalpages = $this->titletb_model->countPage($this->annpp->configvalue);
         $this->session->set_userdata('TotalPages', $totalpages);
-        $this->session->set_userdata('userlogin', "");
-                        $emptyadmin = array (
-                    'adminauthpass' => "",
-                    'denyreason' => ""
-                );
+        $emptyuser = array (
+            'authpass' => "",
+            'denyreason' => ""
+        );
+        $this->session->set_userdata('userlogin', $emptyuser);
+        $emptyadmin = array (
+            'adminauthpass' => "",
+            'denyreason' => ""
+        );
         $this->session->set_userdata('adminlogin', $emptyadmin);
         $data['function_name'] = "";
         $data['site'] = $this->title->configvalue;

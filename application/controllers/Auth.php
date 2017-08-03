@@ -26,12 +26,16 @@ class Auth extends CI_Controller {
         $nowurl = $this->session->userdata('nowurl');
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
+        $data['partlist'] = $this->parttb_model->queryList();
+        /*
         $options = [];
         foreach ($data['part'] as $index => $list)
         {
             $options[$list->partid] = $list->pid . "." .  $list->partname;
         }
         $data['partlist'] = $options;
+        */
+        $result = $this->session->userdata('userlogin');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -40,9 +44,14 @@ class Auth extends CI_Controller {
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
-			// 載入 view
+			$data['message'] = $result['denyreason'];
+            // 載入 view
 			$this->load->view('header-jquery',$data);
 			$this->load->view('auth_postannauth');
+            if ($result['authpass'] == 0 )
+            {
+                $this->load->view('admin_deny');
+            }
 			$this->load->view('footer');
 		}
 		else
