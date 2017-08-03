@@ -59,7 +59,7 @@
 		'class'	=>	'form-control');
 	echo form_password($userpass_data);
 	?>
-	</div>(大小寫有差，不修改不需填寫，留空即可)
+	</div><a href="<?=config_item('base_url');?>/index.php/Reset/requestPassword" class="btn btn-warning">重設密碼用</a>(大小寫有差，不修改不需填寫，留空即可)
 	</td>
 </tr>
 <tr>

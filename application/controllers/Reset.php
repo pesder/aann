@@ -52,7 +52,7 @@ class Reset extends CI_Controller {
         $data['function_name'] = "重設密碼";
         $data['site'] = $this->title->configvalue;
         if ($id != 0) {
-            $this->session->set_userdata('updatemember', $id);
+            //$this->session->set_userdata('updatemember', $id);
         }
         $uid = $this->session->userdata('updatemember');
         // 若沒有 userid 值，則跳回管理頁面
@@ -106,7 +106,7 @@ class Reset extends CI_Controller {
         $this->email->to($data['userdata']->email);
 
         $this->email->subject('密碼重設 - ' . $this->title->configvalue);
-        $this->email->message('Testing the email class.');
+        $this->email->message($message);
 
         $this->email->send();
     }
