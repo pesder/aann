@@ -18,6 +18,10 @@ class Reset extends CI_Controller {
             $this->title = $this->config_model->queryBy('configkey','myname');
             $this->admin = $this->config_model->queryBy('configkey','site_admin');
             $this->email = $this->config_model->queryBy('configkey','site_email');
+            $this->smtphost = $this->config_model->queryBy('configkey','smtp_host');
+            $this->smtpuser = $this->config_model->queryBy('configkey','smtp_user');
+            $this->smtppass = $this->config_model->queryBy('configkey','smtp_pass');
+            $this->smtpport = $this->config_model->queryBy('configkey','smtp_port');
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -79,7 +83,24 @@ class Reset extends CI_Controller {
         // 寫入資料庫
         $this->sessions_model->add($reset_session);
         // 設定郵件參數
+        $config['smtp_host'] = $this->smtphost->configvalue;
+        $config['smtp_user'] = $this->smtpuser->configvalue;
+        $config['smtp_pass'] = $this->smtppass->configvalue;
+        $config['smtp_port'] = $this->smtpport->configvalue;
+        $config['protocol'] = 'smtp';
+        $config['mailtype'] = 'html';
+        $config['charset'] = 'utf-8';
+        $config['wordwrap'] = FALSE;
 
+        $this->email->initialize($config);
+        // 準備郵件本文
+        $message = "<h1>" . $this->title->configvalue . "密碼重設郵件</h1>";
+        $message .= "<p>" . $data['userdata']->realname . "，您好。這封信是由系統寄出，協助您重新設定使用者密碼的信件。</p>";
+        $message .= "<p>電子郵件位址來自您在系統中留存的 e-mail 位址，如果您不是這個 e-mail 位址的擁有者，請忽略這封郵件。</p>";
+        $message .= '<p>如果您的資料無誤，請點選這個連結<a href="' . config_item('base_url') ."/index.php/Reset/confirm/";
+        $message .= $sessionkey . "/" . $pass_code . '">';
+        $message .= config_item('base_url') ."/index.php/Reset/confirm/" . $sessionkey . "/" . $pass_code;
+        $message .= "</a>以瀏覽器完成密碼重設動作。</p>";
         // 準備寄信
         $this->email->from($this->email->configvalue, $this->admin->configvalue);
         $this->email->to($data['userdata']->email);
