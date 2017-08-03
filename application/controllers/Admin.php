@@ -44,7 +44,8 @@ class Admin extends CI_Controller {
                 '/Admin/createPart' =>  "新增一個處室",
                 '/Admin/updatePart1' =>  "修改處室資料",
                 '/Admin/addMember'  =>  "新增一位組員",
-                '/Admin/updateMember1'  =>  "修改組員資料"
+                '/Admin/updateMember1'  =>  "修改組員資料",
+                '/Admin/enableMember'   => "啟用一位組員"
         );
         $data['h2'] = "網站功能";
         $data['h2group'] = array (
@@ -428,6 +429,80 @@ class Admin extends CI_Controller {
         }
         $this->usertb_model->delete($uid);
         redirect('Admin');
+    }
+        // 停用組員資料
+    public function disableMember()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "停用組員";
+        $data['site'] = $this->title->configvalue;
+        // 從 session 取回要刪除的 userid
+        $uid = $this->session->userdata('updatemember');
+        // 若檢查不到 userid 則跳回處室選擇畫面
+        if (!empty($uid)) {
+        $this->load->helper('security');
+        $disable = array (
+            'partid'    =>  '0'
+        );
+        $rand = do_hash(rand(1000,9999), 'md5');
+        // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+        $md5key = $this->config_model->queryBy('configkey','pwdsalt');
+        $ismd5 = $md5key->configvalue;
+        if (!empty($ismd5)) {
+                $rand = sha1($ismd5 . '$|@' . $rand);
+        }
+       
+        $userpass = array(
+                'userpass'  =>  $rand
+            );
+        //將使用者處室設定為 0，這個代號正常情形下不會使用，因而不會出現在任何處室
+        $this->usertb_model->modify($uid, $disable);
+        //設定一個亂數做為使用者密碼，使其無法登入
+        $this->usertb_model->modify($uid, $userpass);
+        redirect('Admin');
+        } else {
+            redirect('/Admin/updateMember1');
+        }
+    }
+        // 啟用一位組員
+    public function enableMember()
+    {
+        $data['function_name'] = "啟用一位組員";
+        $data['site'] = $this->title->configvalue;
+        //$nowurl = $this->session->userdata('nowurl');
+        //查詢被設定為停用的使用者
+        $data['userdata'] = $this->usertb_model->queryMember('0');
+        $data['options'] = $this->parttb_model->queryList();
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('userid', '組員', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_enablemember');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['partid'] = $this->input->post('partid');
+            $formdata['userid'] = $this->input->post('userid');
+            $formdata['partident'] = $this->input->post('partident');
+            if (!empty($formdata['userid']))
+            {
+                $uid = $formdata['userid'];
+                $usertb = array (
+                    'partid'   =>  $formdata['partid']
+                );
+                $this->usertb_model->modify($uid, $usertb);
+            } 
+            // 動作結束，回選單
+            redirect('/Admin');
+        }
     }
 }
 ?>
