@@ -58,7 +58,11 @@ class Sessions_model extends CI_Model {
             $query = $this->db->get();
             return $query->result();
         }
-
+        // 寫入
+        public function add($data)
+        {
+            $this->db->insert('sessions', $data);
+        }
 
 
 }

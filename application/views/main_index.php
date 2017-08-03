@@ -3,6 +3,7 @@
         $rep_str = array('普通','重要','急件');
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
+    <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/rss">rss</a>
     <div>
       <table class="table table-striped">
         <thead>
