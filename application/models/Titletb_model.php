@@ -104,8 +104,26 @@ class Titletb_model extends CI_Model {
             $this->db->order_by('tid','desc');
             $this->db->limit(1);
             $query = $this->db->get();
-            return $query->row();
+            $result = $query->row();
+            return $result->posttime;
         } 
+        //有限查詢給 feed
+        public function feedAnn($limitdays) 
+        {
+            
+            $dueday = new datetime(date('Y-m-d H:i:s', time()));
+            $offset = '-' . $limitdays . "day";
+            $dueday->modify($offset);
+            $querydate = $dueday->format('Y-m-d H:i:s');
+            
+            $this->db->select('*');
+            $this->db->from('titletb');
+            $this->db->where('posttime >=', $querydate);
+            $this->db->order_by('tid','desc');
+            $query = $this->db->get();
+            $result = $query->result();
+            return $result;
+        }
         // 寫入公告標題對應，傳回 id 供內文使用
         public function writeTitle($data)
         {
