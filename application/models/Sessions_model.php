@@ -69,18 +69,43 @@ class Sessions_model extends CI_Model {
             $this->db->order_by('session_key','desc');
             //$this->db->where();
             $query = $this->db->get();
-            $result = $query->result_array();
-            print_r($result);
+            $result = $query->result();
             $data = [];
-            if($result->num_rows() > 0)
+            if($query->num_rows() > 0)
             {
-                foreach ($result as $index => $key) 
+                foreach ($query->result_array() as $index => $key) 
                 {
                     $data[$index] = $key;
                 }
             }
-            print_r($data);
-        }       
+            // 刪除過期 session
+            foreach ($data as $index => $key)
+            {
+                $this->delete($data[$index]['session_key']);
+            }
+        }
+         //取回 sessions
+        public function retriveSession($id) 
+        {
+            $this->db->select('*');
+            $this->db->from('sessions');
+            $this->db->where('session_key', $id);
+        	$this->db->order_by('session_key','desc');
+            $query = $this->db->get();
+            $result = $query->result();
+            $data = [];
+            if($query->num_rows() > 0)
+            {
+                foreach ($query->result_array() as $index => $key) 
+                {
+                    foreach( $key as $index2 => $value)
+                    {
+                        $data[$index2] = $value;
+                    }
+                }
+            }
+            return $data;
+        }
         // 寫入
         public function add($data)
         {

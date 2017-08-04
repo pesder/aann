@@ -407,7 +407,6 @@ class Admin extends CI_Controller {
             );
                 $this->usertb_model->modify($uid, $userpass);
             }
-            print_r($usertb);
             //清除 updatemember
             $this->session->set_userdata('updatemember', "");
             // 動作結束，回選單
