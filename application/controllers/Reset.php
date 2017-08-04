@@ -9,8 +9,9 @@ class Reset extends CI_Controller {
             $this->load->library('session');
             $this->load->helper('form');
             $this->load->helper('url');
-			$this->load->library('email');
+            
             // 載入列表 model
+            $this->load->model('config_model');
             $this->load->model('usertb_model');
             $this->load->model('sessions_model');
 
@@ -44,7 +45,7 @@ class Reset extends CI_Controller {
 	{
 		
 	}
-
+    // 產生通關密碼並寄出密碼信
     public function requestPassword($id = 0)
     {
         $urlpath = current_url();
@@ -67,7 +68,7 @@ class Reset extends CI_Controller {
         $dueday = new datetime(date('Y-m-d H:i:s', time()));
         $offset = '+' . 7 . "day";
         $dueday->modify($offset);
-        $expiredate = $dueday->format('Y-m-d H:i:s');
+        $expiredate = $dueday->getTimestamp();
         // 產生 session key
         $sessionkey = substr(md5("pass" . $uid),0,32);
         // 產生 session 內容
@@ -78,10 +79,9 @@ class Reset extends CI_Controller {
         $reset_session = array (
             'session_key'   =>  $sessionkey,
             'session_expire'    =>  $expiredate,
-            'session_value' =>  $session_content
+            'session_value' =>  serialize($session_content)
         );
-        // 寫入資料庫
-        $this->sessions_model->add($reset_session);
+
         // 設定郵件參數
         $config['smtp_host'] = $this->smtphost->configvalue;
         $config['smtp_user'] = $this->smtpuser->configvalue;
@@ -90,17 +90,21 @@ class Reset extends CI_Controller {
         $config['protocol'] = 'smtp';
         $config['mailtype'] = 'html';
         $config['charset'] = 'utf-8';
+        $config['newline'] = "\r\n";
         $config['wordwrap'] = FALSE;
 
-        $this->email->initialize($config);
+        //$this->email->initialize($config);
+        
+        $this->load->library('email');
         // 準備郵件本文
         $message = "<h1>" . $this->title->configvalue . "密碼重設郵件</h1>";
         $message .= "<p>" . $data['userdata']->realname . "，您好。這封信是由系統寄出，協助您重新設定使用者密碼的信件。</p>";
         $message .= "<p>電子郵件位址來自您在系統中留存的 e-mail 位址，如果您不是這個 e-mail 位址的擁有者，請忽略這封郵件。</p>";
-        $message .= '<p>如果您的資料無誤，請點選這個連結<a href="' . config_item('base_url') ."/index.php/Reset/confirm/";
-        $message .= $sessionkey . "/" . $pass_code . '">';
+        $message .= '<p>如果您的資料無誤，請點選這個連結<a href="{unwrap}' . config_item('base_url') ."/index.php/Reset/confirm/";
+        $message .= $sessionkey . "/" . $pass_code . '{/unwrap}">';
         $message .= config_item('base_url') ."/index.php/Reset/confirm/" . $sessionkey . "/" . $pass_code;
         $message .= "</a>以瀏覽器完成密碼重設動作。</p>";
+        $message .= "若您的電子郵件程式不支援超連結，也可以複製上列連結網址貼到瀏覽器使用。";
         // 準備寄信
         $this->email->from($this->email->configvalue, $this->admin->configvalue);
         $this->email->to($data['userdata']->email);
@@ -108,6 +112,23 @@ class Reset extends CI_Controller {
         $this->email->subject('密碼重設 - ' . $this->title->configvalue);
         $this->email->message($message);
 
-        $this->email->send();
+        if ($this->email->send()) {
+        // 寫入資料庫
+        $this->sessions_model->add($reset_session);
+        } else
+        {
+            echo "Faile send email";
+        }
+    }
+
+    // 產生通關密碼並寄出密碼信
+    public function confirm($id,$pass)
+    {
+        
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "使用者重設密碼";
+        $data['site'] = $this->title->configvalue;
+        echo time();
     }
 }

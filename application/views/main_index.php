@@ -19,7 +19,7 @@
           <?php foreach ($list as $row): ?>
           <tr>
             <td><?=str_replace($orig_str, $rep_str, $row->type)?></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=$row->subject?></a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=$this->security->xss_clean($row->subject);?></a></td>
             <td><?=$row->partname?></td>
             <td><?=$row->posttime?></td>
             <td><?=$row->hits?></td>

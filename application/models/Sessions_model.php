@@ -58,11 +58,39 @@ class Sessions_model extends CI_Model {
             $query = $this->db->get();
             return $query->result();
         }
+         //查詢過期 sessions
+        public function queryExpire() 
+        {
+            $dueday = new datetime(date('Y-m-d H:i:s', time()));
+            $querydate = $dueday->getTimestamp();
+            $this->db->select('*');
+            $this->db->from('sessions');
+            $this->db->where('session_expire <', $querydate);
+            $this->db->order_by('session_key','desc');
+            //$this->db->where();
+            $query = $this->db->get();
+            $result = $query->result_array();
+            print_r($result);
+            $data = [];
+            if($result->num_rows() > 0)
+            {
+                foreach ($result as $index => $key) 
+                {
+                    $data[$index] = $key;
+                }
+            }
+            print_r($data);
+        }       
         // 寫入
         public function add($data)
         {
             $this->db->insert('sessions', $data);
         }
 
-
+        // 刪除
+        public function delete($key)
+        {
+            $this->db->where('session_key', $key);
+            $this->db->delete('sessions');
+        }
 }

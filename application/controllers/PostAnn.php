@@ -7,6 +7,7 @@ class PostAnn extends CI_Controller {
         {
             parent::__construct();
             $this->load->library('session');
+            $this->load->library('form_validation');
             $this->load->helper('form');
             $this->load->helper('url');
             // 載入列表 model

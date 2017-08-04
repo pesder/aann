@@ -46,6 +46,6 @@
         <tbody>
         <tr>
             <td colspan="6">
-            <?=nl2br($body->comment) ?>
+            <?=$this->security->xss_clean(nl2br($body->comment)); ?>
             </td>
         </tr>
