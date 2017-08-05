@@ -4,6 +4,17 @@
 <table class="table">
 <div class="bg-warning text-center"><h3>歡迎回來，<?=$userdata->realname?>，我們接到您重設密碼的要求，請在下面輸入您的新密碼</h3></div>
 <tr>
+	<td class="text-center">單號：</td>
+	<td>
+	<div class="col-xs-3">
+	<?php
+	echo form_radio('session_key',$key , TRUE);
+	echo form_label($key);
+	?>
+	</div>
+	</td>
+</tr>
+<tr>
 	<td class="text-center">使用者帳號：</td>
 	<td>
 	<div class="col-xs-3">

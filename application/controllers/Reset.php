@@ -18,7 +18,7 @@ class Reset extends CI_Controller {
             // 讀取網站名稱
             $this->title = $this->config_model->queryBy('configkey','myname');
             $this->admin = $this->config_model->queryBy('configkey','site_admin');
-            //$this->email = $this->config_model->queryBy('configkey','site_mail');
+            $this->mail = $this->config_model->queryBy('configkey','site_mail');
             
             $this->smtphost = $this->config_model->queryBy('configkey','smtp_host');
             $this->smtpuser = $this->config_model->queryBy('configkey','smtp_user');
@@ -111,13 +111,13 @@ class Reset extends CI_Controller {
         $message .= "若您的電子郵件程式不支援超連結，也可以複製上列連結網址貼到瀏覽器使用。";
 
         // 準備寄信
-        $this->email->from( '', $this->admin->configvalue);
+        $this->email->from( $this->mail->configvalue, $this->admin->configvalue);
         $this->email->to($data['userdata']->email);
 
         $this->email->subject('密碼重設 - ' . $this->title->configvalue);
         $this->email->message($message);
 
-       // if ($this->email->send()) {
+        //if ($this->email->send()) {
         if (TRUE) {
         // 寫入資料庫
         $this->sessions_model->add($reset_session);
@@ -125,11 +125,6 @@ class Reset extends CI_Controller {
         {
             echo "Faile send email";
         }
-    }
-
-    public function sendMail()
-    {
-        $this->load->library('email');
     }
 
     // 檢查通關密碼並重設使用者密碼
@@ -147,19 +142,25 @@ class Reset extends CI_Controller {
         $pass_session = $this->sessions_model->retriveSession($id);
         if(empty($pass_session))
         {
-            echo "此次重設密碼已逾期，請重新申請。";
+            
+            $message = "此次重設密碼已逾期，請重新申請。";
+            $this->session->set_flashdata('message', $message);
+            redirect('/Reset/confirm_done');
         }
         $pass_session['session_value'] = unserialize($pass_session['session_value']);
         $confirm_session = $pass_session['session_value'];
         if ($pass != $confirm_session['pass_code'])
         {
-            echo "認證失敗";
+            $message = "認證失敗，使用的通關密碼有誤，請檢查您的連結或重新申請。";
+            $this->session->set_flashdata('message', $message);
+            redirect('/Reset/confirm_done');
         } else
         {
             $this->session->set_userdata('passid', $confirm_session['userid']);
             $uid = $this->session->userdata('passid');
             $data['userdata'] = $this->usertb_model->query($uid);
             $data['key'] = $pass_session['session_key'];
+            $this->session->set_flashdata('id',$confirm_session['userid']);
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -178,6 +179,7 @@ class Reset extends CI_Controller {
             // 接收表單
             $formdata['userpass'] = $this->input->post('userpass');
             $formdata['userid'] = $this->input->post('userid');
+            $formdata['session_key'] = $this->input->post('session_key');
             $uid = $formdata['userid'];
                         // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryBy('configkey','pwdsalt');
@@ -193,9 +195,12 @@ class Reset extends CI_Controller {
                 $this->usertb_model->modify($uid, $userpass);
                 $key = $this->session->userdata('sessionkey');
                 // 刪除修改密碼要求
-                $this->sessions_model->delete($key);
-
-            redirect('/Reset/confirm_done');
+                $this->sessions_model->delete($formdata['session_key']);
+                $id = $this->session->flashdata('id');
+                print_r($id);
+            $message = "密碼重設已完成，您可以回到公告系統測試看看。";
+            $this->session->set_flashdata('message', $message);
+            //redirect('/Reset/confirm_done');
         }
         }
     }
@@ -205,9 +210,10 @@ class Reset extends CI_Controller {
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "使用者重設密碼";
         $data['site'] = $this->title->configvalue;
+        $data['message'] = $this->session->flashdata('message');
             // 載入 view
 			$this->load->view('header',$data);
-			$this->load->view('reset_confirm_done');
+			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
     }
 }
