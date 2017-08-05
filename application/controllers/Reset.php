@@ -72,7 +72,7 @@ class Reset extends CI_Controller {
         $dueday->modify($offset);
         $expiredate = $dueday->getTimestamp();
         // 產生 session key
-        $sessionkey = substr(md5("pass" . $uid),0,32);
+        $sessionkey = substr(md5("pass" . $uid . time()),0,32);
         // 產生 session 內容
         $session_content = array (
             'userid'    =>  $uid,
@@ -140,27 +140,19 @@ class Reset extends CI_Controller {
         $this->sessions_model->queryExpire();
         // 查詢 session
         $pass_session = $this->sessions_model->retriveSession($id);
-        if(empty($pass_session))
-        {
-            
-            $message = "此次重設密碼已逾期，請重新申請。";
-            $this->session->set_flashdata('message', $message);
-            redirect('/Reset/confirm_done');
-        }
         $pass_session['session_value'] = unserialize($pass_session['session_value']);
         $confirm_session = $pass_session['session_value'];
         if ($pass != $confirm_session['pass_code'])
         {
-            $message = "認證失敗，使用的通關密碼有誤，請檢查您的連結或重新申請。";
+            $message = "認證失敗，使用的通關密碼有誤或重設密碼已逾期，請檢查您的連結或重新申請。";
             $this->session->set_flashdata('message', $message);
-            redirect('/Reset/confirm_done');
+            redirect('/Reset/confirmDone');
         } else
         {
             $this->session->set_userdata('passid', $confirm_session['userid']);
             $uid = $this->session->userdata('passid');
             $data['userdata'] = $this->usertb_model->query($uid);
             $data['key'] = $pass_session['session_key'];
-            $this->session->set_flashdata('id',$confirm_session['userid']);
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -196,19 +188,59 @@ class Reset extends CI_Controller {
                 $key = $this->session->userdata('sessionkey');
                 // 刪除修改密碼要求
                 $this->sessions_model->delete($formdata['session_key']);
-                $id = $this->session->flashdata('id');
-                print_r($id);
             $message = "密碼重設已完成，您可以回到公告系統測試看看。";
             $this->session->set_flashdata('message', $message);
-            //redirect('/Reset/confirm_done');
+            redirect('/Reset/confirmDone');
         }
         }
     }
-    public function confirm_done()
+    // 使用者要求重設密碼
+    public function userRequestPassword()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['function_name'] = "使用者重設密碼";
+        $data['function_name'] = "使用者要求重設密碼";
+        $data['site'] = $this->title->configvalue;
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('email', '電子信箱', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_request');
+			$this->load->view('footer');
+            
+        } else
+        {
+            
+            // 接收表單
+            $formdata['username'] = $this->input->post('username');
+            $formdata['email'] = $this->input->post('email');
+            $result = $this->usertb_model->queryBy('username', $formdata['username']);
+            if(empty($result) || ($result->email != $formdata['email']))
+            {
+            $message = "帳號或電子郵件不符，請再試一次。";
+            $this->session->set_flashdata('message', $message);
+            redirect('/Reset/confirmDone');
+            } else {
+                $this->session->set_userdata('updatemember', $result->userid);
+                $message = "密碼重設已受理，請到電子郵件信箱收信。";
+            $this->session->set_flashdata('message', $message);
+            $this->requestPassword($result->userid);
+            redirect('/Reset/confirmDone');
+            }
+        }
+    }
+    // 使用者重設密碼訊息
+    public function confirmDone()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['function_name'] = "使用者重設密碼訊息";
         $data['site'] = $this->title->configvalue;
         $data['message'] = $this->session->flashdata('message');
             // 載入 view

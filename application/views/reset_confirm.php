@@ -1,8 +1,8 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
+<div class="bg-warning text-center"><h3>歡迎回來，<?=$userdata->realname?>，我們接到您重設密碼的要求，請在下面輸入您的新密碼</h3></div>
 <?=form_open('Reset/confirm');?>
 <table class="table">
-<div class="bg-warning text-center"><h3>歡迎回來，<?=$userdata->realname?>，我們接到您重設密碼的要求，請在下面輸入您的新密碼</h3></div>
 <tr>
 	<td class="text-center">單號：</td>
 	<td>
