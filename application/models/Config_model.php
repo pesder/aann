@@ -44,7 +44,21 @@ class Config_model extends CI_Model {
             $query = $this->db->get();
             return $query->row();
         }
-
+        //查詢處室名稱清單
+        public function queryValue($key) 
+        {
+        	$this->db->select('*');
+        	$this->db->from('config');
+        	$this->db->where('configkey', $key);
+        	$query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $row)
+                {
+                    $data = $row['configvalue'];
+                }
+            }
+                return $data;
+        }
 
 
 }

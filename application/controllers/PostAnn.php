@@ -18,7 +18,7 @@ class PostAnn extends CI_Controller {
             $this->load->model('anntb_model');
             $this->load->model('filetb_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
+            $this->title = $this->config_model->queryValue('myname');
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -39,7 +39,7 @@ class PostAnn extends CI_Controller {
     public function postAnnForm() 
     {
         $data['function_name'] = "發布公告表單";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/postAnnForm';
         $this->session->set_userdata('nowurl', $urlpath);
@@ -56,9 +56,9 @@ class PostAnn extends CI_Controller {
                 "2.1" => "重要",
                 "3.1" => "急件"
             );
-            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
-            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
-            $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            $data['urlnum'] = $this->config_model->queryValue('urlnum');
+            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
+            $data['annday'] = $this->config_model->queryValue('annday');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             //開始載入表單
@@ -74,9 +74,9 @@ class PostAnn extends CI_Controller {
 
 		} else
         {
-            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
-            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
-            $data['annday'] = $this->config_model->queryBy('configkey','annday');
+            $data['urlnum'] = $this->config_model->queryValue('urlnum');
+            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
+            $data['annday'] = $this->config_model->queryValue('annday');
             
             $data['user'] = $login;
             // 接收表單
@@ -133,7 +133,7 @@ class PostAnn extends CI_Controller {
             }
 
             // 收集 URL
-            for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
+            for ($i = 0; $i < $data['urlnum']; $i++)
             {
                 $j = $i + 1;
                 $url = "url" . $j;
@@ -181,7 +181,7 @@ class PostAnn extends CI_Controller {
     public function modify($tid)
     {
         $data['function_name'] = "編輯公告";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         
         $data['head'] = $this->titletb_model->query($tid);
         $data['body'] = $this->anntb_model->query($tid);
@@ -203,8 +203,8 @@ class PostAnn extends CI_Controller {
                 "3.1" => "急件"
             );
             $login = $this->session->userdata('userlogin');
-            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
-            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum');
+            $data['urlnum'] = $this->config_model->queryValue('urlnum');
+            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
             //$data['annday'] = $this->config_model->queryBy('configkey','annday');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
@@ -222,7 +222,7 @@ class PostAnn extends CI_Controller {
                 //編輯介面無需判斷是否有網址註解
             }
             //判斷附件
-            $file_empty = $data['ulfilenum']->configvalue;
+            $file_empty = $data['ulfilenum'];
             if (empty($data['body']->filename)) {
                 $data['hasfile'] = "無";
                 $data['annfile'] = [];
@@ -297,8 +297,8 @@ class PostAnn extends CI_Controller {
 
 		} else
         {
-            $data['urlnum'] = $this->config_model->queryBy('configkey','urlnum');
-            $data['ulfilenum'] = $this->config_model->queryBy('configkey','ulfilenum'); 
+            $data['urlnum'] = $this->config_model->queryValue('urlnum');
+            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum'); 
             $data['user'] = $login;
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
@@ -358,7 +358,7 @@ class PostAnn extends CI_Controller {
             }
 
             // 收集 URL
-            for ($i = 0; $i < $data['urlnum']->configvalue; $i++)
+            for ($i = 0; $i < $data['urlnum']; $i++)
             {
                 $j = $i + 1;
                 $url = "url" . $j;
@@ -399,7 +399,7 @@ class PostAnn extends CI_Controller {
     // 刪除公告功能
     public function deleteAnn($tid,$pid,$uid)
     {
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/deleteAnn/' . $tid . "/" . $pid . "/" . $uid;
         $this->session->set_userdata('nowurl', $urlpath);

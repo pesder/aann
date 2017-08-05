@@ -34,7 +34,7 @@
                         echo "</div>";
                          
                     }
-                    for ($i = $countfile; $i < $urlnum->configvalue; $i++) {
+                    for ($i = $countfile; $i < $urlnum; $i++) {
                         $j = $i + 1;
                         $name2 = "網址 " . $j . "︰";
                         $label_att2 = array ('class' => '');

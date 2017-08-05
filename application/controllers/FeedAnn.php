@@ -11,8 +11,8 @@ class FeedAnn extends CI_Controller {
             $this->load->model('titletb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
-			$this->site = $this->config_model->queryBy('configkey','myhost');
+            $this->title = $this->config_model->queryValue('myname');
+			$this->site = $this->config_model->queryValue('myhost');
 
         }
 
@@ -32,16 +32,16 @@ class FeedAnn extends CI_Controller {
     $feed = new Feed();
 
     // set your feed's title, description, link, pubdate and language
-    $feed->title = $this->title->configvalue;
-    $feed->description = $this->title->configvalue . "訂閱";
-    $feed->link = $this->site->configvalue;
+    $feed->title = $this->title;
+    $feed->description = $this->title . "訂閱";
+    $feed->link = $this->site;
     $feed->lang = 'zh-tw';
     $feed->pubdate = $posts[0]->posttime; // date of your last update (in this example create date of your latest post)
 
     // add posts to the feed
     foreach ($posts as $post)
     {
-        $slug = $this->site->configvalue . "/index.php/Main/viewAnn/" . $post->tid;
+        $slug = $this->site . "/index.php/Main/viewAnn/" . $post->tid;
 		// set item's title, author, url, pubdate and description
         $feed->add($post->subject, $post->partname, $slug, $post->posttime, "");
     }

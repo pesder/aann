@@ -6,7 +6,7 @@
             <td>
                 
                 <?php
-                    for ($i = 0; $i < $ulfilenum->configvalue; $i++) {
+                    for ($i = 0; $i < $ulfilenum; $i++) {
                         $j = $i + 1;
                         $name = "附件 " . $j . "︰";
                         $label_att = array ('class' => '');

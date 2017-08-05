@@ -7,7 +7,7 @@
                 <div class="col-sm-2">
                 <?php
                         $dueday = new datetime(date('Y-m-d', time()));
-                        $offset = '+' . "$annday->configvalue" . "day";
+                        $offset = '+' . "$annday" . "day";
                         $dueday->modify($offset);
                         $date_data = array (
                             'name'  =>  'dueday',

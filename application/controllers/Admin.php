@@ -14,7 +14,7 @@ class Admin extends CI_Controller {
             $this->load->model('parttb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
+            $this->title = $this->config_model->queryValue('myname');
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -38,7 +38,7 @@ class Admin extends CI_Controller {
     public function index()
     {
         $data['function_name'] = "管理功能";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
@@ -60,7 +60,7 @@ class Admin extends CI_Controller {
     public function createPart()
     {
         $data['function_name'] = "建立處室";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         
         // 表單驗證
@@ -114,7 +114,7 @@ class Admin extends CI_Controller {
     public function updatePart1()
     {
             $data['function_name'] = "選擇要修改處室";
-            $data['site'] = $this->title->configvalue;
+            $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
             $data['options'] = $this->parttb_model->queryList();
@@ -142,7 +142,7 @@ class Admin extends CI_Controller {
         public function updatePart2($partid = 0)
     {
             $data['function_name'] = "修改處室";
-            $data['site'] = $this->title->configvalue;
+            $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
             $sessionpartid = $this->session->userdata('modifypartid');
@@ -191,7 +191,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "刪除處室";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         // 從 session 取回要刪除的 partid
         $sessionpartid = $this->session->userdata('modifypartid');
         // 若檢查不到 partid 則跳回處室選擇畫面
@@ -225,7 +225,7 @@ class Admin extends CI_Controller {
     public function addMember()
     {
         $data['function_name'] = "新增組員";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
@@ -253,8 +253,8 @@ class Admin extends CI_Controller {
             $formdata['userident'] = $this->input->post('userident');
             $formdata['rootuid'] = $this->input->post('rootuid');
             // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-            $ismd5 = $md5key->configvalue;
+            $md5key = $this->config_model->queryValue('pwdsalt');
+            $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
@@ -286,7 +286,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "選擇組員處室";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $data['options'] = $this->parttb_model->queryList();        
         // 表單驗證
@@ -335,7 +335,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "修改組員資料";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         if ($id != 0) {
             $this->session->set_userdata('updatemember', $id);
@@ -397,8 +397,8 @@ class Admin extends CI_Controller {
             if (!empty($formdata['userpass']))
             {
             // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-            $ismd5 = $md5key->configvalue;
+            $md5key = $this->config_model->queryValue('pwdsalt');
+            $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
@@ -419,7 +419,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "刪除組員資料";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         // 從 session 取回要刪除的 userid
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
@@ -435,7 +435,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "停用組員";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         // 從 session 取回要刪除的 userid
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
@@ -446,8 +446,8 @@ class Admin extends CI_Controller {
         );
         $rand = do_hash(rand(1000,9999), 'md5');
         // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-        $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-        $ismd5 = $md5key->configvalue;
+        $md5key = $this->config_model->queryValue('pwdsalt');
+        $ismd5 = $md5key;
         if (!empty($ismd5)) {
                 $rand = sha1($ismd5 . '$|@' . $rand);
         }
@@ -468,7 +468,7 @@ class Admin extends CI_Controller {
     public function enableMember()
     {
         $data['function_name'] = "啟用一位組員";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         //查詢被設定為停用的使用者
         $data['userdata'] = $this->usertb_model->queryMember('0');

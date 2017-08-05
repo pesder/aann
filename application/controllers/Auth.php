@@ -16,13 +16,13 @@ class Auth extends CI_Controller {
             $this->load->model('parttb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
+            $this->title = $this->config_model->queryValue('myname');
         }
 
     public function postAnnAuth()
     {
         $data['function_name'] = "發布公告檢驗帳號";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         //取得單位資料
         $data['part'] = $this->parttb_model->query();
         $nowurl = $this->session->userdata('nowurl');
@@ -64,8 +64,8 @@ class Auth extends CI_Controller {
 			$formdata['userpass'] = $this->input->post('userpass');
             $denyreason = "";
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-            $ismd5 = $md5key->configvalue;
+            $md5key = $this->config_model->queryValue('pwdsalt');
+            $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
@@ -114,7 +114,7 @@ class Auth extends CI_Controller {
     public function adminAuth()
     {
         $data['function_name'] = "超級總管檢驗帳號";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $nowurl = $this->session->userdata('nowurl');
         $result = $this->session->userdata('adminlogin');
         // 表單驗證
@@ -143,8 +143,8 @@ class Auth extends CI_Controller {
             $denyreason = "";
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             /*
-            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-            $ismd5 = $md5key->configvalue;
+            $md5key = $this->config_model->queryValue('pwdsalt');
+            $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
@@ -154,10 +154,10 @@ class Auth extends CI_Controller {
                 $denyreason = "您無法發布這個單位的公告。";
             }
             */
-            $adminuser = $this->config_model->queryBy('configkey','adminuser');
-            $adminpass = $this->config_model->queryBy('configkey','adminpass');
+            $adminuser = $this->config_model->queryValue('adminuser');
+            $adminpass = $this->config_model->queryValue('adminpass');
 			// 比對密碼
-            if ($formdata['userpass'] == $adminpass->configvalue && $formdata['username'] == $adminuser->configvalue)
+            if ($formdata['userpass'] == $adminpass && $formdata['username'] == $adminuser)
             {
                 $result = array (
                     'adminauthpass' => "1",

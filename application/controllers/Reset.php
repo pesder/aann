@@ -16,14 +16,14 @@ class Reset extends CI_Controller {
             $this->load->model('sessions_model');
             
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
-            $this->admin = $this->config_model->queryBy('configkey','site_admin');
-            $this->mail = $this->config_model->queryBy('configkey','site_mail');
+            $this->title = $this->config_model->queryValue('myname');
+            $this->admin = $this->config_model->queryValue('site_admin');
+            $this->mail = $this->config_model->queryValue('site_mail');
             
-            $this->smtphost = $this->config_model->queryBy('configkey','smtp_host');
-            $this->smtpuser = $this->config_model->queryBy('configkey','smtp_user');
-            $this->smtppass = $this->config_model->queryBy('configkey','smtp_pass');
-            $this->smtpport = $this->config_model->queryBy('configkey','smtp_port');
+            $this->smtphost = $this->config_model->queryValue('smtp_host');
+            $this->smtpuser = $this->config_model->queryValue('smtp_user');
+            $this->smtppass = $this->config_model->queryValue('smtp_pass');
+            $this->smtpport = $this->config_model->queryValue('smtp_port');
             
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
@@ -53,7 +53,7 @@ class Reset extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "重設密碼";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         if ($id != 0) {
             //$this->session->set_userdata('updatemember', $id);
         }
@@ -88,10 +88,10 @@ class Reset extends CI_Controller {
         $this->load->library('email');
         $this->load->library('encrypt');
         $config['protocol'] = 'smtp';
-        $config['smtp_host'] = $this->smtphost->configvalue;
-        $config['smtp_port'] = $this->smtpport->configvalue;
-        $config['smtp_user'] = $this->smtpuser->configvalue;
-        $config['smtp_pass'] = $this->smtppass->configvalue;
+        $config['smtp_host'] = $this->smtphost;
+        $config['smtp_port'] = $this->smtpport;
+        $config['smtp_user'] = $this->smtpuser;
+        $config['smtp_pass'] = $this->smtppass;
         $config['mailtype'] = 'html';
         $config['charset'] = 'utf-8';
         $config['smtp_timeout'] = '30';
@@ -102,7 +102,7 @@ class Reset extends CI_Controller {
         
         
         // 準備郵件本文
-        $message = "<h1>" . $this->title->configvalue . "密碼重設郵件</h1>";
+        $message = "<h1>" . $this->title . "密碼重設郵件</h1>";
         $message .= "<p>" . $data['userdata']->realname . "，您好。這封信是由系統寄出，協助您重新設定使用者密碼的信件。</p>";
         $message .= "<p>電子郵件位址來自您在系統中留存的 e-mail 位址，如果您不是這個 e-mail 位址的擁有者，請忽略這封郵件。</p>";
         $message .= '<p>如果您的資料無誤，請點選這個連結<a href="{unwrap}' . config_item('base_url') ."/index.php/Reset/confirm/";
@@ -112,10 +112,10 @@ class Reset extends CI_Controller {
         $message .= "若您的電子郵件程式不支援超連結，也可以複製上列連結網址貼到瀏覽器使用。";
 
         // 準備寄信
-        $this->email->from( $this->mail->configvalue, $this->admin->configvalue);
+        $this->email->from( $this->mail, $this->admin);
         $this->email->to($data['userdata']->email);
 
-        $this->email->subject('密碼重設 - ' . $this->title->configvalue);
+        $this->email->subject('密碼重設 - ' . $this->title);
         $this->email->message($message);
 
         if ($this->email->send()) {
@@ -136,7 +136,7 @@ class Reset extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "使用者重設密碼";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         
         // 刪除過期的 session
         $this->sessions_model->queryExpire();
@@ -176,8 +176,8 @@ class Reset extends CI_Controller {
             $formdata['session_key'] = $this->input->post('session_key');
             $uid = $formdata['userid'];
                         // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryBy('configkey','pwdsalt');
-            $ismd5 = $md5key->configvalue;
+            $md5key = $this->config_model->queryValue('pwdsalt');
+            $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
@@ -202,7 +202,7 @@ class Reset extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "使用者要求重設密碼";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -222,7 +222,7 @@ class Reset extends CI_Controller {
             // 接收表單
             $formdata['username'] = $this->input->post('username');
             $formdata['email'] = $this->input->post('email');
-            $result = $this->usertb_model->queryBy('username', $formdata['username']);
+            $result = $this->usertb_model->queryValue('username', $formdata['username']);
             if(empty($result) || ($result->email != $formdata['email']))
             {
             $message = "帳號或電子郵件不符，請再試一次。";
@@ -243,7 +243,7 @@ class Reset extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "使用者重設密碼訊息";
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $data['message'] = $this->session->flashdata('message');
             // 載入 view
 			$this->load->view('header',$data);

@@ -12,15 +12,15 @@ class Main extends CI_Controller {
             $this->load->model('titletb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryBy('configkey','myname');
+            $this->title = $this->config_model->queryValue('myname');
             // 讀取每頁顯示文章數
-            $this->annpp = $this->config_model->queryBy('configkey','ann_perpage');
+            $this->annpp = $this->config_model->queryValue('ann_perpage');
         }
 
     public function index()
     {
         $this->session->set_userdata('CurrentPage','1');
-        $totalpages = $this->titletb_model->countPage($this->annpp->configvalue);
+        $totalpages = $this->titletb_model->countPage($this->annpp);
         $this->session->set_userdata('TotalPages', $totalpages);
         $emptyuser = array (
             'authpass' => "",
@@ -33,8 +33,8 @@ class Main extends CI_Controller {
         );
         $this->session->set_userdata('adminlogin', $emptyadmin);
         $data['function_name'] = "";
-        $data['site'] = $this->title->configvalue;
-        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp->configvalue);
+        $data['site'] = $this->title;
+        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp);
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
@@ -59,11 +59,11 @@ class Main extends CI_Controller {
         if ($page == 1) {
             $gooffset = 0;
         } else {
-            $gooffset = 1 + ($page - 1) * $this->annpp->configvalue;
+            $gooffset = 1 + ($page - 1) * $this->annpp;
         }
         $data['function_name'] = "第 $page 頁";
-        $data['site'] = $this->title->configvalue;
-        $data['list'] = $this->titletb_model->queryLimit($this->annpp->configvalue, $gooffset);
+        $data['site'] = $this->title;
+        $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
         
@@ -96,11 +96,10 @@ class Main extends CI_Controller {
         $this->load->model('usertb_model');
         $this->load->model('filetb_model');
         // 查詢公告標題資訊與本文
-        $data['site'] = $this->title->configvalue;
+        $data['site'] = $this->title;
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
         $data['user'] = $this->usertb_model->queryBy('userid',$data['body']->userid);
-        print_r($data['user']->email);
         //$data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
