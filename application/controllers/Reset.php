@@ -86,17 +86,18 @@ class Reset extends CI_Controller {
 
         // 設定郵件參數
         $this->load->library('email');
+        $this->load->library('encrypt');
+        $config['protocol'] = 'smtp';
         $config['smtp_host'] = $this->smtphost->configvalue;
+        $config['smtp_port'] = $this->smtpport->configvalue;
         $config['smtp_user'] = $this->smtpuser->configvalue;
         $config['smtp_pass'] = $this->smtppass->configvalue;
-        $config['smtp_port'] = $this->smtpport->configvalue;
-        $config['protocol'] = 'smtp';
         $config['mailtype'] = 'html';
         $config['charset'] = 'utf-8';
         $config['smtp_timeout'] = '30';
         $config['newline'] = "\r\n";
         $config['wordwrap'] = FALSE;
-        print_r($config);
+        
         $this->email->initialize($config);
         
         
@@ -117,10 +118,11 @@ class Reset extends CI_Controller {
         $this->email->subject('密碼重設 - ' . $this->title->configvalue);
         $this->email->message($message);
 
-        //if ($this->email->send()) {
-        if (TRUE) {
+        if ($this->email->send()) {
+        //if (TRUE) {
         // 寫入資料庫
         $this->sessions_model->add($reset_session);
+        redirect('/Admin');
         } else
         {
             echo "Faile send email";
