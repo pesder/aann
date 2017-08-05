@@ -36,13 +36,13 @@ class Config_model extends CI_Model {
         public function queryBy($cd1, $cd2) 
         {
 
-            $this->db->select('configvalue');
+            $this->db->select('*');
             $this->db->from('config');
             $this->db->where($cd1, $cd2);
-            $this->db->order_by('configkey','desc');
+            $this->db->order_by('id','asc');
             //$this->db->where();
             $query = $this->db->get();
-            return $query->row();
+            return $query->result();
         }
         //查詢處室名稱清單
         public function queryValue($key) 
@@ -59,6 +59,16 @@ class Config_model extends CI_Model {
             }
                 return $data;
         }
-
+        // 修改
+        public function modify($data, $crit)
+        {
+            $this->db->where('configkey', $crit);
+            $this->db->update('config', $data);
+        }
+        // 修改多個值
+        public function modifyMulti($data, $crit)
+        {
+            $this->db->update_batch('config', $data, $crit);
+        }
 
 }

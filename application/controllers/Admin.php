@@ -49,7 +49,9 @@ class Admin extends CI_Controller {
         );
         $data['h2'] = "網站功能";
         $data['h2group'] = array (
-                '/Admin/changeSiteName' =>  "網站名稱"
+                '/Admin/updateSite' =>  "變更網站設定",
+                '/Admin/updateAnn' =>  "變更公告設定",
+                '/Admin/updateSMTP' =>  "變更郵件設定",
         );
         // 載入 view
         $this->load->view('header',$data);
@@ -499,6 +501,198 @@ class Admin extends CI_Controller {
                 );
                 $this->usertb_model->modify($uid, $usertb);
             } 
+            // 動作結束，回選單
+            redirect('/Admin');
+        }
+    }
+        // 變更網站設定
+    public function updateSite()
+    {
+        $data['function_name'] = "變更網站設定";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        //查詢用到的設定值
+        $data['settings'] = $this->config_model->queryBy('cat', 2);
+        $data['settings2'] = $this->config_model->queryBy('cat', 1);
+        $data['settings3'] = $this->config_model->queryBy('cat', -1);
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('myname', '網站名稱', 'trim|required');
+        $this->form_validation->set_rules('myhost', '網址', 'trim|required');
+        $this->form_validation->set_rules('site_admin', '管理者', 'trim|required');
+        $this->form_validation->set_rules('site_mail', '電子郵件', 'trim|required');
+        $this->form_validation->set_rules('adminuser', '超級使用者', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_updatesite');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['myname'] = $this->input->post('myname');
+            $formdata['myhost'] = $this->input->post('myhost');
+            $formdata['site_admin'] = $this->input->post('site_admin');
+            $formdata['site_mail'] = $this->input->post('site_mail');
+            $formdata['adminuser'] = $this->input->post('adminuser');
+            $formdata['adminpass'] = $this->input->post('adminpass');
+            if (!empty($formdata['adminpass']))
+            {
+                $pass = $formdata['adminpass'];
+                $pass = password_hash($pass, PASSWORD_DEFAULT);
+                $config = array (
+                    'configvalue'   =>  $pass
+                );
+                $this->config_model->modify($config, "adminpass");
+            } 
+            $update = array  (
+                array (
+                    'configkey' =>  'myname',
+                    'configvalue'   =>  $formdata['myname']
+                ),
+                array (
+                    'configkey' =>  'myhost',
+                    'configvalue'   =>  $formdata['myhost']
+                ),
+                array (
+                    'configkey' =>  'site_admin',
+                    'configvalue'   =>  $formdata['site_admin']
+                ),
+                array (
+                    'configkey' =>  'site_mail',
+                    'configvalue'   =>  $formdata['site_mail']
+                ),
+                array (
+                    'configkey' =>  'adminuser',
+                    'configvalue'   =>  $formdata['adminuser']
+                )
+            );
+            $this->config_model->modifyMulti($update, 'configkey');
+            // 動作結束，回選單
+            redirect('/Admin');
+        }
+    }
+    // 變更公告設定
+    public function updateAnn()
+    {
+        $data['function_name'] = "變更公告設定";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        //查詢用到的設定值
+        $data['settings'] = $this->config_model->queryBy('cat', 3);
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('uploadable', '可用副檔名', 'trim|required');
+        $this->form_validation->set_rules('ann_perpage', '每頁公告數', 'trim|required');
+        $this->form_validation->set_rules('annday', '公告天數', 'trim|required');
+        $this->form_validation->set_rules('ulfilenum', '附件數量', 'trim|required');
+        $this->form_validation->set_rules('urlnum', '網址數量', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_updateann');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['uploadable'] = $this->input->post('uploadable');
+            $formdata['ann_perpage'] = $this->input->post('ann_perpage');
+            $formdata['annday'] = $this->input->post('annday');
+            $formdata['ulfilenum'] = $this->input->post('ulfilenum');
+            $formdata['urlnum'] = $this->input->post('urlnum');
+
+            $update = array  (
+                array (
+                    'configkey' =>  'uploadable',
+                    'configvalue'   =>  $formdata['uploadable']
+                ),
+                array (
+                    'configkey' =>  'ann_perpage',
+                    'configvalue'   =>  $formdata['ann_perpage']
+                ),
+                array (
+                    'configkey' =>  'annday',
+                    'configvalue'   =>  $formdata['annday']
+                ),
+                array (
+                    'configkey' =>  'ulfilenum',
+                    'configvalue'   =>  $formdata['ulfilenum']
+                ),
+                array (
+                    'configkey' =>  'urlnum',
+                    'configvalue'   =>  $formdata['urlnum']
+                )
+            );
+            $this->config_model->modifyMulti($update, 'configkey');
+            // 動作結束，回選單
+            redirect('/Admin');
+        }
+    }
+    // 變更郵件設定
+    public function updateSMTP()
+    {
+        $data['function_name'] = "變更郵件設定";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        //查詢用到的設定值
+        $data['settings'] = $this->config_model->queryBy('cat', 4);
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('smtp_host', '主機', 'trim|required');
+        $this->form_validation->set_rules('smtp_port', '連接埠', 'trim|required');
+        $this->form_validation->set_rules('smtp_user', '帳號', 'trim|required');
+        $this->form_validation->set_rules('smtp_pass', '密碼', 'trim|required');
+        
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+			// 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_updatesmtp');
+			$this->load->view('footer');
+		}
+		else
+		{
+            // 接收表單
+			$formdata['smtp_host'] = $this->input->post('smtp_host');
+            $formdata['smtp_port'] = $this->input->post('smtp_port');
+            $formdata['smtp_user'] = $this->input->post('smtp_user');
+            $formdata['smtp_pass'] = $this->input->post('smtp_pass');
+
+            $update = array  (
+                array (
+                    'configkey' =>  'smtp_host',
+                    'configvalue'   =>  $formdata['smtp_host']
+                ),
+                array (
+                    'configkey' =>  'smtp_port',
+                    'configvalue'   =>  $formdata['smtp_port']
+                ),
+                array (
+                    'configkey' =>  'smtp_user',
+                    'configvalue'   =>  $formdata['smtp_user']
+                ),
+                array (
+                    'configkey' =>  'smtp_pass',
+                    'configvalue'   =>  $formdata['smtp_pass']
+                )
+            );
+            $this->config_model->modifyMulti($update, 'configkey');
             // 動作結束，回選單
             redirect('/Admin');
         }

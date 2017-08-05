@@ -157,7 +157,7 @@ class Auth extends CI_Controller {
             $adminuser = $this->config_model->queryValue('adminuser');
             $adminpass = $this->config_model->queryValue('adminpass');
 			// 比對密碼
-            if ($formdata['userpass'] == $adminpass && $formdata['username'] == $adminuser)
+            if (password_verify($formdata['userpass'], $adminpass) && $formdata['username'] == $adminuser)
             {
                 $result = array (
                     'adminauthpass' => "1",
