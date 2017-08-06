@@ -11,15 +11,17 @@
       'class' =>  'form-control'
     );
     $but1 = array(
-                     'name'  =>  'sent',
-                      'type'  =>  'submit',
-                      'content' =>  '確定',
-                      'class' =>  'btn btn-primary',
-                       'accesskey'	=>	's');
+    'name'  =>  'sent',
+    'type'  =>  'submit',
+    'content' =>  '確定',
+    'class' =>  'btn btn-primary',
+    'accesskey'	=>	's');
+    echo '<div class="form-group">';
     echo form_label('搜尋');
     echo form_error('search');
     echo form_input($search);
     echo form_button($but1);
+    echo '</div>';
     ?>
     <?=form_close()?>
     <div>

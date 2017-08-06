@@ -99,12 +99,30 @@ class Main extends CI_Controller {
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
-            redirect('/Main');
+            $this->index();
         } else
         {
+            $data['site'] = $this->title;
             $formdata['search'] = $this->input->post('search');
-            $search = $this->titletb_model->joinSearch($formdata['search']);
-            print_r($search);
+            $data['list'] = $this->titletb_model->joinSearch($formdata['search']);
+            print_r($data['list']);
+            // 載入 view
+            $this->load->view('header',$data);
+            // 檢查是否存在 list ，若無則顯示相關資訊
+            if(empty($data['list']))
+            {
+                $this->load->view('main_nolist');
+            }
+            $this->load->view('main_index');
+            // 判斷目前所在頁面，使用對應的導覽列
+        if ($page == 1){
+            $this->load->view('main_index_bott_home');
+        } elseif ($page < $this->session->userdata('TotalPages')['pages']){
+            $this->load->view('main_index_bott_mid');
+        } else {
+            $this->load->view('main_index_bott_end');
+        }
+        $this->load->view('footer');
         }
     }
     public function viewAnn($id)
