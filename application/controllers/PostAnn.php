@@ -77,6 +77,7 @@ class PostAnn extends CI_Controller {
             $data['urlnum'] = $this->config_model->queryValue('urlnum');
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
             $data['annday'] = $this->config_model->queryValue('annday');
+            $data['fileuploadable'] = $this->config_model->queryValue('uploadable');
             
             $data['user'] = $login;
             // 接收表單
@@ -94,7 +95,7 @@ class PostAnn extends CI_Controller {
 
             //處理附件
             $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
-            $config['allowed_types']        = '*';
+            $config['allowed_types']        = $data['fileuploadable'];
             $config['overwrite']            = true;
             $config['max_size']             = '10240';
             //$config['encrypt_name']         = true;
@@ -205,7 +206,6 @@ class PostAnn extends CI_Controller {
             $login = $this->session->userdata('userlogin');
             $data['urlnum'] = $this->config_model->queryValue('urlnum');
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
-            //$data['annday'] = $this->config_model->queryBy('configkey','annday');
             $data['user'] = $login;
             $data['typelist'] = $typelist;
             // 載入 titletb anntb
@@ -299,6 +299,7 @@ class PostAnn extends CI_Controller {
         {
             $data['urlnum'] = $this->config_model->queryValue('urlnum');
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum'); 
+            $data['fileuploadable'] = $this->config_model->queryValue('uploadable');
             $data['user'] = $login;
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
@@ -314,7 +315,7 @@ class PostAnn extends CI_Controller {
 
             //處理附件
             $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
-            $config['allowed_types']        = '*';
+            $config['allowed_types']        = $data['fileuploadable'];
             $config['overwrite']            = true;
             $config['max_size']             = '10240';
             //$config['encrypt_name']         = true;
