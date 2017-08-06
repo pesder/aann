@@ -24,7 +24,7 @@ class FeedAnn extends CI_Controller {
 	public function feed($rss = 'atom')
 {
     // creating rss feed with our most recent 20 posts in variable $post
-	$posts = $this->titletb_model->feedAnn(14);
+	$posts = $this->titletb_model->joinFeedAnn(14);
     // first load the library
     $this->load->library('feed');
 
@@ -43,7 +43,7 @@ class FeedAnn extends CI_Controller {
     {
         $slug = $this->site . "/index.php/Main/viewAnn/" . $post->tid;
 		// set item's title, author, url, pubdate and description
-        $feed->add($post->subject, $post->partname, $slug, $post->posttime, "");
+        $feed->add($post->subject, $post->partname, $slug, $post->posttime, substr($post->comment,40));
     }
 
     // show your feed (options: 'atom' (recommended) or 'rss')
