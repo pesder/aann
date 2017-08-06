@@ -7,6 +7,7 @@ class Main extends CI_Controller {
         {
             parent::__construct();
             $this->load->library('session');
+            $this->load->helper('url');
             // 載入列表 model
             $this->load->model('parttb_model');
             $this->load->model('titletb_model');
@@ -86,6 +87,25 @@ class Main extends CI_Controller {
             $this->load->view('main_index_bott_end');
         }
         $this->load->view('footer');
+    }
+    // 搜尋功能
+        public function searchKeyword()
+    {
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('search', '搜尋內容', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            redirect('/Main');
+        } else
+        {
+            $formdata['search'] = $this->input->post('search');
+            $search = $this->titletb_model->joinSearch($formdata['search']);
+            print_r($search);
+        }
     }
     public function viewAnn($id)
     {

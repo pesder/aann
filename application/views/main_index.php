@@ -4,6 +4,24 @@
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/rss">rss</a>
+    <?=form_open('Main/searchKeyword','class="form-inline"');?>
+    <?php
+    $search = array(
+      'name'  =>  'search',
+      'class' =>  'form-control'
+    );
+    $but1 = array(
+                     'name'  =>  'sent',
+                      'type'  =>  'submit',
+                      'content' =>  '確定',
+                      'class' =>  'btn btn-primary',
+                       'accesskey'	=>	's');
+    echo form_label('搜尋');
+    echo form_error('search');
+    echo form_input($search);
+    echo form_button($but1);
+    ?>
+    <?=form_close()?>
     <div>
       <table class="table table-striped">
         <thead>

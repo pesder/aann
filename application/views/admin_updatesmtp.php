@@ -12,6 +12,7 @@
 		'name'	=>	$set->configkey,
 		'class'	=>	'form-control',
 		'value'	=>	$set->configvalue);
+	echo form_error($set->configkey);
 	echo form_input($set_data);
 	?>
 	</div>
