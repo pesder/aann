@@ -33,6 +33,8 @@ class Main extends CI_Controller {
             'denyreason' => ""
         );
         $this->session->set_userdata('adminlogin', $emptyadmin);
+        $this->session->set_userdata('selected_part', '');
+        $this->session->set_userdata('serach_keyword', '');
         $data['function_name'] = "";
         $data['site'] = $this->title;
         $data['list'] = $this->titletb_model->queryLimitHome($this->annpp);
@@ -124,6 +126,35 @@ class Main extends CI_Controller {
         }
         $this->load->view('footer');
         }
+    }
+    public function showList($page, $case)
+    {
+        $this->session->set_userdata('CurrentPage', $page);
+        //判斷，第1頁與其他頁的偏移量不同
+        if ($page == 1) {
+            $gooffset = 0;
+        } else {
+            $gooffset = 1 + ($page - 1) * $this->annpp;
+        }
+        $data['function_name'] = "第 $page 頁";
+        $data['site'] = $this->title;
+        switch ($case) {
+            case 'index':
+                $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
+                $data['pages'] = $this->session->userdata('TotalPages');
+                break;
+            case 'serch':
+                break;
+            case 'part':
+                    # code...
+                break;
+            default:
+                $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
+                break;
+        }
+        
+        
+        $data['current'] = $this->session->userdata('CurrentPage');
     }
     public function viewAnn($id)
     {

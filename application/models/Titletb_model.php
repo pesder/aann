@@ -142,17 +142,16 @@ class Titletb_model extends CI_Model {
             $result = $query->result();
             return $result;
         }
-        //有限查詢給 fe
-        public function joinSearch($keyword) 
-        {
-            
-            
+        //同時查詢 titletb anntb
+        public function joinSearch($keyword,$limit, $offset) 
+        { 
             $this->db->select('*');
             $this->db->from('titletb');
             $this->db->join('anntb', 'anntb.tid = titletb.tid');
             $this->db->like('subject', $keyword);
             $this->db->or_like('comment', $keyword);
             $this->db->order_by('posttime','desc');
+            $this->db->limit($limit, $offset);
             $query = $this->db->get();
             $result = $query->result();
             return $result;
