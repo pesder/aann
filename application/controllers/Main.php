@@ -21,8 +21,8 @@ class Main extends CI_Controller {
     public function index()
     {
         $this->session->set_userdata('CurrentPage','1');
-        $totalpages = $this->titletb_model->countPage($this->annpp);
-        $this->session->set_userdata('TotalPages', $totalpages);
+        //$totalpages = $this->titletb_model->countPage($this->annpp);
+        //$this->session->set_userdata('TotalPages', $totalpages);
         $emptyuser = array (
             'authpass' => "",
             'denyreason' => ""
@@ -33,6 +33,8 @@ class Main extends CI_Controller {
             'denyreason' => ""
         );
         $this->session->set_userdata('adminlogin', $emptyadmin);
+        $this->session->set_userdata('ann_days', '720');
+        $this->session->set_userdata('pp', $this->annpp);
         $this->session->set_userdata('selected_part', '');
         $this->session->set_userdata('serach_keyword', '');
         $data['function_name'] = "";

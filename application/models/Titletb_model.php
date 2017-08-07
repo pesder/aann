@@ -6,6 +6,7 @@ class Titletb_model extends CI_Model {
         {
                 // Call the CI_Model constructor
                 parent::__construct();
+                $this->load->library('session');
 
                 //連結資料庫
                 $this->load->database();
@@ -37,16 +38,33 @@ class Titletb_model extends CI_Model {
         //首頁查詢
         public function queryLimitHome($limit) 
         {
+            $limitdays = $this->session->userdata('ann_days');
+            $dueday = new datetime(date('Y-m-d H:i:s', time()));
+            $offset = '-' . $limitdays . "day";
+            $dueday->modify($offset);
+            $querydate = $dueday->format('Y-m-d H:i:s');
 
             $this->db->select('*');
             $this->db->from('titletb');
+            $this->db->where('posttime >=', $querydate);
             $this->db->order_by('posttime','desc');
             $this->db->limit($limit);
             $query = $this->db->get();
             if ($query->num_rows() > 0)
             {
-                return $query->result();
+                $result = $query->result();
             }
+            $total = $this->db->count_all_results('titletb' ,FALSE);
+            $pp1 = $limit;
+            $pages = ceil( $total / $pp1);
+            $totalpages = array (
+                "total" => $total,
+                "pages" => $pages
+            );
+            print_r($totalpages);
+            $this->session->set_userdata('TotalPages', $totalpages);
+            return $result;
+            
         }        
         //有限查詢
         public function queryLimit($limit, $offset) 
