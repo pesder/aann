@@ -39,7 +39,7 @@ class Main extends CI_Controller {
         $this->session->set_userdata('serach_keyword', '');
         $data['function_name'] = "";
         $data['site'] = $this->title;
-        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp);
+        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
@@ -68,7 +68,7 @@ class Main extends CI_Controller {
         }
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
-        $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
+        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
         
@@ -108,28 +108,11 @@ class Main extends CI_Controller {
         {
             $data['site'] = $this->title;
             $formdata['search'] = $this->input->post('search');
-            $data['list'] = $this->titletb_model->joinSearch($formdata['search']);
-            print_r($data['list']);
-            // 載入 view
-            $this->load->view('header',$data);
-            // 檢查是否存在 list ，若無則顯示相關資訊
-            if(empty($data['list']))
-            {
-                $this->load->view('main_nolist');
-            }
-            $this->load->view('main_index');
-            // 判斷目前所在頁面，使用對應的導覽列
-        if ($page == 1){
-            $this->load->view('main_index_bott_home');
-        } elseif ($page < $this->session->userdata('TotalPages')['pages']){
-            $this->load->view('main_index_bott_mid');
-        } else {
-            $this->load->view('main_index_bott_end');
-        }
-        $this->load->view('footer');
+            $this->session->set_userdata('serach_keyword', $formdata['search']);
+            $this->showList('1');
         }
     }
-    public function showList($page, $case)
+    public function showList($page)
     {
         $this->session->set_userdata('CurrentPage', $page);
         //判斷，第1頁與其他頁的偏移量不同
@@ -140,23 +123,28 @@ class Main extends CI_Controller {
         }
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
-        switch ($case) {
-            case 'index':
-                $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
-                $data['pages'] = $this->session->userdata('TotalPages');
-                break;
-            case 'serch':
-                break;
-            case 'part':
-                    # code...
-                break;
-            default:
-                $data['list'] = $this->titletb_model->queryLimit($this->annpp, $gooffset);
-                break;
-        }
-        
-        
+        $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
+        $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
+        
+        // 載入 view
+        $this->load->view('header',$data);
+        // 檢查是否存在 list ，若無則顯示相關資訊
+        if(empty($data['list']))
+        {
+            $this->load->view('main_nolist');
+        }
+        $this->load->view('main_index');
+        // 判斷目前所在頁面，使用對應的導覽列
+        if ($page == 1){
+            $this->load->view('main_index_bott_home');
+        } elseif ($page < $this->session->userdata('TotalPages')['pages']){
+            $this->load->view('main_index_bott_mid');
+        } else {
+            $this->load->view('main_index_bott_end');
+        }
+        $this->load->view('footer');  
+        
     }
     public function viewAnn($id)
     {

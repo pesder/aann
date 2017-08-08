@@ -36,7 +36,7 @@ class Titletb_model extends CI_Model {
         	}
         }
         //首頁查詢
-        public function queryLimitHome($limit) 
+        public function queryLimitHome($limit, $annoffset) 
         {
             $limitdays = $this->session->userdata('ann_days');
             $dueday = new datetime(date('Y-m-d H:i:s', time()));
@@ -47,21 +47,25 @@ class Titletb_model extends CI_Model {
             $this->db->select('*');
             $this->db->from('titletb');
             $this->db->where('posttime >=', $querydate);
+            
             $this->db->order_by('posttime','desc');
-            $this->db->limit($limit);
+            $this->db->limit($limit, $annoffset);
             $query = $this->db->get();
+            
             if ($query->num_rows() > 0)
             {
                 $result = $query->result();
             }
-            $total = $this->db->count_all_results('titletb' ,FALSE);
+            $this->db->from('titletb');
+            $this->db->where('posttime >=', $querydate);
+            //計算總頁數，並以 session 回傳數值
+            $total = $this->db->count_all_results();
             $pp1 = $limit;
             $pages = ceil( $total / $pp1);
             $totalpages = array (
                 "total" => $total,
                 "pages" => $pages
             );
-            print_r($totalpages);
             $this->session->set_userdata('TotalPages', $totalpages);
             return $result;
             
@@ -161,17 +165,57 @@ class Titletb_model extends CI_Model {
             return $result;
         }
         //同時查詢 titletb anntb
-        public function joinSearch($keyword,$limit, $offset) 
+        public function joinSearch($limit, $annoffset) 
         { 
+            //取得搜尋日數
+            $limitdays = $this->session->userdata('ann_days');
+            $dueday = new datetime(date('Y-m-d H:i:s', time()));
+            $offset = '-' . $limitdays . "day";
+            $dueday->modify($offset);
+            $querydate = $dueday->format('Y-m-d H:i:s');
+            // 取得處室或搜尋狀況
+            $part = $this->session->userdata('selected_part');
+            $search = $this->session->userdata('serach_keyword');
             $this->db->select('*');
             $this->db->from('titletb');
             $this->db->join('anntb', 'anntb.tid = titletb.tid');
-            $this->db->like('subject', $keyword);
-            $this->db->or_like('comment', $keyword);
+            if (!empty($part))
+            {
+                $this->db->where('partid', $part);
+            }
+            if (!empty($search))
+            {
+            $this->db->like('subject', $search);
+            $this->db->or_like('comment', $search);
+            }
+            $this->db->where('posttime >=', $querydate);
             $this->db->order_by('posttime','desc');
-            $this->db->limit($limit, $offset);
+            $this->db->limit($limit, $annoffset);
             $query = $this->db->get();
             $result = $query->result();
+            
+            //計算總頁數，並以 session 回傳數值
+            $this->db->select('*');
+            $this->db->from('titletb');
+            $this->db->join('anntb', 'anntb.tid = titletb.tid');
+            if (!empty($part))
+            {
+                $this->db->where('partid', $part);
+            }
+            if (!empty($search))
+            {
+            $this->db->like('subject', $search);
+            $this->db->or_like('comment', $search);
+            }
+            $this->db->where('posttime >=', $querydate);
+            $total = $this->db->count_all_results();
+            $pp1 = $limit;
+            $pages = ceil( $total / $pp1);
+            $totalpages = array (
+                "total" => $total,
+                "pages" => $pages
+            );
+            $this->session->set_userdata('TotalPages', $totalpages);
             return $result;
         }
         // 寫入公告標題對應，傳回 id 供內文使用
