@@ -34,42 +34,7 @@ class Titletb_model extends CI_Model {
         	{
         		return $query->result();
         	}
-        }
-        //首頁查詢
-        public function queryLimitHome($limit, $annoffset) 
-        {
-            $limitdays = $this->session->userdata('ann_days');
-            $dueday = new datetime(date('Y-m-d H:i:s', time()));
-            $offset = '-' . $limitdays . "day";
-            $dueday->modify($offset);
-            $querydate = $dueday->format('Y-m-d H:i:s');
-
-            $this->db->select('*');
-            $this->db->from('titletb');
-            $this->db->where('posttime >=', $querydate);
-            
-            $this->db->order_by('posttime','desc');
-            $this->db->limit($limit, $annoffset);
-            $query = $this->db->get();
-            
-            if ($query->num_rows() > 0)
-            {
-                $result = $query->result();
-            }
-            $this->db->from('titletb');
-            $this->db->where('posttime >=', $querydate);
-            //計算總頁數，並以 session 回傳數值
-            $total = $this->db->count_all_results();
-            $pp1 = $limit;
-            $pages = ceil( $total / $pp1);
-            $totalpages = array (
-                "total" => $total,
-                "pages" => $pages
-            );
-            $this->session->set_userdata('TotalPages', $totalpages);
-            return $result;
-            
-        }        
+        }     
         //有限查詢
         public function queryLimit($limit, $offset) 
         {
@@ -92,17 +57,6 @@ class Titletb_model extends CI_Model {
             //$this->db->where();
             $query = $this->db->get();
             return $query->result();
-        }
-        //頁數計算
-        public function countPage($pp1) 
-        {
-            $total = $this->db->count_all('titletb');
-            $pages = ceil( $total / $pp1);
-            $result = array (
-                "total" => $total,
-                "pages" => $pages
-            );
-            return $result;
         }
         // 增加點擊數
         public function addHit($tid)

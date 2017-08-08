@@ -21,8 +21,6 @@ class Main extends CI_Controller {
     public function index()
     {
         $this->session->set_userdata('CurrentPage','1');
-        //$totalpages = $this->titletb_model->countPage($this->annpp);
-        //$this->session->set_userdata('TotalPages', $totalpages);
         $emptyuser = array (
             'authpass' => "",
             'denyreason' => ""
@@ -39,7 +37,8 @@ class Main extends CI_Controller {
         $this->session->set_userdata('serach_keyword', '');
         $data['function_name'] = "";
         $data['site'] = $this->title;
-        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
+        //$data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
+        $data['list'] = $this->titletb_model->joinSearch($this->annpp, '0');
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
@@ -68,7 +67,7 @@ class Main extends CI_Controller {
         }
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
-        $data['list'] = $this->titletb_model->queryLimitHome($this->annpp, $gooffset);
+        $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
         
