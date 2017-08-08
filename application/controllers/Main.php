@@ -42,6 +42,7 @@ class Main extends CI_Controller {
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
+        $data['options'] = $this->parttb_model->queryList();
 
 
         // 載入 view
@@ -70,7 +71,7 @@ class Main extends CI_Controller {
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
-        
+        $data['options'] = $this->parttb_model->queryList();
 
 
         // 載入 view
@@ -120,11 +121,14 @@ class Main extends CI_Controller {
         } else {
             $gooffset = 1 + ($page - 1) * $this->annpp;
         }
+        
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
+        $data['options'] = $this->parttb_model->queryList();
+        
         
         // 載入 view
         $this->load->view('header',$data);

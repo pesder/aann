@@ -347,7 +347,7 @@ class PostAnn extends CI_Controller {
                         $fInfo = $this->upload->data();
                         // 將轉換好的檔名寫入 filetb 資料庫
                         $addfilelist = array (
-                           'partid'    => $pid,
+                            'partid'    => $pid,
                             'userid'    => $uid,
                             'filelist'  => $newfilename,
                             'origname'  => $_FILES[$key]["name"]
