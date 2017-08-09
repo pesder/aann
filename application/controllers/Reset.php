@@ -175,12 +175,14 @@ class Reset extends CI_Controller {
             $formdata['userid'] = $this->input->post('userid');
             $formdata['session_key'] = $this->input->post('session_key');
             $uid = $formdata['userid'];
-                        // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+            /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
-            }
+            }*/
+            // 新設定之密碼改用 php 加密方式
+            $formdata['userpass'] = password_hash($formdata['userpass'], PASSWORD_DEFAULT);
             
             $userpass = array(
                 'userpass'  =>  $formdata['userpass']

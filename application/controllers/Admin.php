@@ -254,12 +254,14 @@ class Admin extends CI_Controller {
             $formdata['email'] = $this->input->post('email');
             $formdata['userident'] = $this->input->post('userident');
             $formdata['rootuid'] = $this->input->post('rootuid');
-            // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+            /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
-            }
+            }*/
+            // 新設定之密碼改用 php 加密方式
+            $formdata['userpass'] = password_hash($formdata['userpass'], PASSWORD_DEFAULT);
             //準備寫入 usertb
             $usertb = array (
                 'partid'    =>  $formdata['partid'],
@@ -398,12 +400,14 @@ class Admin extends CI_Controller {
             // 判斷，若密碼欄位有填寫，則進行密碼變更
             if (!empty($formdata['userpass']))
             {
-            // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
+            /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
-            }
+            }*/
+            // 新設定之密碼改用 php 加密方式
+            $formdata['userpass'] = password_hash($formdata['userpass'], PASSWORD_DEFAULT);
             $userpass = array(
                 'userpass'  =>  $formdata['userpass']
             );
@@ -447,12 +451,8 @@ class Admin extends CI_Controller {
             'partid'    =>  '0'
         );
         $rand = do_hash(rand(1000,9999), 'md5');
-        // 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-        $md5key = $this->config_model->queryValue('pwdsalt');
-        $ismd5 = $md5key;
-        if (!empty($ismd5)) {
-                $rand = sha1($ismd5 . '$|@' . $rand);
-        }
+        // 利用 password_hash 將產生的亂碼加密，成為無法登入的密碼
+        $rand = password_hash($rand, PASSWORD_DEFAULT);
        
         $userpass = array(
                 'userpass'  =>  $rand
