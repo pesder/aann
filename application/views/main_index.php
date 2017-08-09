@@ -4,7 +4,7 @@
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/rss">rss</a>
-    <table>
+    <table class="table table-condensed">
     <tr><td>
     <?=form_open('Main/selectPart','class="form-inline"');?>
     <?php
@@ -73,6 +73,12 @@
     echo '</div>';
     ?>
     <?=form_close()?>
+    </td>
+    <td>
+    <div class="text-right">
+    <a href="<?=config_item('base_url');?>/index.php/postAnn/postAnnForm" class="btn btn-success">發布公告</a> 
+    <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-warning">管理功能</a>
+    </div>
     </td></tr>
  </table>
     <div>

@@ -141,20 +141,9 @@ class Auth extends CI_Controller {
 			$formdata['username'] = $this->input->post('username');
 			$formdata['userpass'] = $this->input->post('userpass');
             $denyreason = "";
-			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            /*
-            $md5key = $this->config_model->queryValue('pwdsalt');
-            $ismd5 = $md5key;
-            if (!empty($ismd5)) {
-                $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
-            }
-            //取得使用者資料
-            $data['user'] = $this->usertb_model->matchPassword('username', $formdata['username']);
-            if ($formdata['partid'] != $data['user']['partid']) {
-                $denyreason = "您無法發布這個單位的公告。";
-            }
-            */
+            // 超級使用者帳號驗證時自動在前面加入 "="
             $adminuser = $this->config_model->queryValue('adminuser');
+            $adminuser = "=" . $adminuser;
             $adminpass = $this->config_model->queryValue('adminpass');
 			// 比對密碼
             if (password_verify($formdata['userpass'], $adminpass) && $formdata['username'] == $adminuser)

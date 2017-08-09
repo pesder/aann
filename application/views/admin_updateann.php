@@ -1,9 +1,10 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
 <?=form_open('Admin/updateAnn', 'class="form-inline"');?>
-<table class="table">
+<table class="table .table-condensed container-fluid">
+<tr><th>設定鍵</th><th>設定值</th><th>說明</th>
+</tr>
 <?php foreach($settings as $set) : ?>
-<tr>
 	<td class="text-center"><?=$set->configkey?></td>
 	<td>
 	<div class="col-xs-3">
