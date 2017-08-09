@@ -43,7 +43,7 @@ class FeedAnn extends CI_Controller {
     {
         $slug = $this->site . "/index.php/Main/viewAnn/" . $post->tid;
 		// set item's title, author, url, pubdate and description
-        $feed->add($post->subject, $post->partname, $slug, $post->posttime, $post->comment,60);
+        $feed->add($post->subject, $post->partname, $slug, $post->posttime, mb_substr($post->comment,0,90,"UTF-8"));
     }
 
     // show your feed (options: 'atom' (recommended) or 'rss')
