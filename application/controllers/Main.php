@@ -92,6 +92,28 @@ class Main extends CI_Controller {
         }
         $this->load->view('footer');
     }
+    // 處室選擇功能
+        public function selectPart()
+    {
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partid', '處室選擇', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            $this->index();
+        } else
+        {
+            $data['site'] = $this->title;
+            $formdata['partid'] = $this->input->post('partid');
+            if (!empty($formdata['partid'])) {
+            $this->session->set_userdata('selected_part', $formdata['partid']);
+            $this->showList('1');
+            }
+        }
+    }
     // 搜尋功能
         public function searchKeyword()
     {

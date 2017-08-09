@@ -21,6 +21,7 @@
     'class' =>  'btn btn-primary',
     'accesskey'	=>	's');
     echo '<div class="form-group">';
+    echo form_error('partid');
     echo form_dropdown($partid_data);
     echo form_button($but1);
     echo '</div>';
