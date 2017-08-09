@@ -38,13 +38,37 @@
     $but1 = array(
     'name'  =>  'sent',
     'type'  =>  'submit',
-    'content' =>  '確定',
+    'content' =>  '搜尋',
     'class' =>  'btn btn-primary',
     'accesskey'	=>	's');
     echo '<div class="form-group">';
-    echo form_label('搜尋');
+    echo form_label('關鍵字');
     echo form_error('search');
     echo form_input($search);
+    echo form_button($but1);
+    echo '</div>';
+    ?>
+    <?=form_close()?>
+    </td>
+    <td>
+    <?=form_open('Main/setDays','class="form-inline"');?>
+    <?php
+    $days = array(
+      'name'  =>  'ann_list_days',
+      'class' =>  'form-control',
+      'value' =>  $ann_list_days
+    );
+    $but1 = array(
+    'name'  =>  'sent',
+    'type'  =>  'submit',
+    'content' =>  '顯示',
+    'class' =>  'btn btn-primary',
+    'accesskey'	=>	's');
+    echo '<div class="form-group">';
+    echo form_label('列出');
+    echo form_error('ann_list_days');
+    echo form_input($days);
+    echo form_label('天前公告');
     echo form_button($but1);
     echo '</div>';
     ?>

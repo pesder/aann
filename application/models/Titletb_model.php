@@ -122,7 +122,7 @@ class Titletb_model extends CI_Model {
         public function joinSearch($limit, $annoffset) 
         { 
             //取得搜尋日數
-            $limitdays = $this->session->userdata('ann_days');
+            $limitdays = $this->session->userdata('ann_list_days');
             $dueday = new datetime(date('Y-m-d H:i:s', time()));
             $offset = '-' . $limitdays . "day";
             $dueday->modify($offset);

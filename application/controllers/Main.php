@@ -31,12 +31,19 @@ class Main extends CI_Controller {
             'denyreason' => ""
         );
         $this->session->set_userdata('adminlogin', $emptyadmin);
-        $this->session->set_userdata('ann_days', '720');
+        // 檢測如果顯示公告日數未設定則使用資料庫中的預設值
+        if (empty($this->session->userdata('ann_list_days')))
+        {
+            $show_days = $this->config_model->queryValue('ann_list_days');
+            $this->session->set_userdata('ann_list_days', $show_days);
+        }
+        
         $this->session->set_userdata('pp', $this->annpp);
         $this->session->set_userdata('selected_part', '');
         $this->session->set_userdata('serach_keyword', '');
         $data['function_name'] = "";
         $data['site'] = $this->title;
+        $data['ann_list_days'] = $this->session->userdata('ann_list_days');
         //$data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, '0');
         $data['pages'] = $this->session->userdata('TotalPages');
@@ -68,6 +75,7 @@ class Main extends CI_Controller {
         }
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
+        $data['ann_list_days'] = $this->session->userdata('ann_list_days');
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
@@ -91,6 +99,26 @@ class Main extends CI_Controller {
             $this->load->view('main_index_bott_end');
         }
         $this->load->view('footer');
+    }
+    // 設定顯示日數功能
+        public function setDays()
+    {
+        
+        // 表單驗證
+		$this->form_validation->set_message('required','{field}未填');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('ann_list_days', '顯示日數', 'trim|required');
+		// 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            $this->index();
+        } else
+        {
+            $data['site'] = $this->title;
+            $formdata['ann_list_days'] = $this->input->post('ann_list_days');
+            $this->session->set_userdata('ann_list_days', $formdata['ann_list_days']);
+            $this->showList('1');
+        }
     }
     // 處室選擇功能
         public function selectPart()
@@ -146,6 +174,7 @@ class Main extends CI_Controller {
         
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
+        $data['ann_list_days'] = $this->session->userdata('ann_list_days');
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
