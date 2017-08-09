@@ -62,6 +62,8 @@ class Auth extends CI_Controller {
             $formdata['partid'] = $this->input->post('partid');
 			$formdata['username'] = $this->input->post('username');
 			$formdata['userpass'] = $this->input->post('userpass');
+            // 使用 php 加密者則留存一份原使輸入資料
+            $php_crypt_password = $formdata['userpass'];
             $denyreason = "";
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
@@ -75,7 +77,7 @@ class Auth extends CI_Controller {
                 $denyreason = "您無法發布這個單位的公告。";
             }
 			// 比對密碼
-            if ($formdata['userpass'] == $data['user']['userpass'] && $formdata['partid'] == $data['user']['partid'])
+            if ((password_verify($php_crypt_password, $data['user']['userpass']) || ($formdata['userpass'] == $data['user']['userpass'])) && $formdata['partid'] == $data['user']['partid'])
             {
                 $result = array (
                     'authpass' => "1",
