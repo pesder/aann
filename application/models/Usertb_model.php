@@ -96,6 +96,47 @@ class Usertb_model extends CI_Model {
             }
             return $data;
         }
+        //查詢使用者清單
+        public function queryUser() 
+        {
+        	// 列出已停用使用者
+            $this->db->select('userid');
+            $this->db->from('usertb');
+            $this->db->where('partid', '0');
+            $query = $this->db->get();
+            $except = [];
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $index => $row)
+                {
+                    $except[] = $row->userid;
+                }
+            }
+            // 列出已綁定使用者
+            $this->db->select('bind_userid');
+            $this->db->from('openidbind');
+            $this->db->where('bind_userid IS NOT NULL');
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $index => $row)
+                {
+                    $except[] = $row->bind_userid;
+                }
+            }
+            // 查詢使用者資料，排除已停用或已綁定之使用者
+            $this->db->select('*');
+        	$this->db->from('usertb');
+            $this->db->where_not_in('userid', $except);
+        	$this->db->order_by('partid','asc');
+        	$query = $this->db->get();
+            $data = array('' => '請選擇使用者' );
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $row)
+                {
+                    $data[$row['userid']] = $row['realname'] . " (" . $row['username'] . ")";
+                }
+            }
+            return $data;
+        }
 
         // 寫入
         public function add($data)

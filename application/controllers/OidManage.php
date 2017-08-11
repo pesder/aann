@@ -67,7 +67,7 @@ class OidManage extends CI_Controller {
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            $data['options'] = $this->parttb_model->queryList();
+            $data['options'] = $this->usertb_model->ququeryUser();
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
         }

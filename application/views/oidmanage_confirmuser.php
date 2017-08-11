@@ -71,6 +71,52 @@
 	</div>
 	</td>
 </tr>
+<tr>
+	<td class="text-center">綁定系統內帳號：</td>
+	<td>
+	<div class="col-xs-3">
+	<?=form_error('new')?>
+	<?php
+	$userid_data = array (
+		'name'	=>	'userid',
+		'class'	=>	'form-control',
+		'options'	=>	$options
+	);
+	echo form_dropdown($userid_data);
+	?>
+	</div>
+	<?php 
+	$acc_data = array(
+		'name' => 'use_same_account',
+		'id'	=>	'use_same_account',
+		'value'	=>	'1',
+		'checked'	=>	FALSE,
+		'class'	=>	'form-control' );
+	echo form_checkbox($acc_data);
+	echo form_label('直接以oid帳號建立系統內帳號');?>
+	</td>
+</tr>
+<tr>
+	<td class="text-center">是否阻擋此帳號？</td>
+	<td>
+	<div class="col-xs-3">
+	<?=form_error('banned')?>
+	<?php
+	if ($newuser->banned == 1) {
+	echo form_radio('banned',0 , FALSE);
+	echo form_label('否');
+	echo form_radio('banned',1 , TRUE);
+	echo form_label('是');
+	} else {
+	echo form_radio('banned',0 , TRUE);
+	echo form_label('否');
+	echo form_radio('banned',1 , FALSE);
+	echo form_label('是');
+	}
+	?>
+	</div>
+	</td>
+</tr>
 </table>
 <div class="text-center">
     <?php
