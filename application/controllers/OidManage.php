@@ -11,7 +11,7 @@ class OidManage extends CI_Controller {
             $this->load->helper('url');
             // 載入列表 model
             $this->load->model('usertb_model');
-            $this->load->model('openbind_model');
+            $this->load->model('openidbind_model');
             $this->load->model('config_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryValue('myname');
@@ -37,7 +37,8 @@ class OidManage extends CI_Controller {
     {
         $data['function_name'] = "OpenID管理功能";
         $data['site'] = $this->title;
-        $data['newuser'] = $this->openidbind_model->query_By('new', '1');
+        $data['newuser'] = $this->openidbind_model->queryBy('new', '1');
+        print_r($data['newuser']);
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",

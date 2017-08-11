@@ -29,14 +29,6 @@ class Auth extends CI_Controller {
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
         $data['partlist'] = $this->parttb_model->queryList();
-        /*
-        $options = [];
-        foreach ($data['part'] as $index => $list)
-        {
-            $options[$list->partid] = $list->pid . "." .  $list->partname;
-        }
-        $data['partlist'] = $options;
-        */
         $result = $this->session->userdata('userlogin');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
@@ -178,12 +170,15 @@ class Auth extends CI_Controller {
     }
     public function openidAuth()
     {
+        $data['function_name'] = "單一登入檢驗帳號";
+        $data['site'] = $this->title;
+        $nowurl = $this->session->userdata('nowurl');
+        $oid_login = $this->session->userdata('openid_user');
         //載入 openid 帳號管理資料庫
         $this->load->model('openidbind_model');
         $schoolnumber = $this->config_model->queryValue('schoolnumber');
-        $oid_login = $this->session->userdata('openid_user');
         // 檢查是否為本系統使用者，若不是則回到首頁
-        if ($oid_login['school'] != $schoolnumber)
+        if (($oid_login['school'] != $schoolnumber) || ($oid_login['job'] == 'student'))
         {
             $message = "您透過單一認證所驗證的單位與本系統所屬不同，請確認您認證所屬單位為何，或洽單一認證管理單位。";
             $data['message'] = $message;
@@ -191,7 +186,67 @@ class Auth extends CI_Controller {
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
+        } else {
+        // 查詢資料庫是否有相關資料
+        $olduser = $this->openidbind_model->checkUser('openid_id', $oid_login['openid_id']);
+        print_r($olduser);
+        // 檢查是否曾登入過本系統，若無則提供登錄功能
+        if (empty($olduser)) {
+            $message = "您是第一次以" . $oid_login->fullname . "的身分登入，目前尚無法提供完整功能。系統會先記錄此次登入要求，等系統管理者完成設定後就可以使用完整公告功能。";
+            // 將此次認證寫入資料庫
+            $newuser_data = array(
+                'openid_id' => $oid_login['openid_id'],
+                'fullname'  =>  $oid_login['fullname'],
+                'email'     =>  $oid_login['email'],
+                'school_number' =>  $oid_login['school'],
+                'job'       =>  $oid_login['job'] );
+            $this->openidbind_model->add($newuser_data);
+            $data['message'] = $message;
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_confirm_message');
+			$this->load->view('footer');
+        } elseif ($olduser->new == '1') {
+            $message = "您的資料已建立，但使用者尚未設定相關資料，請稍候系統管理者確認。";
+            $data['message'] = $message;
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_confirm_message');
+			$this->load->view('footer');
+        } elseif ($olduser->banned == '1') {
+            $message = "系統發生錯誤，暫時無法讓您以這個身分登入，抱歉。";
+            $data['message'] = $message;
+            // 清除認證資料
+            $this->session->set_userdata('openid_user', '');
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_confirm_message');
+			$this->load->view('footer');
         }
+        // 通過前列檢查後，如有綁定帳號，則將綁定帳號的身分寫入 session
+        if (!empty($olduser->bind_userid)) {
+            $annuser = $this->usertb_model->query($olduser->bind_userid);
+            $result = array (
+                    'authpass' => "1",
+                    'denyreason' => '',
+                    'partid' => $annuser->partid,
+                    'username' => $annuser->username,
+                    'realname' => $annuser->realname,
+                    'userid'    =>  $annuser->userid
+                );
+        $this->session->set_userdata('userlogin', $result);
+        }
+        }
+        /*
+        // 回首頁
+        if (empty($nowurl))
+        {
+            redirect('/PostAnn/postAnnForm');
+        } else
+        {
+            redirect($nowurl);
+        }
+        */
     }
 }
 ?>
