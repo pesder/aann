@@ -56,7 +56,7 @@ class Openidbind_model extends CI_Model {
             $this->db->order_by('oid','desc');
             //$this->db->where();
             $query = $this->db->get();
-            return $query->row();
+            return $query->result();
         }
         //依查詢密碼
         public function matchPassword($cd1, $cd2) 

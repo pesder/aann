@@ -11,15 +11,14 @@ class OidManage extends CI_Controller {
             $this->load->helper('url');
             // 載入列表 model
             $this->load->model('usertb_model');
-            $this->load->model('parttb_model');
+            $this->load->model('openbind_model');
             $this->load->model('config_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryValue('myname');
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            //進行認證
-            $this->auth();   
+               
         }
     public function auth()
     {
@@ -38,6 +37,7 @@ class OidManage extends CI_Controller {
     {
         $data['function_name'] = "OpenID管理功能";
         $data['site'] = $this->title;
+        $data['newuser'] = $this->openidbind_model->query_By('new', '1');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
@@ -52,9 +52,11 @@ class OidManage extends CI_Controller {
                 '/Admin/updateAnn' =>  "變更公告設定",
                 '/Admin/updateSMTP' =>  "變更郵件設定",
         );
+        //進行認證
+        $this->auth();
         // 載入 view
         $this->load->view('header',$data);
-        $this->load->view('admin_index');
+        $this->load->view('oidmanage_index');
         $this->load->view('footer');
     }
 

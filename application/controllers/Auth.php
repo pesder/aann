@@ -176,5 +176,22 @@ class Auth extends CI_Controller {
 			
 		}
     }
+    public function openidAuth()
+    {
+        //載入 openid 帳號管理資料庫
+        $this->load->model('openidbind_model');
+        $schoolnumber = $this->config_model->queryValue('schoolnumber');
+        $oid_login = $this->session->userdata('openid_user');
+        // 檢查是否為本系統使用者，若不是則回到首頁
+        if ($oid_login['school'] != $schoolnumber)
+        {
+            $message = "您透過單一認證所驗證的單位與本系統所屬不同，請確認您認證所屬單位為何，或洽單一認證管理單位。";
+            $data['message'] = $message;
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_confirm_message');
+			$this->load->view('footer');
+        }
+    }
 }
 ?>
