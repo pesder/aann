@@ -11,9 +11,9 @@
 <?php if (!empty($newuser)) : ?>
 <h1>新進 Openid</h1>
 <?php foreach ($newuser as $index => $name): ?>
-<div class="btn btn-info">
 
-    <?=$name->fullname?>
-</div> 
+<a href="<?=config_item('base_url');?>/index.php/OidManage/confirmNewuser/<?=$index?>" class="btn btn-info"><?=$name->fullname?></a>
+
+
 <?php endforeach; ?>
 <?php endif; ?>

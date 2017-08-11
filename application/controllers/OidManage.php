@@ -60,6 +60,32 @@ class OidManage extends CI_Controller {
         $this->load->view('oidmanage_index');
         $this->load->view('footer');
     }
+    // 確認單一登入使用者
+    public function confirmNewuser($oid = 0)
+    {
+        $data['function_name'] = "確認單一登入使用者";
+            $data['site'] = $this->title;
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
+            $data['options'] = $this->parttb_model->queryList();
+        if ($oid > 0) {
+            $data['newuser'] = $this->openidbind_model->query($oid);
+        }
+            // 表單驗證
+		$this->form_validation->set_message('required','{field}未選');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+            // 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('oidmanage_confirmuser');
+			$this->load->view('footer');
+        } else {
+            # code...
+        }
+    }
 
 	
 }
