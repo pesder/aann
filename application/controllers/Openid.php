@@ -24,6 +24,9 @@ class Openid extends CI_Controller {
             print_r($retrive_data);
             // 判斷類別為教職員或學生
             $retrive_data['openid_ext2_value_titleStr'] = (strpos($retrive_data['openid_ext2_value_titleStr'], "學生") !== false) ? "student" : "teacher";
+            $strip_o = array('http://', '.openid.ylc.edu.tw/');
+            $strip_r = array('','');
+            $retrive_data['openid_identity'] = str_replace($strip_o, $strip_r, $retrive_data['openid_identity']);
             $return_data = array (
                 'fullname'  =>  $retrive_data['openid_ext1_fullname'],
                 'email'  =>  $retrive_data['openid_ext1_email'],
