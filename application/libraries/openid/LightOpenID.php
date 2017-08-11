@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
 
 /**
  * This class provides a simple interface for OpenID (1.1 and 2.0) authentication.

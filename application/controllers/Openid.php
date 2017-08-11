@@ -7,16 +7,17 @@ class Openid extends CI_Controller {
         {
             parent::__construct();
             $this->load->library('session');
-            $this->load->library('LightOpenID');
+            
             $this->load->helper('url');
                      
         }
 
 	public function index()
 	{
+        $this->load->library('oid_ylc');
         $conty = "ylc";
         $openid_identity = "http://openid.ylc.edu.tw";
-        $openid = new LightOpenID("http://www.elps.ylc.edu.tw");
+        $openid = new Oid_ylc(config_item('base_url'));
         if (!$openid->mode) {
             $openid->identity = $openid_identity;
             $openid->required = array('contact/email', 'namePerson/friendly', 'namePerson');
