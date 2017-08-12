@@ -50,14 +50,14 @@
 	<?php
 	if ($newuser->new == 1) {
 	echo form_radio('new',0 , FALSE);
-	echo form_label('否');
+	echo form_label('確認');
 	echo form_radio('new',1 , TRUE);
-	echo form_label('是');
+	echo form_label('未確認');
 	} else {
 	echo form_radio('new',0 , TRUE);
-	echo form_label('否');
+	echo form_label('確認');
 	echo form_radio('new',1 , FALSE);
-	echo form_label('是');
+	echo form_label('未確認');
 	}
 	?>
 	</div>
@@ -67,7 +67,6 @@
 	<td class="text-center">綁定系統內帳號：</td>
 	<td>
 	<div class="col-xs-3">
-	<?=form_error('new')?>
 	<?php
 	$userid_data = array (
 		'name'	=>	'userid',
@@ -77,6 +76,10 @@
 	echo form_dropdown($userid_data);
 	?>
 	</div>
+	</td>
+</tr>
+<tr>
+	<td class="text-center">
 	<?php 
 	$acc_data = array(
 		'name' => 'use_same_account',
@@ -84,9 +87,23 @@
 		'value'	=>	'1',
 		'checked'	=>	FALSE,
 		'class'	=>	'form-control' );
+	echo "<div class=form-group>";
 	echo form_checkbox($acc_data);
 	echo form_label('直接以oid帳號建立系統內帳號');
+	echo "</div>";
+	?></td>
+	<td>
+	<div class="col-xs-3">
+	<?php
+	$partid_data = array (
+		'name'	=>	'partid',
+		'class'	=>	'form-control',
+		'options'	=>	$parts
+	);
+	echo form_dropdown($partid_data);
 	?>
+	</div>
+	
 	</td>
 </tr>
 <tr>
@@ -121,7 +138,7 @@
       'accesskey'	=>	's');
     echo form_button($but1);
     ?> ｜ 
-    <a href="<?=config_item('base_url');?>/index.php/Admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a> ｜ 
+    <a href="<?=config_item('base_url');?>/index.php/OidManage" class="btn btn-primary" accesskey="h">回單一登入選單</a> ｜ 
     <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>
 </div>
 <?=form_close()?>

@@ -11,6 +11,7 @@ class OidManage extends CI_Controller {
             $this->load->helper('url');
             // 載入列表 model
             $this->load->model('usertb_model');
+            $this->load->model('parttb_model');
             $this->load->model('openidbind_model');
             $this->load->model('config_model');
             // 讀取網站名稱
@@ -68,13 +69,16 @@ class OidManage extends CI_Controller {
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
             $data['options'] = $this->usertb_model->queryUser();
+            $data['parts'] = $this->parttb_model->queryList();
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
+            $this->session->set_userdata('oiduser', $data['newuser']);
         }
             // 表單驗證
 		$this->form_validation->set_message('required','{field}未選');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+		$this->form_validation->set_rules('new', '新建帳號', 'trim|required');
+        $this->form_validation->set_rules('banned', '阻擋帳號', 'trim|required');
             // 表單判斷
 		if($this->form_validation->run() == FALSE) 
 		{
@@ -83,7 +87,54 @@ class OidManage extends CI_Controller {
 			$this->load->view('oidmanage_confirmuser');
 			$this->load->view('footer');
         } else {
-            # code...
+            // 接收表單
+            $formdata['new'] = $this->input->post['new'];
+            $formdata['userid'] = $this->input->post['userid'];
+            $formdata['use_same_account'] = $this->input->post['use_same_account'];
+            $formdata['partid'] = $this->input->post['partid'];
+            $formdata['banned'] = $this->input->post['banned'];
+            // 優先處理以此設定新建帳號動作
+            if ($formdata['use_same_account'] == 1) {
+                if ($formdata['partid'] == '') {
+                    $formdata['partid'] = '0';
+                }
+                $newuser = $this->session->userdata('oiduser');
+                //準備寫入 usertb
+            $usertb = array (
+                'partid'    =>  $formdata['partid'],
+                'username'    =>  $oiduser->openid_id . "-oid",
+                'realname'    =>  $oiduser->fullname,
+                'userpass'    =>  password_hash(do_hash(rand(1000,9999), 'md5'), PASSWORD_DEFAULT),
+                'email'    =>  $oiduser->email,
+                'userident'    =>  'openid 匯入帳號-' . $oiduser->fullname . "(" . $oiduser->openid_id . ")"
+            );
+            $newid = $this->usertb_model->add($usertb);
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'bind_userid'   =>  $newid,
+                'new'   =>  '0'
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/OidManage');
+            }
+            // 若非直接建立帳號，則採綁定帳號處理
+            if ($formdata['userid'] != '') {
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'bind_userid'   =>  $formdata['userid'],
+                'new'   =>  '0'
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/OidManage');
+            }
+            // 若非前兩種動作，則只處理確認或阻擋
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'new'   =>  $formdata['new'],
+                'banned'   =>   $formdata['banned']
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/OidManage');
         }
     }
 
