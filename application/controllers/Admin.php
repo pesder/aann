@@ -56,6 +56,12 @@ class Admin extends CI_Controller {
                 '/Admin/updateAnn' =>  "變更公告設定",
                 '/Admin/updateSMTP' =>  "變更郵件設定",
         );
+        $data['h3'] = "單一登入功能";
+        $data['h3group'] = array (
+                '/Admin/showOiduser' =>  "顯示單一登入使用者",
+                '/Admin/showBinduser' =>  "顯示單一登入使用者(已綁定)",
+                '/Admin/showBanneduser' =>  "顯示被封鎖使用者",
+        );
         // 載入 view
         $this->load->view('header',$data);
         $this->load->view('admin_index');
@@ -806,6 +812,45 @@ class Admin extends CI_Controller {
         $message = "已刪除" . $user->fullname . "以單一登入申請的帳號";
         $this->session->set_flashdata('message', $message);
         redirect('/Admin');
+    }
+    // 顯示單一登入使用者
+    public function showOiduser()
+    {
+        $data['function_name'] = "顯示單一登入使用者";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['list'] = $this->openidbind_model->showUser();
+        // 載入 View
+        $this->load->view('header',$data);
+		$this->load->view('admin_oid_showuser');
+		$this->load->view('footer');
+    }
+    // 顯示單一登入使用者(已綁定)
+    public function showBinduser()
+    {
+        $data['function_name'] = "顯示單一登入使用者(已綁定)";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['list'] = $this->openidbind_model->showBindUser();
+        // 載入 View
+        $this->load->view('header',$data);
+		$this->load->view('admin_oid_showuser');
+		$this->load->view('footer');
+    }
+    // 顯示被封鎖使用者
+    public function showBanneduser()
+    {
+        $data['function_name'] = "顯示被封鎖使用者";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['list'] = $this->openidbind_model->queryBy('banned','1');
+        // 載入 View
+        $this->load->view('header',$data);
+		$this->load->view('admin_oid_showuser');
+		$this->load->view('footer');
     }
 }
 ?>

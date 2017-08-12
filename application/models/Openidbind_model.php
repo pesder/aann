@@ -53,6 +53,34 @@ class Openidbind_model extends CI_Model {
                 return $query->result();
             }
         }
+        //查詢核准使用者
+        public function showUser() 
+        {
+            $this->db->select('*');
+            $this->db->from('openidbind');
+            $this->db->where('bind_userid', '');
+            $this->db->where('new', '0');
+            $this->db->where('banned', '0');
+            $this->db->order_by('oid','desc');
+            //$this->db->where();
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                return $query->result();
+            }
+        }
+        //查詢綁定使用者
+        public function showBindUser() 
+        {
+            $this->db->select('*');
+            $this->db->from('openidbind');
+            $this->db->where('bind_userid IS NOT NULL');
+            $this->db->order_by('oid','desc');
+            //$this->db->where();
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                return $query->result();
+            }
+        }
         // 檢查使用者
         public function checkUser($cd1, $cd2) 
         {
@@ -66,18 +94,6 @@ class Openidbind_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 return $query->row();
             }
-        }
-        //依查詢密碼
-        public function matchPassword($cd1, $cd2) 
-        {
-
-            $this->db->select('*');
-            $this->db->from('openidbind');
-            $this->db->where($cd1, $cd2);
-            $this->db->order_by('oid','desc');
-            //$this->db->where();
-            $query = $this->db->get();
-            return $query->row_array();
         }
         //單一姓名查詢
         public function querySingleName($id) 
