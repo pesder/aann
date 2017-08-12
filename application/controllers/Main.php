@@ -26,6 +26,11 @@ class Main extends CI_Controller {
             'denyreason' => ""
         );
         $this->session->set_userdata('userlogin', $emptyuser);
+        $emptyoiduser = array (
+            'oidpass' => "",
+            'denyreason' => ""
+        );
+        $this->session->set_userdata('openid_user', $emptyoiduser);
         $emptyadmin = array (
             'adminauthpass' => "",
             'denyreason' => ""
@@ -296,15 +301,10 @@ class Main extends CI_Controller {
         // 檢查是否為內部公告
         $login = $this->session->userdata('userlogin');
         $oidlogin = $this->session->userdata('openid_user');
-        if ($data['head']->local == 'yes') {
-            if (!empty($login) && $login['authpass'] != 1){
-                $this->warnLocal();
-            }
-            if (!empty($oidlogin) && $oidlogin['oidpass'] != 1) {
-                $this->warnLocal();
-            }
+        $islocal = $this->session->tempdata('readlocal');
+        if (($data['head']->local == 'yes') && ($islocal != 1)) {
             $this->warnLocal();
-        } elseif (($data['head']->local == 'no') || ($login['authpass'] == 1 || $oidlogin['oidpass'] == 1)) {
+        } elseif (($data['head']->local == 'no') || ($islocal = 1)) {
         // 載入 view
         $this->load->view('header',$data);
         // 檢查是否存在 list ，若無則顯示相關資訊

@@ -77,10 +77,10 @@ class Auth extends CI_Controller {
                     'partid' => $data['user']['partid'],
                     'username' => $data['user']['username'],
                     'realname' => $data['user']['realname'],
-                    'userid'    =>  $data['user']['userid'],
-                    'readlocal' =>  "1"
+                    'userid'    =>  $data['user']['userid']
                 );
                 $this->session->set_userdata('userlogin', $result);
+                $this->session->set_tempdata('readlocal', '1', 600);
             } else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
@@ -90,8 +90,7 @@ class Auth extends CI_Controller {
                     'partid' => "",
                     'username' => "",
                     'realname' => "",
-                    'userid'    =>  "",
-                    'readlocal' =>  ""
+                    'userid'    =>  ""
                 );
                 $this->session->set_userdata('userlogin', $result);
             }
@@ -238,7 +237,7 @@ class Auth extends CI_Controller {
         $this->session->set_userdata('userlogin', $result);
         // 登錄為通過單一登入身分
         $oid_login['oidpass'] = "1";
-        $oid_login['readlocal'] = "1";
+        $this->session->set_tempdata('readlocal', '1', 600);
         }
         }
         
