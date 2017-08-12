@@ -17,3 +17,6 @@
 
 <?php endforeach; ?>
 <?php endif; ?>
+<?php if (!empty($message)) : ?>
+<h1><?=$message?></h1>
+<?php endif; ?>

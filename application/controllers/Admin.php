@@ -41,6 +41,7 @@ class Admin extends CI_Controller {
         $data['function_name'] = "管理功能";
         $data['site'] = $this->title;
         $data['newuser'] = $this->openidbind_model->queryBy('new', '1');
+        $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
@@ -792,6 +793,18 @@ class Admin extends CI_Controller {
             redirect('/Admin');
             }
         }
+    }
+    // 刪除 openid 使用者
+    public function deleteOidUser($oid = 0)
+    {
+        if ($oid> 0) {
+            $this->session->set_userdata('deleteuser', $oid);
+        }
+        $deleteid = $this->session->userdata('deleteuser');
+        $user = $this->openidbind_model->querySingleName($deleteid);
+        $this->openidbind_model->delete($deleteid);
+        $message = "已刪除" . $user->fullname . "以單一登入申請的帳號";
+        $this->session->set_flashdata('message', $message);
     }
 }
 ?>

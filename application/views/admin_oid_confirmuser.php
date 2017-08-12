@@ -2,16 +2,7 @@
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
 <?=form_open('Admin/confirmNewuser/' . $newuser->oid);?>
 <table class="table">
-<tr>
-	<td class="text-center">使用者編號：</td>
-	<td>
-	<div class="col-xs-3">
-	<?php 
-	echo form_radio('oid',$newuser->oid , TRUE);
-	echo form_label($newuser->oid);?>
-	</div>
-	</td>
-</tr>
+
 <tr>
 	<td class="text-center">使用者單一登入帳號：</td>
 	<td>
@@ -122,6 +113,7 @@
 	</div>
 	</td>
 </tr>
+<tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/"<?=$newuser->oid?> class="btn btn-danger">刪除</a></td></tr>
 </table>
 <div class="text-center">
     <?php
