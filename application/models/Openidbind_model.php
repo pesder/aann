@@ -26,14 +26,7 @@ class Openidbind_model extends CI_Model {
         	$query = $this->db->get();
         	$date = $query->result();
         	// 回傳
-        	if ($id > 0)
-        	{
-        		return $query->row();
-        	}
-        	else
-        	{
-        		return $query->result();
-        	}
+        	return $query->row();
         }
         //有限查詢
         public function queryLimit($limit) 

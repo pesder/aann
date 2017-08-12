@@ -13,6 +13,7 @@ class Admin extends CI_Controller {
             $this->load->model('usertb_model');
             $this->load->model('parttb_model');
             $this->load->model('config_model');
+            $this->load->model('openidbind_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryValue('myname');
             // 設定目前網址，供認證後跳回
@@ -39,6 +40,7 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "管理功能";
         $data['site'] = $this->title;
+        $data['newuser'] = $this->openidbind_model->queryBy('new', '1');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
                 '/Admin/createPart' =>  "新增一個處室",
@@ -695,6 +697,100 @@ class Admin extends CI_Controller {
             $this->config_model->modifyMulti($update, 'configkey');
             // 動作結束，回選單
             redirect('/Admin');
+        }
+    }
+    // 確認單一登入使用者
+    public function confirmNewuser($oid = 0)
+    {
+        $data['function_name'] = "確認單一登入使用者";
+            $data['site'] = $this->title;
+            $urlpath = current_url();
+            $this->session->set_userdata('nowurl', $urlpath);
+            $options = $this->usertb_model->queryUser();
+            $data['userid_data'] = array (
+		    'name'	=>	'userid',
+		    'class'	=>	'form-control',
+		    'options'	=>	$options
+	        );
+            $parts = $this->parttb_model->queryList();
+            $data['partid_data'] = array (
+		        'name'	=>	'partid',
+		        'class'	=>	'form-control',
+		        'options'	=>	$parts
+	        );
+            $data['acc_data'] = array(
+		    'name' => 'use_same_account',
+		    'id'	=>	'use_same_account',
+		    'value'	=>	'1',
+		    'checked'	=>	FALSE,
+		    'class'	=>	'form-control' );
+        if ($oid > 0) {
+            $data['newuser'] = $this->openidbind_model->query($oid);
+            $this->session->set_userdata('oiduser', $data['newuser']);
+        }
+            // 表單驗證
+		$this->form_validation->set_message('required','{field}未選');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('new', '新建帳號', 'trim|required');
+        $this->form_validation->set_rules('banned', '阻擋帳號', 'trim|required');
+            // 表單判斷
+		if($this->form_validation->run() == FALSE) 
+		{
+            // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('admin_oid_confirmuser');
+			$this->load->view('footer');
+        } else {
+            // 接收表單
+            $formdata['new'] = $this->input->post('new');
+            $formdata['userid'] = $this->input->post('userid');
+            $formdata['use_same_account'] = $this->input->post('use_same_account');
+            $formdata['partid'] = $this->input->post('partid');
+            $formdata['banned'] = $this->input->post('banned');
+            $oiduser = $this->session->userdata('oiduser');
+            // 優先處理以此設定新建帳號動作
+            if ($formdata['use_same_account'] == 1) {
+                if ($formdata['partid'] == '') {
+                    $formdata['partid'] = '0';
+                }
+                $newuser = $this->session->userdata('oiduser');
+                //準備寫入 usertb
+            $usertb = array (
+                'partid'    =>  $formdata['partid'],
+                'username'    =>  $oiduser->openid_id . "-oid",
+                'realname'    =>  $oiduser->fullname,
+                'userpass'    =>  password_hash(md5(rand(1000,9999)), PASSWORD_DEFAULT),
+                'email'    =>  $oiduser->email,
+                'userident'    =>  'openid 匯入帳號-' . $oiduser->fullname . "(" . $oiduser->openid_id . ")"
+            );
+            $newid = $this->usertb_model->add($usertb);
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'bind_userid'   =>  $newid,
+                'new'   =>  '0'
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/Admin');
+            }
+            // 若非直接建立帳號，則採綁定帳號處理
+            elseif ($formdata['userid'] != '') {
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'bind_userid'   =>  $formdata['userid'],
+                'new'   =>  '0'
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/Admin');
+            } else {
+            // 若非前兩種動作，則只處理確認或阻擋
+            // 處理本筆 oid 帳號
+            $openidbind_data = array(
+                'new'   =>  $formdata['new'],
+                'banned'   =>   $formdata['banned']
+            );
+            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+            redirect('/Admin');
+            }
         }
     }
 }

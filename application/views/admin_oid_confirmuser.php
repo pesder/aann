@@ -1,7 +1,17 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('OidManage/confirmNewuser');?>
+<?=form_open('Admin/confirmNewuser/' . $newuser->oid);?>
 <table class="table">
+<tr>
+	<td class="text-center">使用者編號：</td>
+	<td>
+	<div class="col-xs-3">
+	<?php 
+	echo form_radio('oid',$newuser->oid , TRUE);
+	echo form_label($newuser->oid);?>
+	</div>
+	</td>
+</tr>
 <tr>
 	<td class="text-center">使用者單一登入帳號：</td>
 	<td>
@@ -68,11 +78,6 @@
 	<td>
 	<div class="col-xs-3">
 	<?php
-	$userid_data = array (
-		'name'	=>	'userid',
-		'class'	=>	'form-control',
-		'options'	=>	$options
-	);
 	echo form_dropdown($userid_data);
 	?>
 	</div>
@@ -81,12 +86,6 @@
 <tr>
 	<td class="text-center">
 	<?php 
-	$acc_data = array(
-		'name' => 'use_same_account',
-		'id'	=>	'use_same_account',
-		'value'	=>	'1',
-		'checked'	=>	FALSE,
-		'class'	=>	'form-control' );
 	echo "<div class=form-group>";
 	echo form_checkbox($acc_data);
 	echo form_label('直接以oid帳號建立系統內帳號');
@@ -95,11 +94,7 @@
 	<td>
 	<div class="col-xs-3">
 	<?php
-	$partid_data = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$parts
-	);
+	
 	echo form_dropdown($partid_data);
 	?>
 	</div>
