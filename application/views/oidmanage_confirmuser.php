@@ -43,14 +43,6 @@
 	</td>
 </tr>
 <tr>
-	<td class="text-center">使用者身分：</td>
-	<td>
-	<div class="col-xs-3">
-	<?php echo form_label($newuser->job);?>
-	</div>
-	</td>
-</tr>
-<tr>
 	<td class="text-center">新建帳號確認？</td>
 	<td>
 	<div class="col-xs-3">
@@ -93,7 +85,8 @@
 		'checked'	=>	FALSE,
 		'class'	=>	'form-control' );
 	echo form_checkbox($acc_data);
-	echo form_label('直接以oid帳號建立系統內帳號');?>
+	echo form_label('直接以oid帳號建立系統內帳號');
+	?>
 	</td>
 </tr>
 <tr>

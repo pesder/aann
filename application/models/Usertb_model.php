@@ -108,7 +108,7 @@ class Usertb_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $index => $row)
                 {
-                    $except[] = $row->userid;
+                    $except[] = $row['userid'];
                 }
             }
             // 列出已綁定使用者
@@ -119,7 +119,7 @@ class Usertb_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $index => $row)
                 {
-                    $except[] = $row->bind_userid;
+                    $except[] = $row['bind_userid'];
                 }
             }
             // 查詢使用者資料，排除已停用或已綁定之使用者

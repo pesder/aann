@@ -12,7 +12,7 @@
 <h1>新進 Openid</h1>
 <?php foreach ($newuser as $index => $name): ?>
 
-<a href="<?=config_item('base_url');?>/index.php/OidManage/confirmNewuser/<?=$index?>" class="btn btn-info"><?=$name->fullname?></a>
+<a href="<?=config_item('base_url');?>/index.php/OidManage/confirmNewuser/<?=$name->oid?>" class="btn btn-info"><?=$name->fullname?></a>
 
 
 <?php endforeach; ?>
