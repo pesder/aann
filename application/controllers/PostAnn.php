@@ -60,7 +60,32 @@ class PostAnn extends CI_Controller {
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
             $data['annday'] = $this->config_model->queryValue('annday');
             $data['user'] = $login;
-            $data['typelist'] = $typelist;
+            $data['type_data'] = array (
+	        	'name'	=>	'type',
+		        'class'	=>	'form-control',
+                'options' => $typelist);
+            $serial = array ('0' => '否', '1' => '是');
+            $data['serialpost_data'] = array (
+                    'name'  =>  'serial',
+                    'class'	=>	'form-control',
+                    'options'   => $serial
+                );
+            $local = array ('no' => '否', 'yes' => '是');
+            $data['local_data'] = array (
+                    'name'  =>  'local',
+                    'class'	=>	'form-control',
+                    'options'   => $local
+                );
+            $data['title_data'] = array (
+	        	'name'	=>	'title',
+                'id'    =>  'title',
+                'class'	=>	'form-control col-sm-8'
+                );
+            $data['comment_data'] = array (
+	        	'name'	=>	'comment',
+                'id'    =>  'comment',
+                'class'	=>	'form-control'
+                );
             //開始載入表單
             $this->auth();
             // 載入 view
@@ -83,10 +108,11 @@ class PostAnn extends CI_Controller {
             // 接收表單
             // 先接收標題、內文
             $formdata['type'] = $this->input->post('type');
-            $formdata['title'] = $this->input->post('title');
-            $formdata['comment'] = $this->input->post('comment');
-            $formdata['annday'] = $this->input->post('dueday');
+            $formdata['title'] = $this->input->post('title', TRUE);
+            $formdata['comment'] = $this->input->post('comment', TRUE);
+            $formdata['annday'] = $this->input->post('dueday', TRUE);
             $formdata['serial'] = $this->input->post('serial');
+            $formdata['local'] = $this->input->post('local');
             $pid = $login['partid'];
             $uid = $login['userid'];
             $data['partname'] = $this->parttb_model->queryPartname($pid);
@@ -155,7 +181,8 @@ class PostAnn extends CI_Controller {
                 'subject'   =>  $formdata['title'],
                 'posttime'  =>  date("Y-m-d H:i:s"),
                 'overtime'  =>  $formdata['annday'],
-                'type'      =>  $formdata['type']
+                'type'      =>  $formdata['type'],
+                'local'     =>  $formdata['local']
             );
             $tid = $this->titletb_model->writeTitle($titletb);
             $anntb = array (

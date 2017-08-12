@@ -204,6 +204,8 @@ class Main extends CI_Controller {
     {
         
         $data['function_name'] = "瀏覽公告";
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
         // 載入 anntb，為公告本文資料表
         $this->load->model('anntb_model');
         $this->load->model('usertb_model');
@@ -291,6 +293,18 @@ class Main extends CI_Controller {
                 }
             }
         }
+        // 檢查是否為內部公告
+        $login = $this->session->userdata('userlogin');
+        $oidlogin = $this->session->userdata('openid_user');
+        if ($data['head']->local == 'yes') {
+            if (!empty($login) && $login['authpass'] != 1){
+                $this->warnLocal();
+            }
+            if (!empty($oidlogin) && $oidlogin['oidpass'] != 1) {
+                $this->warnLocal();
+            }
+            $this->warnLocal();
+        } elseif (($data['head']->local == 'no') || ($login['authpass'] == 1 || $oidlogin['oidpass'] == 1)) {
         // 載入 view
         $this->load->view('header',$data);
         // 檢查是否存在 list ，若無則顯示相關資訊
@@ -310,7 +324,26 @@ class Main extends CI_Controller {
             $this->load->view('main_viewann_file');
         }
         $this->load->view('main_viewann_end');
-        $this->load->view('footer');    
+        $this->load->view('footer');   
+        } 
+    }
+    // 內部文件警告
+    public function warnLocal()
+    {
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $message = "本文為內部文件，必須為本系統內有帳號的使用者或單一登入帳號才能觀看，請";
+        $message .= '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary">登入本系統帳號</a>';
+        $message .= "或是";
+        $message .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-primary">登入單一登入帳號</a>';
+        $message .= "以取得觀看權限。";
+        $this->session->set_flashdata('message', $message);
+        $data['site'] = $this->title;
+        $data['message'] = $this->session->flashdata('message');
+        // 載入 view
+			$this->load->view('header',$data);
+			$this->load->view('reset_confirm_message');
+			$this->load->view('footer');
     }
     public function download($pid,$uid,$filename = NULL) 
     {

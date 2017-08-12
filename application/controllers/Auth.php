@@ -77,7 +77,8 @@ class Auth extends CI_Controller {
                     'partid' => $data['user']['partid'],
                     'username' => $data['user']['username'],
                     'realname' => $data['user']['realname'],
-                    'userid'    =>  $data['user']['userid']
+                    'userid'    =>  $data['user']['userid'],
+                    'readlocal' =>  "1"
                 );
                 $this->session->set_userdata('userlogin', $result);
             } else 
@@ -89,7 +90,8 @@ class Auth extends CI_Controller {
                     'partid' => "",
                     'username' => "",
                     'realname' => "",
-                    'userid'    =>  ""
+                    'userid'    =>  "",
+                    'readlocal' =>  ""
                 );
                 $this->session->set_userdata('userlogin', $result);
             }
@@ -189,7 +191,6 @@ class Auth extends CI_Controller {
         } else {
         // 查詢資料庫是否有相關資料
         $olduser = $this->openidbind_model->checkUser('openid_id', $oid_login['openid_id']);
-        print_r($olduser);
         // 檢查是否曾登入過本系統，若無則提供登錄功能
         if (empty($olduser)) {
             $message = "您是第一次以" . $oid_login->fullname . "的身分登入，目前尚無法提供完整功能。系統會先記錄此次登入要求，等系統管理者完成設定後就可以使用完整公告功能。";
@@ -235,6 +236,9 @@ class Auth extends CI_Controller {
                     'userid'    =>  $annuser->userid
                 );
         $this->session->set_userdata('userlogin', $result);
+        // 登錄為通過單一登入身分
+        $oid_login['oidpass'] = "1";
+        $oid_login['readlocal'] = "1";
         }
         }
         
