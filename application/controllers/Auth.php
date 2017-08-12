@@ -237,16 +237,16 @@ class Auth extends CI_Controller {
         $this->session->set_userdata('userlogin', $result);
         }
         }
-        /*
+        
         // 回首頁
         if (empty($nowurl))
         {
-            redirect('/PostAnn/postAnnForm');
+            redirect('/Main');
         } else
         {
             redirect($nowurl);
         }
-        */
+        
     }
 }
 ?>

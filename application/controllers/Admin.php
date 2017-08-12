@@ -805,6 +805,7 @@ class Admin extends CI_Controller {
         $this->openidbind_model->delete($deleteid);
         $message = "已刪除" . $user->fullname . "以單一登入申請的帳號";
         $this->session->set_flashdata('message', $message);
+        redirect('/Admin');
     }
 }
 ?>

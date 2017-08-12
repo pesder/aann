@@ -113,7 +113,7 @@
 	</div>
 	</td>
 </tr>
-<tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/"<?=$newuser->oid?> class="btn btn-danger">刪除</a></td></tr>
+<tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$newuser->oid?> " class="btn btn-danger">刪除</a></td></tr>
 </table>
 <div class="text-center">
     <?php
@@ -125,7 +125,7 @@
       'accesskey'	=>	's');
     echo form_button($but1);
     ?> ｜ 
-    <a href="<?=config_item('base_url');?>/index.php/OidManage" class="btn btn-primary" accesskey="h">回單一登入選單</a> ｜ 
+     
     <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>
 </div>
 <?=form_close()?>
