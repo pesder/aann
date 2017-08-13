@@ -235,20 +235,22 @@ class Auth extends CI_Controller {
                     'userid'    =>  $annuser->userid
                 );
         $this->session->set_userdata('userlogin', $result);
+        
+        }
         // 登錄為通過單一登入身分
         $oid_login['oidpass'] = "1";
         $this->session->set_tempdata('readlocal', '1', 600);
-        }
         }
         
         // 回首頁
         if (empty($nowurl))
         {
-            redirect('/Main');
+            redirect('/Auth/postAnnAuth');
         } else
         {
             redirect($nowurl);
         }
+        
         
     }
 }

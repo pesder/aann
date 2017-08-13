@@ -302,6 +302,7 @@ class Main extends CI_Controller {
         $login = $this->session->userdata('userlogin');
         $oidlogin = $this->session->userdata('openid_user');
         $islocal = $this->session->tempdata('readlocal');
+        print_r($login);print_r($oidlogin);print_r($islocal);
         if (($data['head']->local == 'yes') && ($islocal != 1)) {
             $this->warnLocal();
         } elseif (($data['head']->local == 'no') || ($islocal = 1)) {

@@ -168,7 +168,7 @@ class PostAnn extends CI_Controller {
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
                 if (!empty($this->input->post($inurl)))
                 {
-                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl));
+                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
                 
@@ -234,10 +234,41 @@ class PostAnn extends CI_Controller {
             $data['urlnum'] = $this->config_model->queryValue('urlnum');
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
             $data['user'] = $login;
-            $data['typelist'] = $typelist;
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
             $data['body'] = $this->anntb_model->query($tid);
+            // 載入前次公告數值
+            $data['type_data'] = array (
+	        	'name'	=>	'type',
+		        'class'	=>	'form-control',
+                'options' => $typelist,
+                'value' =>  $data['head']->type);
+            $serial = array ('0' => '否', '1' => '是');
+            $data['serialpost_data'] = array (
+                    'name'  =>  'serial',
+                    'class'	=>	'form-control',
+                    'options'   => $serial
+                );
+            $local = array ('no' => '否', 'yes' => '是');
+            $data['local_data'] = array (
+                    'name'  =>  'local',
+                    'class'	=>	'form-control',
+                    'options'   => $local,
+                    'selected' =>  $data['head']->local
+                );
+            $data['title_data'] = array (
+	        	'name'	=>	'title',
+                'id'    =>  'title',
+                'class'	=>	'form-control col-sm-8',
+                'value' =>  $data['head']->subject
+                );
+            $data['comment_data'] = array (
+	        	'name'	=>	'comment',
+                'id'    =>  'comment',
+                'class'	=>	'form-control',
+                'value' =>  $data['body']->comment
+                );
+            
             //判斷 URL
             if (empty($data['body']->url)) {
                 $data['hasurl'] = "無";
@@ -299,7 +330,7 @@ class PostAnn extends CI_Controller {
             if ($login['userid'] == $uid && $login['partid'] == $pid) {
             // 載入 view
 			$this->load->view('header-jquery',$data);
-			$this->load->view('postann_modify');
+			$this->load->view('postann_postannform_edit');
             // 有附件則載入相關 view
             if (!empty($data['body']->filename))
             {
@@ -334,9 +365,9 @@ class PostAnn extends CI_Controller {
             // 接收表單
             // 先接收標題、內文
             $formdata['type'] = $this->input->post('type');
-            $formdata['title'] = $this->input->post('title');
-            $formdata['comment'] = $this->input->post('comment');
-            $formdata['annday'] = $this->input->post('dueday');
+            $formdata['title'] = $this->input->post('title', TRUE);
+            $formdata['comment'] = $this->input->post('comment', TRUE);
+            $formdata['annday'] = $this->input->post('dueday', TRUE);
             $data['partname'] = $this->parttb_model->queryPartname($pid);
             $urllist = "";
 
@@ -394,7 +425,7 @@ class PostAnn extends CI_Controller {
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
                 if (!empty($this->input->post($inurl)))
                 {
-                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl));
+                    $formdata[$url] = str_replace(' ', '' ,$this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
                 
