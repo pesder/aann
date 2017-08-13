@@ -143,7 +143,18 @@ class Admin extends CI_Controller {
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            $data['options'] = $this->parttb_model->queryList();
+            $options = $this->parttb_model->queryList();
+                
+	    $data['partid_data'] = array (
+		    'name'	=>	'partid',
+		    'class'	=>	'form-control',
+		    'options'	=>	$options);
+            $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '選擇',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');
             // 表單驗證
 		$this->form_validation->set_message('required','{field}未選');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -274,7 +285,33 @@ class Admin extends CI_Controller {
         $data['function_name'] = "新增組員";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
-        $data['options'] = $this->parttb_model->queryList();        
+        $options = $this->parttb_model->queryList();
+        $data['partid_data'] = array (
+		'name'	=>	'partid',
+		'class'	=>	'form-control',
+		'options'	=>	$options
+	);        
+        $data['username_data'] = array (
+		'name'	=>	'username',
+		'class'	=>	'form-control');
+        $data['realname_data'] = array (
+		'name'	=>	'realname',
+		'class'	=>	'form-control');
+        $data['userpass_data'] = array (
+		'name'	=>	'userpass',
+		'class'	=>	'form-control');
+        $data['email_data'] = array (
+		'name'	=>	'email',
+		'class'	=>	'form-control');
+        $data['userident_data'] = array (
+		'name'	=>	'userident',
+		'class'	=>	'form-control');
+        $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '新增',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -287,6 +324,7 @@ class Admin extends CI_Controller {
 			// 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('admin_addmember');
+            $this->load->view('admin_addmember_end');
 			$this->load->view('footer');
 		}
 		else
@@ -337,7 +375,17 @@ class Admin extends CI_Controller {
         $data['function_name'] = "選擇組員處室";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
-        $data['options'] = $this->parttb_model->queryList();        
+        $options = $this->parttb_model->queryList();  
+        $data['partid_data'] = array (
+		'name'	=>	'partid',
+		'class'	=>	'form-control',
+		'options'	=>	$options); 
+        $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '選擇',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');     
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -396,8 +444,38 @@ class Admin extends CI_Controller {
             redirect('/Admin');
         }
         $data['userdata'] = $this->usertb_model->query($uid);
-        $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
-        $data['options'] = $this->parttb_model->queryList();        
+        $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid; 
+        $options = $this->parttb_model->queryList();
+        $data['partid_data'] = array (
+		'name'	=>	'partid',
+		'class'	=>	'form-control',
+		'options'	=>	$options,
+        'selected'	=>	$data['userdata']->partid);        
+        $data['username_data'] = array (
+		'name'	=>	'username',
+		'class'	=>	'form-control',
+        'value' =>  $data['userdata']->username);
+        $data['realname_data'] = array (
+		'name'	=>	'realname',
+		'class'	=>	'form-control',
+        'value' =>  $data['userdata']->realname);
+        $data['userpass_data'] = array (
+		'name'	=>	'userpass',
+		'class'	=>	'form-control');
+        $data['email_data'] = array (
+		'name'	=>	'email',
+		'class'	=>	'form-control',
+        'value' =>  $data['userdata']->email);
+        $data['userident_data'] = array (
+		'name'	=>	'userident',
+		'class'	=>	'form-control',
+        'value' =>  $data['userdata']->userident);
+        $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '新增',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');       
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -409,7 +487,8 @@ class Admin extends CI_Controller {
 		{
             // 載入 view
 			$this->load->view('header',$data);
-			$this->load->view('admin_updatemember2');
+			$this->load->view('admin_addmember');
+            $this->load->view('admin_updatemember2');
 			$this->load->view('footer');
             
         } else

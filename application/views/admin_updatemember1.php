@@ -7,29 +7,14 @@
 	<td>
 	<div class="col-xs-3">
 	<?=form_error('partid')?>
-	<?php
-	$partid_data = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options
-	);
-	echo form_dropdown($partid_data);
-	?>
+	<?php echo form_dropdown($partid_data);	?>
 	</div>
 	</td>
 </tr>
 
 </table>
 <div class="text-center">
-    <?php
-    $but1 = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '選擇',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-    echo form_button($but1);
-    ?> ｜ 
+    <?php echo form_button($but1); ?> ｜ 
     <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>
 </div>
 <?=form_close()?>
