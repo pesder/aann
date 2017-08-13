@@ -73,7 +73,21 @@ class Admin extends CI_Controller {
         $data['function_name'] = "建立處室";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
-        
+        $data['pid_data'] = array (
+		'name'	=>	'pid',
+		'class'	=>	'form-control');
+        $data['partname_data'] = array (
+		'name'	=>	'partname',
+		'class'	=>	'form-control');
+        $data['partident_data'] = array (
+		'name'	=>	'partident',
+		'class'	=>	'form-control');
+        $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '新增',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -84,14 +98,15 @@ class Admin extends CI_Controller {
 			// 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('admin_createpart');
+            $this->load->view('admin_updatepart_end');
 			$this->load->view('footer');
 		}
 		else
 		{
             // 接收表單
 			$formdata['pid'] = $this->input->post('pid');
-            $formdata['partname'] = $this->input->post('partname');
-            $formdata['partident'] = $this->input->post('partident');
+            $formdata['partname'] = $this->input->post('partname', TRUE);
+            $formdata['partident'] = $this->input->post('partident', TRUE);
             if (!empty($formdata['pid']))
             {
                 $parttb = array (
@@ -139,12 +154,13 @@ class Admin extends CI_Controller {
 			// 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('admin_updatepart1');
+            
 			$this->load->view('footer');
 		}
 		else
 		{
             // 接收表單
-			$formdata['partid'] = $this->input->post('partid');
+			$formdata['partid'] = $this->input->post('partid', TRUE);
             $this->session->set_userdata("modifypartid", $formdata['partid']);
             // 跳到下一頁
             redirect('/Admin/updatePart2');
@@ -157,6 +173,7 @@ class Admin extends CI_Controller {
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
             $sessionpartid = $this->session->userdata('modifypartid');
+            
             if (empty($sessionpartid))
             {
                 redirect('/Admin');
@@ -164,7 +181,24 @@ class Admin extends CI_Controller {
             {
                 $data['parttb'] = $this->parttb_model->query($sessionpartid);
             }
-
+            $data['pid_data'] = array (
+		'name'	=>	'pid',
+		'class'	=>	'form-control',
+        'value' =>  $data['parttb']->pid);
+        $data['partname_data'] = array (
+		'name'	=>	'partname',
+		'class'	=>	'form-control',
+        'value' =>  $data['parttb']->partname);
+        $data['partident_data'] = array (
+		'name'	=>	'partident',
+		'class'	=>	'form-control',
+        'value' =>  $data['parttb']->partident);
+        $data['but1'] = array (
+      'name'  =>  'sent',
+      'type'  =>  'submit',
+      'content' =>  '送出',
+      'class' =>  'btn btn-primary',
+      'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -176,15 +210,17 @@ class Admin extends CI_Controller {
 		{
 			// 載入 view
 			$this->load->view('header',$data);
+            $this->load->view('admin_createpart');
 			$this->load->view('admin_updatepart2');
+            $this->load->view('admin_updatepart_end');
 			$this->load->view('footer');
 		}
 		else
 		{
             // 接收表單
 			$formdata['pid'] = $this->input->post('pid');
-            $formdata['partname'] = $this->input->post('partname');
-            $formdata['partident'] = $this->input->post('partident');
+            $formdata['partname'] = $this->input->post('partname', TRUE);
+            $formdata['partident'] = $this->input->post('partident', TRUE);
             $parttb = array(
                     'pid'   =>  $formdata['pid'],
                     'partname'  =>  $formdata['partname'],
@@ -257,11 +293,11 @@ class Admin extends CI_Controller {
 		{
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username');
-            $formdata['realname'] = $this->input->post('realname');
-            $formdata['userpass'] = $this->input->post('userpass');
-            $formdata['email'] = $this->input->post('email');
-            $formdata['userident'] = $this->input->post('userident');
+            $formdata['username'] = $this->input->post('username', TRUE);
+            $formdata['realname'] = $this->input->post('realname', TRUE);
+            $formdata['userpass'] = $this->input->post('userpass', TRUE);
+            $formdata['email'] = $this->input->post('email', TRUE);
+            $formdata['userident'] = $this->input->post('userident', TRUE);
             $formdata['rootuid'] = $this->input->post('rootuid');
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
@@ -381,11 +417,11 @@ class Admin extends CI_Controller {
             $uid = $this->session->userdata('updatemember');
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username');
-            $formdata['realname'] = $this->input->post('realname');
-            $formdata['userpass'] = $this->input->post('userpass');
-            $formdata['email'] = $this->input->post('email');
-            $formdata['userident'] = $this->input->post('userident');
+            $formdata['username'] = $this->input->post('username', TRUE);
+            $formdata['realname'] = $this->input->post('realname', TRUE);
+            $formdata['userpass'] = $this->input->post('userpass', TRUE);
+            $formdata['email'] = $this->input->post('email', TRUE);
+            $formdata['userident'] = $this->input->post('userident', TRUE);
             $formdata['rootuid'] = $this->input->post('rootuid');
 
             //準備寫入 usertb
@@ -501,7 +537,7 @@ class Admin extends CI_Controller {
             // 接收表單
 			$formdata['partid'] = $this->input->post('partid');
             $formdata['userid'] = $this->input->post('userid');
-            $formdata['partident'] = $this->input->post('partident');
+            //$formdata['partident'] = $this->input->post('partident');
             if (!empty($formdata['userid']))
             {
                 $uid = $formdata['userid'];
@@ -545,12 +581,12 @@ class Admin extends CI_Controller {
 		else
 		{
             // 接收表單
-			$formdata['myname'] = $this->input->post('myname');
-            $formdata['myhost'] = $this->input->post('myhost');
-            $formdata['site_admin'] = $this->input->post('site_admin');
-            $formdata['site_mail'] = $this->input->post('site_mail');
-            $formdata['adminuser'] = $this->input->post('adminuser');
-            $formdata['adminpass'] = $this->input->post('adminpass');
+			$formdata['myname'] = $this->input->post('myname', TRUE);
+            $formdata['myhost'] = $this->input->post('myhost', TRUE);
+            $formdata['site_admin'] = $this->input->post('site_admin', TRUE);
+            $formdata['site_mail'] = $this->input->post('site_mail', TRUE);
+            $formdata['adminuser'] = $this->input->post('adminuser', TRUE);
+            $formdata['adminpass'] = $this->input->post('adminpass', TRUE);
             if (!empty($formdata['adminpass']))
             {
                 $pass = $formdata['adminpass'];
@@ -616,11 +652,11 @@ class Admin extends CI_Controller {
 		else
 		{
             // 接收表單
-			$formdata['uploadable'] = $this->input->post('uploadable');
-            $formdata['ann_perpage'] = $this->input->post('ann_perpage');
-            $formdata['annday'] = $this->input->post('annday');
-            $formdata['ulfilenum'] = $this->input->post('ulfilenum');
-            $formdata['urlnum'] = $this->input->post('urlnum');
+			$formdata['uploadable'] = $this->input->post('uploadable', TRUE);
+            $formdata['ann_perpage'] = $this->input->post('ann_perpage', TRUE);
+            $formdata['annday'] = $this->input->post('annday', TRUE);
+            $formdata['ulfilenum'] = $this->input->post('ulfilenum', TRUE);
+            $formdata['urlnum'] = $this->input->post('urlnum', TRUE);
 
             $update = array  (
                 array (
@@ -678,10 +714,10 @@ class Admin extends CI_Controller {
 		else
 		{
             // 接收表單
-			$formdata['smtp_host'] = $this->input->post('smtp_host');
-            $formdata['smtp_port'] = $this->input->post('smtp_port');
-            $formdata['smtp_user'] = $this->input->post('smtp_user');
-            $formdata['smtp_pass'] = $this->input->post('smtp_pass');
+			$formdata['smtp_host'] = $this->input->post('smtp_host', TRUE);
+            $formdata['smtp_port'] = $this->input->post('smtp_port', TRUE);
+            $formdata['smtp_user'] = $this->input->post('smtp_user', TRUE);
+            $formdata['smtp_pass'] = $this->input->post('smtp_pass', TRUE);
 
             $update = array  (
                 array (

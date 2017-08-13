@@ -74,6 +74,7 @@ class Openidbind_model extends CI_Model {
             $this->db->select('*');
             $this->db->from('openidbind');
             $this->db->where('bind_userid IS NOT NULL');
+            $this->db->where('bind_userid !=', '0');
             $this->db->order_by('oid','desc');
             //$this->db->where();
             $query = $this->db->get();
