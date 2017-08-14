@@ -32,11 +32,11 @@ class PartAdmin extends CI_Controller
         $this->session->set_userdata('part', $part);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if (empty($login)) {
-            redirect('/Auth/postAnnAuth');
+            redirect('/Auth/chooseAuth');
         } elseif ($login['authpass'] == 0) {
-            redirect('/Auth/postAnnAuth');
+            redirect('/Auth/chooseAuth');
         } elseif ($part->rootuid != $login['userid']) {
-            redirect('/Auth/postAnnAuth');
+            redirect('/Auth/chooseAuth');
         }
     }
     public function index()
