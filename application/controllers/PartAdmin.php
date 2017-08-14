@@ -1,10 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class PartAdmin extends CI_Controller {
+class PartAdmin extends CI_Controller
+{
 
     public function __construct()
-        {
+    {
             parent::__construct();
             $this->load->library('session');
             $this->load->helper('form');
@@ -21,7 +22,7 @@ class PartAdmin extends CI_Controller {
             $this->session->set_userdata('nowurl', $urlpath);
             //進行認證
             $this->auth();
-        }
+    }
 
     public function auth()
     {
@@ -29,15 +30,11 @@ class PartAdmin extends CI_Controller {
         $part = $this->parttb_model->query($login['partid']);
         $this->session->set_userdata('part', $part);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if(empty($login))
-        {
+        if (empty($login)) {
             redirect('/Auth/postAnnAuth');
-        }
-        elseif ($login['authpass'] == 0  )
-        {
+        } elseif ($login['authpass'] == 0) {
             redirect('/Auth/postAnnAuth');
-        }
-        elseif ($part->rootuid != $login['userid']) {
+        } elseif ($part->rootuid != $login['userid']) {
             redirect('/Auth/postAnnAuth');
         }
     }
@@ -63,7 +60,7 @@ class PartAdmin extends CI_Controller {
                 '/PartAdmin/showBanneduser' =>  "顯示被封鎖使用者",
         );
         // 載入 view
-        $this->load->view('header',$data);
+        $this->load->view('header', $data);
         $this->load->view('admin_index');
         $this->load->view('footer');
     }
@@ -79,56 +76,53 @@ class PartAdmin extends CI_Controller {
             $selectPart->partid =>  $selectPart->partname
         );
         $data['partid_data'] = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options
-	);        
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options
+        );
         $data['username_data'] = array (
-		'name'	=>	'username',
-		'class'	=>	'form-control');
+        'name'  =>  'username',
+        'class'     =>  'form-control');
         $data['realname_data'] = array (
-		'name'	=>	'realname',
-		'class'	=>	'form-control');
+        'name'  =>  'realname',
+        'class'     =>  'form-control');
         $data['userpass_data'] = array (
-		'name'	=>	'userpass',
-		'class'	=>	'form-control');
+        'name'  =>  'userpass',
+        'class'     =>  'form-control');
         $data['email_data'] = array (
-		'name'	=>	'email',
-		'class'	=>	'form-control');
+        'name'  =>  'email',
+        'class'     =>  'form-control');
         $data['userident_data'] = array (
-		'name'	=>	'userident',
-		'class'	=>	'form-control');
+        'name'  =>  'userident',
+        'class'     =>  'form-control');
         $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '新增',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '新增',
+        'class' =>  'btn btn-primary',
+        'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
-		$this->form_validation->set_message('required','{field}未填');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_message('required', '{field}未填');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+        $this->form_validation->set_rules('username', '帳號', 'trim|required');
         $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
         $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
-		// 表單判斷
-		if($this->form_validation->run() == FALSE) 
-		{
-			// 載入 view
-			$this->load->view('header',$data);
-			$this->load->view('admin_addmember');
+        // 表單判斷
+        if ($this->form_validation->run() == false) {
+            // 載入 view
+            $this->load->view('header', $data);
+            $this->load->view('admin_addmember');
             $this->load->view('admin_addmember_end');
-			$this->load->view('footer');
-		}
-		else
-		{
+            $this->load->view('footer');
+        } else {
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username', TRUE);
-            $formdata['realname'] = $this->input->post('realname', TRUE);
-            $formdata['userpass'] = $this->input->post('userpass', TRUE);
-            $formdata['email'] = $this->input->post('email', TRUE);
-            $formdata['userident'] = $this->input->post('userident', TRUE);
+            $formdata['username'] = $this->input->post('username', true);
+            $formdata['realname'] = $this->input->post('realname', true);
+            $formdata['userpass'] = $this->input->post('userpass', true);
+            $formdata['email'] = $this->input->post('email', true);
+            $formdata['userident'] = $this->input->post('userident', true);
             $formdata['rootuid'] = $this->input->post('rootuid');
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
@@ -149,8 +143,7 @@ class PartAdmin extends CI_Controller {
             );
             $newid = $this->usertb_model->add($usertb);
             // 設定處室管理者
-            if($formdata['rootuid'] == 1)
-            {
+            if ($formdata['rootuid'] == 1) {
                 $root = array(
                     'rootuid'   =>  $newid
                 );
@@ -171,26 +164,25 @@ class PartAdmin extends CI_Controller {
         $selectPart = $this->session->userdata('part');
         $options = array(
             $selectPart->partid =>  $selectPart->partname
-        );  
+        );
         $data['partid_data'] = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options); 
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options);
         $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '選擇',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';     
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '選擇',
+        'class' =>  'btn btn-primary',
+        'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
-		$this->form_validation->set_message('required','{field}未填');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('partid', '處室', 'trim|required');
-		// 表單判斷
-		if($this->form_validation->run() == FALSE) 
-		{
-			$part = $this->session->userdata('partid');
+        $this->form_validation->set_message('required', '{field}未填');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+        $this->form_validation->set_rules('partid', '處室', 'trim|required');
+        // 表單判斷
+        if ($this->form_validation->run() == false) {
+            $part = $this->session->userdata('partid');
             if (empty($part)) {
                 $data['message'] = "尚未選擇處室";
             } else {
@@ -202,21 +194,17 @@ class PartAdmin extends CI_Controller {
                     $data['message'] = "請點選成員進入修改";
                 }
             }
-            if (!empty($part))
-            {
+            if (!empty($part)) {
                 $data['userlist'] = $this->usertb_model->queryMember($part);
             }
             // 載入 view
-			$this->load->view('header',$data);
-			$this->load->view('admin_updatemember1');
+            $this->load->view('header', $data);
+            $this->load->view('admin_updatemember1');
             $this->load->view('admin_updatemember1_list');
-			$this->load->view('footer');
-		}
-		else
-		{
+            $this->load->view('footer');
+        } else {
             $part = $this->session->userdata('partid');
-            if(empty($part)) 
-            {
+            if (empty($part)) {
                 $inputpart = $this->input->post('partid');
                 $this->session->set_userdata('partid', $inputpart);
             }
@@ -236,70 +224,66 @@ class PartAdmin extends CI_Controller {
         }
         $uid = $this->session->userdata('updatemember');
         // 若沒有 userid 值，則跳回管理頁面
-        if (empty($uid))
-        {
+        if (empty($uid)) {
             redirect('/PartAdmin');
         }
         $data['userdata'] = $this->usertb_model->query($uid);
-        $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid; 
+        $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
         $options = $this->parttb_model->queryList();
         $data['partid_data'] = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options,
-        'selected'	=>	$data['userdata']->partid);        
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options,
+        'selected'  =>  $data['userdata']->partid);
         $data['username_data'] = array (
-		'name'	=>	'username',
-		'class'	=>	'form-control',
+        'name'  =>  'username',
+        'class'     =>  'form-control',
         'value' =>  $data['userdata']->username);
         $data['realname_data'] = array (
-		'name'	=>	'realname',
-		'class'	=>	'form-control',
+        'name'  =>  'realname',
+        'class'     =>  'form-control',
         'value' =>  $data['userdata']->realname);
         $data['userpass_data'] = array (
-		'name'	=>	'userpass',
-		'class'	=>	'form-control');
+        'name'  =>  'userpass',
+        'class'     =>  'form-control');
         $data['email_data'] = array (
-		'name'	=>	'email',
-		'class'	=>	'form-control',
+        'name'  =>  'email',
+        'class'     =>  'form-control',
         'value' =>  $data['userdata']->email);
         $data['userident_data'] = array (
-		'name'	=>	'userident',
-		'class'	=>	'form-control',
+        'name'  =>  'userident',
+        'class'     =>  'form-control',
         'value' =>  $data['userdata']->userident);
         $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '新增',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
-      $data['button'] .= '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';       
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '新增',
+        'class' =>  'btn btn-primary',
+        'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
+        $data['button'] .= '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
-		$this->form_validation->set_message('required','{field}未填');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('partid', '處室', 'trim|required');
+        $this->form_validation->set_message('required', '{field}未填');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+        $this->form_validation->set_rules('partid', '處室', 'trim|required');
         $this->form_validation->set_rules('username', '帳號', 'trim|required');
         $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
-		// 表單判斷
-		if($this->form_validation->run() == FALSE) 
-		{
+        // 表單判斷
+        if ($this->form_validation->run() == false) {
             // 載入 view
-			$this->load->view('header',$data);
-			$this->load->view('admin_addmember');
+            $this->load->view('header', $data);
+            $this->load->view('admin_addmember');
             $this->load->view('admin_updatemember2');
-			$this->load->view('footer');
-            
-        } else
-        {
+            $this->load->view('footer');
+        } else {
             $uid = $this->session->userdata('updatemember');
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username', TRUE);
-            $formdata['realname'] = $this->input->post('realname', TRUE);
-            $formdata['userpass'] = $this->input->post('userpass', TRUE);
-            $formdata['email'] = $this->input->post('email', TRUE);
-            $formdata['userident'] = $this->input->post('userident', TRUE);
+            $formdata['username'] = $this->input->post('username', true);
+            $formdata['realname'] = $this->input->post('realname', true);
+            $formdata['userpass'] = $this->input->post('userpass', true);
+            $formdata['email'] = $this->input->post('email', true);
+            $formdata['userident'] = $this->input->post('userident', true);
             $formdata['rootuid'] = $this->input->post('rootuid');
 
             //準備寫入 usertb
@@ -313,16 +297,14 @@ class PartAdmin extends CI_Controller {
             $this->usertb_model->modify($uid, $usertb);
             $newid = $uid;
             // 設定處室管理者
-            if($formdata['rootuid'] == 1)
-            {
+            if ($formdata['rootuid'] == 1) {
                 $root = array(
                     'rootuid'   =>  $newid
                 );
                 $this->parttb_model->modify($formdata['partid'], $root);
             }
             // 判斷，若密碼欄位有填寫，則進行密碼變更
-            if (!empty($formdata['userpass']))
-            {
+            if (!empty($formdata['userpass'])) {
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
             $ismd5 = $md5key;
@@ -330,10 +312,10 @@ class PartAdmin extends CI_Controller {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }*/
             // 新設定之密碼改用 php 加密方式
-            $formdata['userpass'] = password_hash($formdata['userpass'], PASSWORD_DEFAULT);
-            $userpass = array(
+                $formdata['userpass'] = password_hash($formdata['userpass'], PASSWORD_DEFAULT);
+                $userpass = array(
                 'userpass'  =>  $formdata['userpass']
-            );
+                );
                 $this->usertb_model->modify($uid, $userpass);
             }
             //清除 updatemember
@@ -369,22 +351,22 @@ class PartAdmin extends CI_Controller {
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
         if (!empty($uid)) {
-        $this->load->helper('security');
-        $disable = array (
+            $this->load->helper('security');
+            $disable = array (
             'partid'    =>  '0'
-        );
-        $rand = do_hash(rand(1000,9999), 'md5');
+            );
+            $rand = do_hash(rand(1000, 9999), 'md5');
         // 利用 password_hash 將產生的亂碼加密，成為無法登入的密碼
-        $rand = password_hash($rand, PASSWORD_DEFAULT);
+            $rand = password_hash($rand, PASSWORD_DEFAULT);
        
-        $userpass = array(
+            $userpass = array(
                 'userpass'  =>  $rand
             );
         //將使用者處室設定為 0，這個代號正常情形下不會使用，因而不會出現在任何處室
-        $this->usertb_model->modify($uid, $disable);
+            $this->usertb_model->modify($uid, $disable);
         //設定一個亂數做為使用者密碼，使其無法登入
-        $this->usertb_model->modify($uid, $userpass);
-        redirect('Admin');
+            $this->usertb_model->modify($uid, $userpass);
+            redirect('Admin');
         } else {
             redirect('/PartAdmin/updateMember1');
         }
@@ -399,42 +381,38 @@ class PartAdmin extends CI_Controller {
         $data['userdata'] = $this->usertb_model->queryMember('0');
         $options = $this->parttb_model->queryList();
         $data['partid_data'] = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options);
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options);
         $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '啟用選擇的組員',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';  
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '啟用選擇的組員',
+        'class' =>  'btn btn-primary',
+        'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
-		$this->form_validation->set_message('required','{field}未填');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('userid', '組員', 'trim|required');
-		// 表單判斷
-		if($this->form_validation->run() == FALSE) 
-		{
-			// 載入 view
-			$this->load->view('header',$data);
-			$this->load->view('admin_enablemember');
-			$this->load->view('footer');
-		}
-		else
-		{
+        $this->form_validation->set_message('required', '{field}未填');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+        $this->form_validation->set_rules('userid', '組員', 'trim|required');
+        // 表單判斷
+        if ($this->form_validation->run() == false) {
+            // 載入 view
+            $this->load->view('header', $data);
+            $this->load->view('admin_enablemember');
+            $this->load->view('footer');
+        } else {
             // 接收表單
-			$formdata['partid'] = $this->input->post('partid');
+            $formdata['partid'] = $this->input->post('partid');
             $formdata['userid'] = $this->input->post('userid');
             //$formdata['partident'] = $this->input->post('partident');
-            if (!empty($formdata['userid']))
-            {
+            if (!empty($formdata['userid'])) {
                 $uid = $formdata['userid'];
                 $usertb = array (
                     'partid'   =>  $formdata['partid']
                 );
                 $this->usertb_model->modify($uid, $usertb);
-            } 
+            }
             // 動作結束，回選單
             redirect('/PartAdmin');
         }
@@ -449,45 +427,44 @@ class PartAdmin extends CI_Controller {
             $this->session->set_userdata('nowurl', $urlpath);
             $options = $this->usertb_model->queryUser();
             $data['userid_data'] = array (
-		    'name'	=>	'userid',
-		    'class'	=>	'form-control',
-		    'options'	=>	$options
-	        );
+            'name'  =>  'userid',
+            'class'     =>  'form-control',
+            'options'   =>  $options
+            );
             $parts = $this->parttb_model->queryList();
             $data['partid_data'] = array (
-		        'name'	=>	'partid',
-		        'class'	=>	'form-control',
-		        'options'	=>	$parts
-	        );
+                'name'  =>  'partid',
+                'class'     =>  'form-control',
+                'options'   =>  $parts
+            );
             $data['acc_data'] = array(
-		    'name' => 'use_same_account',
-		    'id'	=>	'use_same_account',
-		    'value'	=>	'1',
-		    'checked'	=>	FALSE,
-		    'class'	=>	'form-control' );
+            'name' => 'use_same_account',
+            'id'    =>  'use_same_account',
+            'value'     =>  '1',
+            'checked'   =>  false,
+            'class'     =>  'form-control' );
             $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '修改',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '修改',
+        'class' =>  'btn btn-primary',
+        'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
         }
             // 表單驗證
-		$this->form_validation->set_message('required','{field}未選');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('new', '新建帳號', 'trim|required');
+        $this->form_validation->set_message('required', '{field}未選');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+        $this->form_validation->set_rules('new', '新建帳號', 'trim|required');
         $this->form_validation->set_rules('banned', '阻擋帳號', 'trim|required');
             // 表單判斷
-		if($this->form_validation->run() == FALSE) 
-		{
+        if ($this->form_validation->run() == false) {
             // 載入 view
-			$this->load->view('header',$data);
-			$this->load->view('admin_oid_confirmuser');
-			$this->load->view('footer');
+            $this->load->view('header', $data);
+            $this->load->view('admin_oid_confirmuser');
+            $this->load->view('footer');
         } else {
             // 接收表單
             $formdata['new'] = $this->input->post('new');
@@ -503,41 +480,40 @@ class PartAdmin extends CI_Controller {
                 }
                 $newuser = $this->session->userdata('oiduser');
                 //準備寫入 usertb
-            $usertb = array (
+                $usertb = array (
                 'partid'    =>  $formdata['partid'],
                 'username'    =>  $oiduser->openid_id . "-oid",
                 'realname'    =>  $oiduser->fullname,
-                'userpass'    =>  password_hash(md5(rand(1000,9999)), PASSWORD_DEFAULT),
+                'userpass'    =>  password_hash(md5(rand(1000, 9999)), PASSWORD_DEFAULT),
                 'email'    =>  $oiduser->email,
                 'userident'    =>  'openid 匯入帳號-' . $oiduser->fullname . "(" . $oiduser->openid_id . ")"
-            );
-            $newid = $this->usertb_model->add($usertb);
+                );
+                $newid = $this->usertb_model->add($usertb);
             // 處理本筆 oid 帳號
-            $openidbind_data = array(
+                $openidbind_data = array(
                 'bind_userid'   =>  $newid,
                 'new'   =>  '0'
-            );
-            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-            redirect('/PartAdmin');
-            }
-            // 若非直接建立帳號，則採綁定帳號處理
+                );
+                $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+                redirect('/PartAdmin');
+            } // 若非直接建立帳號，則採綁定帳號處理
             elseif ($formdata['userid'] != '') {
             // 處理本筆 oid 帳號
-            $openidbind_data = array(
+                $openidbind_data = array(
                 'bind_userid'   =>  $formdata['userid'],
                 'new'   =>  '0'
-            );
-            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-            redirect('/PartAdmin');
+                );
+                $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+                redirect('/PartAdmin');
             } else {
             // 若非前兩種動作，則只處理確認或阻擋
             // 處理本筆 oid 帳號
-            $openidbind_data = array(
+                $openidbind_data = array(
                 'new'   =>  $formdata['new'],
                 'banned'   =>   $formdata['banned']
-            );
-            $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-            redirect('/PartAdmin');
+                );
+                $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
+                redirect('/PartAdmin');
             }
         }
     }
@@ -563,9 +539,9 @@ class PartAdmin extends CI_Controller {
         $this->session->set_userdata('nowurl', $urlpath);
         $data['list'] = $this->openidbind_model->showUser();
         // 載入 View
-        $this->load->view('header',$data);
-		$this->load->view('admin_oid_showuser');
-		$this->load->view('footer');
+        $this->load->view('header', $data);
+        $this->load->view('admin_oid_showuser');
+        $this->load->view('footer');
     }
     // 顯示單一登入使用者(已綁定)
     public function showBinduser()
@@ -577,9 +553,9 @@ class PartAdmin extends CI_Controller {
         $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         $data['list'] = $this->openidbind_model->showBindUser();
         // 載入 View
-        $this->load->view('header',$data);
-		$this->load->view('admin_oid_showuser');
-		$this->load->view('footer');
+        $this->load->view('header', $data);
+        $this->load->view('admin_oid_showuser');
+        $this->load->view('footer');
     }
     // 顯示被封鎖使用者
     public function showBanneduser()
@@ -589,11 +565,10 @@ class PartAdmin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
-        $data['list'] = $this->openidbind_model->queryBy('banned','1');
+        $data['list'] = $this->openidbind_model->queryBy('banned', '1');
         // 載入 View
-        $this->load->view('header',$data);
-		$this->load->view('admin_oid_showuser');
-		$this->load->view('footer');
+        $this->load->view('header', $data);
+        $this->load->view('admin_oid_showuser');
+        $this->load->view('footer');
     }
 }
-?>
