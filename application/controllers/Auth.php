@@ -25,7 +25,7 @@ class Auth extends CI_Controller {
         $data['function_name'] = "選擇登入帳號";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
-        $data['but_PartAdmin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary" accesskey="l">系統帳號登入</a>';
+        $data['but_Part_admin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary" accesskey="l">系統帳號登入</a>';
         $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-success" accesskey="o">單一登入帳號登入</a>';
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h">回首頁</a>';
         // 載入 View

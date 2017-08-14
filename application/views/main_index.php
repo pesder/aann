@@ -3,23 +3,11 @@
         $rep_str = array('普通','重要','急件');
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
-    <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/FeedAnn/feed/rss">rss</a>
+    <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/rss">rss</a>
     <table class="table table-condensed">
     <tr><td>
     <?=form_open('Main/selectPart','class="form-inline"');?>
     <?php
-    $partid_data = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control',
-		'options'	=>	$options
-	);
-	
-    $but1 = array(
-    'name'  =>  'sent',
-    'type'  =>  'submit',
-    'content' =>  '確定',
-    'class' =>  'btn btn-primary',
-    'accesskey'	=>	's');
     echo '<div class="form-group">';
     echo form_error('partid');
     echo form_dropdown($partid_data);
@@ -31,21 +19,11 @@
     <td>
     <?=form_open('Main/searchKeyword','class="form-inline"');?>
     <?php
-    $search = array(
-      'name'  =>  'search',
-      'class' =>  'form-control'
-    );
-    $but1 = array(
-    'name'  =>  'sent',
-    'type'  =>  'submit',
-    'content' =>  '搜尋',
-    'class' =>  'btn btn-primary',
-    'accesskey'	=>	's');
     echo '<div class="form-group">';
     echo form_label('關鍵字');
     echo form_error('search');
     echo form_input($search);
-    echo form_button($but1);
+    echo form_button($but2);
     echo '</div>';
     ?>
     <?=form_close()?>
@@ -53,17 +31,6 @@
     <td>
     <?=form_open('Main/setDays','class="form-inline"');?>
     <?php
-    $days = array(
-      'name'  =>  'ann_list_days',
-      'class' =>  'form-control',
-      'value' =>  $ann_list_days
-    );
-    $but1 = array(
-    'name'  =>  'sent',
-    'type'  =>  'submit',
-    'content' =>  '顯示',
-    'class' =>  'btn btn-primary',
-    'accesskey'	=>	's');
     echo '<div class="form-group">';
     echo form_label('列出');
     echo form_error('ann_list_days');
@@ -76,7 +43,7 @@
     </td>
     <td>
     <div class="text-right">
-    <a href="<?=config_item('base_url');?>/index.php/postAnn/postAnnForm" class="btn btn-success">發布公告</a> 
+    <a href="<?=config_item('base_url');?>/index.php/Post_ann/postAnnForm" class="btn btn-success">發布公告</a> 
     <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning">管理功能</a>
     </div>
     </td></tr>
@@ -96,8 +63,8 @@
           <?php foreach ($list as $row): ?>
           <tr>
             <td><?=str_replace($orig_str, $rep_str, $row->type)?></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=$this->security->xss_clean($row->subject);?></a></td>
-            <td><?=$row->partname?></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=html_escape($this->security->xss_clean($row->subject));?></a></td>
+            <td><?=$this->security->xss_clean($row->partname)?></td>
             <td><?=$row->posttime?></td>
             <td><?=$row->hits?></td>
           </tr>

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class PartAdmin extends CI_Controller
+class Part_admin extends CI_Controller
 {
 
     public function __construct()
@@ -20,7 +20,7 @@ class PartAdmin extends CI_Controller
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            $this->classname = "PartAdmin";
+            $this->classname = "Part_admin";
             //進行認證
             $this->auth();
     }
@@ -47,8 +47,8 @@ class PartAdmin extends CI_Controller
         $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
-                '/PartAdmin/addMember'  =>  "新增一位組員",
-                '/PartAdmin/updateMember1'  =>  "修改組員資料",
+                '/Part_admin/addMember'  =>  "新增一位組員",
+                '/Part_admin/updateMember1'  =>  "修改組員資料",
         );
         $data['h2'] = "";
         $data['h2group'] = array (
@@ -56,9 +56,9 @@ class PartAdmin extends CI_Controller
         );
         $data['h3'] = "單一登入功能";
         $data['h3group'] = array (
-                '/PartAdmin/showOiduser' =>  "顯示單一登入使用者",
-                '/PartAdmin/showBinduser' =>  "顯示單一登入使用者(已綁定)",
-                '/PartAdmin/showBanneduser' =>  "顯示被封鎖使用者",
+                '/Part_admin/showOiduser' =>  "顯示單一登入使用者",
+                '/Part_admin/showBinduser' =>  "顯示單一登入使用者(已綁定)",
+                '/Part_admin/showBanneduser' =>  "顯示被封鎖使用者",
         );
         // 載入 view
         $this->load->view('header', $data);
@@ -103,7 +103,7 @@ class PartAdmin extends CI_Controller
         'content' =>  '新增',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -152,7 +152,7 @@ class PartAdmin extends CI_Controller
                 $this->parttb_model->modify($formdata['partid'], $root);
             }
             // 動作結束，回選單
-            redirect('/PartAdmin');
+            redirect('/Part_admin');
         }
     }
         // 修改組員資料
@@ -178,7 +178,7 @@ class PartAdmin extends CI_Controller
         'content' =>  '選擇',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -220,7 +220,7 @@ class PartAdmin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "修改組員資料";
-        $data['function_key'] = $this->classname . "/updateMember2";
+        $data['function_key'] = $this->classname . "/updateMember2/" . $id;
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         if ($id != 0) {
@@ -229,7 +229,7 @@ class PartAdmin extends CI_Controller
         $uid = $this->session->userdata('updatemember');
         // 若沒有 userid 值，則跳回管理頁面
         if (empty($uid)) {
-            redirect('/PartAdmin');
+            redirect('/Part_admin');
         }
         $data['userdata'] = $this->usertb_model->query($uid);
         $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
@@ -267,8 +267,8 @@ class PartAdmin extends CI_Controller
         'content' =>  '新增',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/PartAdmin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
-        $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/Part_admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
+        $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -328,7 +328,7 @@ class PartAdmin extends CI_Controller
             //清除 updatemember
             $this->session->set_userdata('updatemember', "");
             // 動作結束，回選單
-            redirect('/PartAdmin');
+            redirect('/Part_admin');
         }
     }
     // 刪除組員資料
@@ -342,7 +342,7 @@ class PartAdmin extends CI_Controller
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
         if (empty($uid)) {
-            redirect('/PartAdmin/updateMember1');
+            redirect('/Part_admin/updateMember1');
         }
         $this->usertb_model->delete($uid);
         redirect('Admin');
@@ -375,7 +375,7 @@ class PartAdmin extends CI_Controller
             $this->usertb_model->modify($uid, $userpass);
             redirect('Admin');
         } else {
-            redirect('/PartAdmin/updateMember1');
+            redirect('/Part_admin/updateMember1');
         }
     }
         // 啟用一位組員
@@ -401,7 +401,7 @@ class PartAdmin extends CI_Controller
         'content' =>  '啟用選擇的組員',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -425,7 +425,7 @@ class PartAdmin extends CI_Controller
                 $this->usertb_model->modify($uid, $usertb);
             }
             // 動作結束，回選單
-            redirect('/PartAdmin');
+            redirect('/Part_admin');
         }
     }
     
@@ -465,7 +465,7 @@ class PartAdmin extends CI_Controller
             'content' =>  '修改',
             'class' =>  'btn btn-primary',
             'accesskey'   =>  's');
-            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
@@ -511,7 +511,7 @@ class PartAdmin extends CI_Controller
                 'new'   =>  '0'
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-                redirect('/PartAdmin');
+                redirect('/Part_admin');
             } // 若非直接建立帳號，則採綁定帳號處理
             elseif ($formdata['userid'] != '') {
             // 處理本筆 oid 帳號
@@ -520,7 +520,7 @@ class PartAdmin extends CI_Controller
                 'new'   =>  '0'
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-                redirect('/PartAdmin');
+                redirect('/Part_admin');
             } else {
             // 若非前兩種動作，則只處理確認或阻擋
             // 處理本筆 oid 帳號
@@ -529,7 +529,7 @@ class PartAdmin extends CI_Controller
                 'banned'   =>   $formdata['banned']
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
-                redirect('/PartAdmin');
+                redirect('/Part_admin');
             }
         }
     }
@@ -544,7 +544,7 @@ class PartAdmin extends CI_Controller
         $this->openidbind_model->delete($deleteid);
         $message = "已刪除" . $user->fullname . "以單一登入申請的帳號";
         $this->session->set_flashdata('message', $message);
-        redirect('/PartAdmin');
+        redirect('/Part_admin');
     }
     // 顯示單一登入使用者
     public function showOiduser()
@@ -554,7 +554,7 @@ class PartAdmin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         $data['list'] = $this->openidbind_model->showUser();
         // 載入 View
         $this->load->view('header', $data);
@@ -569,7 +569,7 @@ class PartAdmin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         $data['list'] = $this->openidbind_model->showBindUser();
         // 載入 View
         $this->load->view('header', $data);
@@ -584,7 +584,7 @@ class PartAdmin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         $data['list'] = $this->openidbind_model->queryBy('banned', '1');
         // 載入 View
         $this->load->view('header', $data);

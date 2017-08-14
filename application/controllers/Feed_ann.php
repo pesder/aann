@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class FeedAnn extends CI_Controller {
+class Feed_ann extends CI_Controller {
 
     public function __construct()
         {
@@ -43,7 +43,7 @@ class FeedAnn extends CI_Controller {
     {
         $slug = $this->site . "/index.php/Main/viewAnn/" . $post->tid;
 		// set item's title, author, url, pubdate and description
-        $feed->add($post->subject, $post->partname, $slug, $post->posttime, mb_substr($post->comment,0,90,"UTF-8"));
+        $feed->add($this->security->xss_clean($post->subject), $this->security->xss_clean($post->partname), $slug, $post->posttime, html_escape($this->security->xss_clean(mb_substr($post->comment,0,90,"UTF-8"))));
     }
 
     // show your feed (options: 'atom' (recommended) or 'rss')

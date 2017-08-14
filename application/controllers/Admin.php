@@ -185,7 +185,7 @@ class Admin extends CI_Controller {
         public function updatePart2($partid = 0)
     {
             $data['function_name'] = "修改處室";
-            $data['function_key'] = $this->classname . "/updatePart2";
+            $data['function_key'] = $this->classname . "/updatePart2/" . $partid;
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -443,7 +443,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "修改組員資料";
-        $data['function_key'] = $this->classname . "/updateMember2";
+        $data['function_key'] = $this->classname . "/updateMember2/" . $id;
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         if ($id != 0) {

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class PostAnn extends CI_Controller {
+class Post_ann extends CI_Controller {
 
     public function __construct()
         {
@@ -19,6 +19,7 @@ class PostAnn extends CI_Controller {
             $this->load->model('filetb_model');
             // 讀取網站名稱
             $this->title = $this->config_model->queryValue('myname');
+            $this->classname = "Post_ann";
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -39,7 +40,9 @@ class PostAnn extends CI_Controller {
     public function postAnnForm() 
     {
         $data['function_name'] = "發布公告表單";
+        $data['function_key'] = $this->classname . "/postAnnForm";
         $data['site'] = $this->title;
+        
         $login = $this->session->userdata('userlogin');
         $urlpath = '/PostAnn/postAnnForm';
         $this->session->set_userdata('nowurl', $urlpath);
@@ -209,6 +212,7 @@ class PostAnn extends CI_Controller {
     public function modify($tid)
     {
         $data['function_name'] = "編輯公告";
+        $data['function_key'] = $this->classname . "/modify/" . $tid;
         $data['site'] = $this->title;
         
         $data['head'] = $this->titletb_model->query($tid);
