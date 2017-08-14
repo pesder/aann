@@ -31,4 +31,4 @@
 <?php if (!empty($message)) : ?>
 <h1><?=$message?></h1>
 <?php endif; ?>
-<a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>
+<?php echo $button ?>

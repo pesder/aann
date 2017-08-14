@@ -77,7 +77,8 @@ class Auth extends CI_Controller {
                     'partid' => $data['user']['partid'],
                     'username' => $data['user']['username'],
                     'realname' => $data['user']['realname'],
-                    'userid'    =>  $data['user']['userid']
+                    'userid'    =>  $data['user']['userid'],
+                    'rootuid'   =>  $data['user']['rootuid']
                 );
                 $this->session->set_userdata('userlogin', $result);
                 $this->session->set_tempdata('readlocal', '1', 600);
@@ -90,7 +91,8 @@ class Auth extends CI_Controller {
                     'partid' => "",
                     'username' => "",
                     'realname' => "",
-                    'userid'    =>  ""
+                    'userid'    =>  "",
+                    'rootuid'   =>  ""
                 );
                 $this->session->set_userdata('userlogin', $result);
             }
@@ -232,7 +234,8 @@ class Auth extends CI_Controller {
                     'partid' => $annuser->partid,
                     'username' => $annuser->username,
                     'realname' => $annuser->realname,
-                    'userid'    =>  $annuser->userid
+                    'userid'    =>  $annuser->userid,
+                    'rootuid'   =>  $annuser->rootuid
                 );
         $this->session->set_userdata('userlogin', $result);
         

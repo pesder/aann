@@ -116,16 +116,7 @@
 <tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$newuser->oid?> " class="btn btn-danger">刪除</a></td></tr>
 </table>
 <div class="text-center">
-    <?php
-    $but1 = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '修改',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-    echo form_button($but1);
-    ?> ｜ 
-     
-    <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>
+    <?php echo form_button($but1);?> ｜ 
+    <?php echo $button ?>
 </div>
 <?=form_close()?>
