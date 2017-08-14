@@ -16,6 +16,7 @@ class Main extends CI_Controller {
             $this->title = $this->config_model->queryValue('myname');
             // 讀取每頁顯示文章數
             $this->annpp = $this->config_model->queryValue('ann_perpage');
+            $this->classname = "Main";
         }
 
     public function index()
@@ -353,6 +354,22 @@ class Main extends CI_Controller {
         // read file contents
         $data = file_get_contents(base_url('/files/' . $pid . '/' . $uid . '/' .$filename));
         force_download($filename, $data);
+    }
+    // 顯示管理區
+    public function showManage()
+    {
+        $data['function_name'] = "顯示管理區";
+        $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $data['but_PartAdmin'] = '<a href="' . config_item('base_url') . '/index.php/PartAdmin" class="btn btn-warning" accesskey="h">處室管理員選單</a>';
+        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-danger" accesskey="h">超級總管選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h">回首頁</a>';
+        // 載入 View
+        $this->load->view('header',$data);
+		$this->load->view('main_showmanage');
+		$this->load->view('footer');
     }
 }
 ?>

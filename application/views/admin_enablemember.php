@@ -1,6 +1,6 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Admin/enableMember');?>
+<?=form_open($function_key);?>
 <table class="table">
 <tr>
 	<td class="text-center">選擇要歸入哪個處室：</td>

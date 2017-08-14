@@ -21,8 +21,8 @@
             <td><?=$row->email?></td>
             <td><?=$row->school_number?></td>
             <td><?=$row->job?></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Admin/confirmNewuser/<?=$row->oid?>" class="btn btn-success">編輯</a></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$row->oid?>" class="btn btn-danger">刪除</a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/<?=$classname?>/confirmNewuser/<?=$row->oid?>" class="btn btn-success">編輯</a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/<?=$classname?>/deleteOidUser/<?=$row->oid?>" class="btn btn-danger">刪除</a></td>
           </tr>
         <?php endforeach; ?>
         </tbody>

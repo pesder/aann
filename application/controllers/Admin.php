@@ -19,6 +19,7 @@ class Admin extends CI_Controller {
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
+            $this->classname = "Admin";
             //進行認證
             $this->auth();
         }
@@ -71,6 +72,7 @@ class Admin extends CI_Controller {
     public function createPart()
     {
         $data['function_name'] = "建立處室";
+        $data['function_key'] = $this->classname . "/createPart";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $data['pid_data'] = array (
@@ -83,12 +85,12 @@ class Admin extends CI_Controller {
 		'name'	=>	'partident',
 		'class'	=>	'form-control');
         $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '新增',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '新增',
+        'class' =>  'btn btn-primary',
+        'accesskey'	=>	's');
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -141,6 +143,7 @@ class Admin extends CI_Controller {
     public function updatePart1()
     {
             $data['function_name'] = "選擇要修改處室";
+            $data['function_key'] = $this->classname . "/updatePart1";
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -182,6 +185,7 @@ class Admin extends CI_Controller {
         public function updatePart2($partid = 0)
     {
             $data['function_name'] = "修改處室";
+            $data['function_key'] = $this->classname . "/updatePart2";
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -286,6 +290,7 @@ class Admin extends CI_Controller {
     public function addMember()
     {
         $data['function_name'] = "新增組員";
+        $data['function_key'] = $this->classname . "/addMember";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $options = $this->parttb_model->queryList();
@@ -377,6 +382,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "選擇組員處室";
+        $data['function_key'] = $this->classname . "/updateMember1";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $options = $this->parttb_model->queryList();  
@@ -437,6 +443,7 @@ class Admin extends CI_Controller {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "修改組員資料";
+        $data['function_key'] = $this->classname . "/updateMember2";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         if ($id != 0) {
@@ -601,6 +608,7 @@ class Admin extends CI_Controller {
     public function enableMember()
     {
         $data['function_name'] = "啟用一位組員";
+        $data['function_key'] = $this->classname . "/enableMember";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         //查詢被設定為停用的使用者
@@ -864,7 +872,9 @@ class Admin extends CI_Controller {
     public function confirmNewuser($oid = 0)
     {
         $data['function_name'] = "確認單一登入使用者";
+        $data['function_key'] = $this->classname . "/confirmNewuser";
             $data['site'] = $this->title;
+            $data['classname'] = $this->classname;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
             $options = $this->usertb_model->queryUser();
@@ -886,12 +896,12 @@ class Admin extends CI_Controller {
 		    'checked'	=>	FALSE,
 		    'class'	=>	'form-control' );
             $data['but1'] = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '修改',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-      $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '修改',
+            'class' =>  'btn btn-primary',
+            'accesskey'	=>	's');
+            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
@@ -979,8 +989,10 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "顯示單一登入使用者";
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         $data['list'] = $this->openidbind_model->showUser();
         // 載入 View
         $this->load->view('header',$data);
@@ -992,6 +1004,7 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "顯示單一登入使用者(已綁定)";
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
@@ -1006,6 +1019,7 @@ class Admin extends CI_Controller {
     {
         $data['function_name'] = "顯示被封鎖使用者";
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';

@@ -1,6 +1,6 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Admin/confirmNewuser/' . $newuser->oid);?>
+<?=form_open($function_key . "/" . $newuser->oid);?>
 <table class="table">
 
 <tr>
@@ -113,7 +113,7 @@
 	</div>
 	</td>
 </tr>
-<tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$newuser->oid?> " class="btn btn-danger">刪除</a></td></tr>
+<tr><td></td><td><a href="<?=config_item('base_url');?>/index.php/<?=$classname?>/deleteOidUser/<?=$newuser->oid?> " class="btn btn-danger">刪除</a></td></tr>
 </table>
 <div class="text-center">
     <?php echo form_button($but1);?> ｜ 

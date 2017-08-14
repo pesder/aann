@@ -77,7 +77,7 @@
     <td>
     <div class="text-right">
     <a href="<?=config_item('base_url');?>/index.php/postAnn/postAnnForm" class="btn btn-success">發布公告</a> 
-    <a href="<?=config_item('base_url');?>/index.php/Admin" class="btn btn-warning">管理功能</a>
+    <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning">管理功能</a>
     </div>
     </td></tr>
  </table>
