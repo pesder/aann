@@ -77,6 +77,11 @@ class Post_ann extends CI_Controller
                     'class'     =>  'form-control',
                     'options'   => $local
                 );
+            $data['html_data'] = array (
+               'name'  =>  'html',
+                'class'     =>  'form-control',
+                'options'   => $serial
+                );
             $data['title_data'] = array (
                 'name'  =>  'title',
                 'id'    =>  'title',
@@ -127,11 +132,17 @@ class Post_ann extends CI_Controller
             $formdata['annday'] = $this->input->post('dueday', TRUE);
             $formdata['serial'] = $this->input->post('serial');
             $formdata['local'] = $this->input->post('local');
+            $formdata['html'] = $this->input->post('html');
             $pid = $login['partid'];
             $uid = $login['userid'];
             $data['partname'] = $this->parttb_model->queryPartname($pid);
             $filelist = "";
             $urllist = "";
+            if ($formdata['html'] == 0) {
+                $formdata['comment'] = html_escape($formdata('comment'));
+            } else {
+                $formdata['comment'] = trim($formdata['comment'], "\n\r");
+            }
 
             //處理附件
             $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
@@ -268,6 +279,11 @@ class Post_ann extends CI_Controller
                 'class'     =>  'form-control col-sm-8',
                 'value' =>  $data['head']->subject
                 );
+            $data['html_data'] = array (
+                'name'  =>  'html',
+                'class'     =>  'form-control',
+                'options'   => $serial
+                );
             $data['comment_data'] = array (
                 'name'  =>  'comment',
                 'id'    =>  'comment',
@@ -374,8 +390,14 @@ class Post_ann extends CI_Controller
             $formdata['title'] = $this->input->post('title', TRUE);
             $formdata['comment'] = $this->input->post('comment', TRUE);
             $formdata['annday'] = $this->input->post('dueday', TRUE);
+            $formdata['html'] = $this->input->post('html');
             $data['partname'] = $this->parttb_model->queryPartname($pid);
             $urllist = "";
+            if ($formdata['html'] == 0) {
+                $formdata['comment'] = html_escape($formdata('comment'));
+            } else {
+                $formdata['comment'] = trim($formdata['comment'], "\n\r");
+            }
 
             //處理附件
             $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";

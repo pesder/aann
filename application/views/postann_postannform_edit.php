@@ -12,7 +12,7 @@
             <div class="form-inline">
             <div class="col-sm-10">連續發公告：
             <?=form_dropdown($serialpost_data);?>
-            內部公告：<?=form_dropdown($local_data);?></div></div></div></td></tr>
+            內部公告：<?=form_dropdown($local_data);?>使用 HTML：<?=form_dropdown($html_data);?></div></div></div></td></tr>
         <tr>
              <td  colspan="2"><div class="form-group row"><div class="col-sm-1">
              <?=form_dropdown($type_data);?></div>

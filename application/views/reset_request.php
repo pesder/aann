@@ -8,12 +8,7 @@
 	<td>
 	<div class="col-xs-3">
 		<?=form_error('username')?>
-	<?php
-		$username_data = array (
-		'name'	=>	'username',
-		'class'	=>	'form-control');
-	echo form_input($username_data);
-	?>
+	<?=form_input($username_data);	?>
 	</div>★
 	</td>
 </tr>
@@ -22,25 +17,12 @@
 	<td>
 	<div class="col-xs-3">
 	<?=form_error('email')?>
-	<?php
-		$email_data = array (
-		'name'	=>	'email',
-		'class'	=>	'form-control');
-	echo form_input($email_data);
-	?>
+	<?=form_input($email_data);?>
 	</div>★
 	</td>
 </tr>
 </table>
 <div class="text-center">
-    <?php
-    $but1 = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '送出',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-    echo form_button($but1);
-    ?>
+    <?=form_button($but1);?>
 </div>
 <?=form_close()?>

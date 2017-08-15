@@ -113,7 +113,7 @@ class Part_admin extends CI_Controller
         $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
         $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == FALSE) {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_addmember');
@@ -122,11 +122,11 @@ class Part_admin extends CI_Controller
         } else {
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username', true);
-            $formdata['realname'] = $this->input->post('realname', true);
-            $formdata['userpass'] = $this->input->post('userpass', true);
-            $formdata['email'] = $this->input->post('email', true);
-            $formdata['userident'] = $this->input->post('userident', true);
+            $formdata['username'] = $this->input->post('username', TRUE);
+            $formdata['realname'] = $this->input->post('realname', TRUE);
+            $formdata['userpass'] = $this->input->post('userpass', TRUE);
+            $formdata['email'] = $this->input->post('email', TRUE);
+            $formdata['userident'] = $this->input->post('userident', TRUE);
             $formdata['rootuid'] = $this->input->post('rootuid');
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->queryValue('pwdsalt');
@@ -187,7 +187,7 @@ class Part_admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('partid', '處室', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == FALSE) {
             $part = $this->session->userdata('partid');
             if (empty($part)) {
                 $data['message'] = "尚未選擇處室";
@@ -281,7 +281,7 @@ class Part_admin extends CI_Controller
         $this->form_validation->set_rules('userpass', '密碼', 'trim');
         $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == FALSE) {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_addmember');
@@ -291,11 +291,11 @@ class Part_admin extends CI_Controller
             $uid = $this->session->userdata('updatemember');
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
-            $formdata['username'] = $this->input->post('username', true);
-            $formdata['realname'] = $this->input->post('realname', true);
-            $formdata['userpass'] = $this->input->post('userpass', true);
-            $formdata['email'] = $this->input->post('email', true);
-            $formdata['userident'] = $this->input->post('userident', true);
+            $formdata['username'] = $this->input->post('username', TRUE);
+            $formdata['realname'] = $this->input->post('realname', TRUE);
+            $formdata['userpass'] = $this->input->post('userpass', TRUE);
+            $formdata['email'] = $this->input->post('email', TRUE);
+            $formdata['userident'] = $this->input->post('userident', TRUE);
             $formdata['rootuid'] = $this->input->post('rootuid');
 
             //準備寫入 usertb
@@ -412,7 +412,7 @@ class Part_admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('userid', '組員', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == FALSE) {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_enablemember');
@@ -481,7 +481,7 @@ class Part_admin extends CI_Controller
         $this->form_validation->set_rules('new', '新建帳號', 'trim|required');
         $this->form_validation->set_rules('banned', '阻擋帳號', 'trim|required');
             // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == FALSE) {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_oid_confirmuser');

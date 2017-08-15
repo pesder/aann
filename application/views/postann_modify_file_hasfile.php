@@ -15,7 +15,7 @@
             <?php endif;?>
             </div>
             <div class="col-sm-1">
-            <a href="<?=config_item('base_url');?>/index.php/PostAnn/deleteFile/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>/<?php echo $row?>" class="btn btn-danger">刪除</a>
+            <a href="<?=config_item('base_url');?>/index.php/Post_ann/deleteFile/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>/<?php echo $row?>" class="btn btn-danger">刪除</a>
             </div>
             </div>
             <?php endforeach; ?>

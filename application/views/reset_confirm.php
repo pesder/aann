@@ -41,14 +41,6 @@
 </tr>
 </table>
 <div class="text-center">
-    <?php
-    $but1 = array (
-      'name'  =>  'sent',
-      'type'  =>  'submit',
-      'content' =>  '修改',
-      'class' =>  'btn btn-primary',
-      'accesskey'	=>	's');
-    echo form_button($but1);
-    ?>
+    <?=form_button($but1);?>
 </div>
 <?=form_close()?>
