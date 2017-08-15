@@ -42,6 +42,9 @@ class Feed_ann extends CI_Controller {
     foreach ($posts as $post)
     {
         $slug = $this->site . "/index.php/Main/viewAnn/" . $post->tid;
+        if ($post->local = "yes") {
+            $post->comment = "內部公告，需登入才能閱讀。";
+        }
 		// set item's title, author, url, pubdate and description
         $feed->add($this->security->xss_clean($post->subject), $this->security->xss_clean($post->partname), $slug, $post->posttime, html_escape($this->security->xss_clean(mb_substr($post->comment,0,90,"UTF-8"))));
     }

@@ -110,11 +110,43 @@ class Main extends CI_Controller
         }
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
-        $data['ann_list_days'] = $this->session->userdata('ann_list_days');
+        $ann_list_days = $this->session->userdata('ann_list_days');
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
-        $data['options'] = $this->parttb_model->queryList();
+        $options = $this->parttb_model->queryList();
+        $data['partid_data'] = array (
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options
+        );
+        $data['but1'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '確定',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
+        $data['search'] = array(
+        'name'  =>  'search',
+        'class' =>  'form-control'
+        );
+        $data['but2'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '搜尋',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
+        $data['days'] = array(
+        'name'  =>  'ann_list_days',
+        'class' =>  'form-control',
+        'value' =>  $ann_list_days
+        );
+        $data['but3'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '確定',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
 
 
         // 載入 view
@@ -141,7 +173,7 @@ class Main extends CI_Controller
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-        $this->form_validation->set_rules('ann_list_days', '顯示日數', 'trim|required');
+        $this->form_validation->set_rules('ann_list_days', '顯示日數', 'trim|required|numeric');
         // 表單判斷
         if ($this->form_validation->run() == false) {
             $this->index();
@@ -205,11 +237,43 @@ class Main extends CI_Controller
         
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
-        $data['ann_list_days'] = $this->session->userdata('ann_list_days');
+        $ann_list_days = $this->session->userdata('ann_list_days');
         $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
-        $data['options'] = $this->parttb_model->queryList();
+        $options = $this->parttb_model->queryList();
+        $data['partid_data'] = array (
+        'name'  =>  'partid',
+        'class'     =>  'form-control',
+        'options'   =>  $options
+        );
+        $data['but1'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '確定',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
+        $data['search'] = array(
+        'name'  =>  'search',
+        'class' =>  'form-control'
+        );
+        $data['but2'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '搜尋',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
+        $data['days'] = array(
+        'name'  =>  'ann_list_days',
+        'class' =>  'form-control',
+        'value' =>  $ann_list_days
+        );
+        $data['but3'] = array(
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '確定',
+        'class' =>  'btn btn-primary',
+        'accesskey'     =>  's');
         
         
         // 載入 view
@@ -338,11 +402,11 @@ class Main extends CI_Controller
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $message = "本文為內部文件，必須為本系統內有帳號的使用者或單一登入帳號才能觀看，請";
+        $message = "<div class=\"btn btn-info\"><h2>本文為內部文件，必須為本系統內有帳號的使用者或單一登入帳號才能觀看，請";
         $message .= '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary">登入本系統帳號</a>';
         $message .= "或是";
         $message .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-primary">登入單一登入帳號</a>';
-        $message .= "以取得觀看權限。";
+        $message .= "以取得觀看權限。</h2></div>";
         $this->session->set_flashdata('message', $message);
         $data['site'] = $this->title;
         $data['message'] = $this->session->flashdata('message');
@@ -368,8 +432,8 @@ class Main extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['but_Part_admin'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-warning" accesskey="h">處室管理員選單</a>';
-        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-danger" accesskey="h">超級總管選單</a>';
+        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-warning" accesskey="p">處室管理員選單</a> ';
+        $data['but_Admin'] .= '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-danger" accesskey="a">超級總管選單</a>';
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h">回首頁</a>';
         // 載入 View
         $this->load->view('header', $data);

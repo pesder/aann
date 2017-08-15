@@ -113,7 +113,6 @@ class Titletb_model extends CI_Model {
             $this->db->from('titletb');
             $this->db->join('anntb', 'anntb.tid = titletb.tid');
             $this->db->where('posttime >=', $querydate);
-            $this->db->where('local !=', 'yes');
             $this->db->order_by('posttime','desc');
             $query = $this->db->get();
             $result = $query->result();

@@ -43,6 +43,7 @@ class Part_admin extends CI_Controller
     {
         $data['function_name'] = "管理功能 - 處室管理員";
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         $data['newuser'] = $this->openidbind_model->queryBy('new', '1');
         $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
@@ -107,9 +108,10 @@ class Part_admin extends CI_Controller
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-        $this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('username', '帳號', 'trim|required|alpha_dash|is_unique[usertb.username]');
         $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
         $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
+        $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
         if ($this->form_validation->run() == false) {
             // 載入 view
@@ -163,6 +165,7 @@ class Part_admin extends CI_Controller
         $data['function_name'] = "選擇組員處室";
         $data['function_key'] = $this->classname . "/updateMember1";
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         //$nowurl = $this->session->userdata('nowurl');
         $selectPart = $this->session->userdata('part');
         $options = array(
@@ -222,6 +225,7 @@ class Part_admin extends CI_Controller
         $data['function_name'] = "修改組員資料";
         $data['function_key'] = $this->classname . "/updateMember2/" . $id;
         $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
         //$nowurl = $this->session->userdata('nowurl');
         if ($id != 0) {
             $this->session->set_userdata('updatemember', $id);
@@ -267,14 +271,15 @@ class Part_admin extends CI_Controller
         'content' =>  '新增',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . 'index.php/Part_admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
         $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-        $this->form_validation->set_rules('partid', '處室', 'trim|required');
-        $this->form_validation->set_rules('username', '帳號', 'trim|required');
+        $this->form_validation->set_rules('username', '帳號', 'trim|required|alpha_dash|is_unique[usertb.username]');
         $this->form_validation->set_rules('realname', '真實姓名', 'trim|required');
+        $this->form_validation->set_rules('userpass', '密碼', 'trim');
+        $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
         if ($this->form_validation->run() == false) {
             // 載入 view
@@ -590,5 +595,14 @@ class Part_admin extends CI_Controller
         $this->load->view('header', $data);
         $this->load->view('admin_oid_showuser');
         $this->load->view('footer');
+    }
+    // 登出
+    public function logout($oid = 0)
+    {
+        $data['function_name'] = "登出";
+        $data['function_key'] = $this->classname . "/logout";
+        $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
+        redirect('/Main');
     }
 }

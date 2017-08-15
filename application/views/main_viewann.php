@@ -18,7 +18,7 @@
           </tr>
             <tr>
             <th>標題</th>
-            <th><?=$head->subject ?></th>
+            <th><?=$this->security->xss_clean($head->subject) ?></th>
             <th>相關網址</th>
             <th><?php print_r($hasurl);?></th>
             <th>人氣</th>

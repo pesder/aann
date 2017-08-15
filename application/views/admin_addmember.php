@@ -6,7 +6,7 @@
 	<td class="text-center">屬於哪一處室：</td>
 	<td>
 	<div class="col-xs-3">
-	<?php echo form_dropdown($partid_data);	?>
+	<?=form_dropdown($partid_data);	?>
 	</div>
 	</td>
 </tr>
@@ -15,7 +15,7 @@
 	<td>
 	<div class="col-xs-3">
 		<?=form_error('username')?>
-	<?php echo form_input($username_data);?>
+	<?=form_input($username_data);?>
 	</div>★(英文或數字，最多10個字元)
 	</td>
 </tr>
@@ -24,7 +24,7 @@
 	<td>
 	<div class="col-xs-3">
 		<?=form_error('realname')?>
-	<?php echo form_input($realname_data);?>
+	<?=form_input($realname_data);?>
 	</div>★
 	</td>
 </tr>
@@ -33,7 +33,7 @@
 	<td>
 	<div class="col-xs-3">
 		<?=form_error('userpass')?>
-	<?php echo form_password($userpass_data);?>
+	<?=form_password($userpass_data);?>
 	</div>★
 	</td>
 </tr>
@@ -41,7 +41,8 @@
 	<td class="text-center">電子信箱：</td>
 	<td>
 	<div class="col-xs-3">
-	<?php echo form_input($email_data);?>
+	<?=form_error('emal')?>
+	<?=form_input($email_data);?>
 	</div>
 	</td>
 </tr>
@@ -49,7 +50,7 @@
 	<td class="text-center">備註資料：</td>
 	<td>
 	<div class="col-xs-8">
-	<?php echo form_input($userident_data);?>
+	<?=form_input($userident_data);?>
 	</div>
 	</td>
 </tr>
