@@ -43,12 +43,28 @@ class Auth extends CI_Controller {
         $nowurl = $this->session->userdata('nowurl');
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
-        $data['partlist'] = $this->parttb_model->queryList();
+        $partlist = $this->parttb_model->queryList();
         $result = $this->session->userdata('userlogin');
+        $data['partid_data'] = array (
+		'name'	=>	'partid',
+		'class'	=>	'form-control selectpicker',
+        'options' => $partlist);
+        $data['username_data'] = array (
+		'name'	=>	'username',
+		'class'	=>	'form-control');
+        $data['userpass_data'] = array (
+		'name'	=>	'userpass',
+		'class'	=>	'form-control');
+        $data['but1'] = array (
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
+        'class' =>  'btn btn-primary',
+        'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-		$this->form_validation->set_rules('username', '使用者帳號', 'trim|required');
+		$this->form_validation->set_rules('username', '使用者帳號', 'trim|required|alpha_dash');
 		$this->form_validation->set_rules('userpass', '密碼', 'trim|required');
 		// 表單判斷
 		if($this->form_validation->run() == FALSE) 
@@ -129,6 +145,18 @@ class Auth extends CI_Controller {
         $data['site'] = $this->title;
         $nowurl = $this->session->userdata('nowurl');
         $result = $this->session->userdata('adminlogin');
+        $data['username_data'] = array (
+		'name'	=>	'username',
+		'class'	=>	'form-control');
+        $data['userpass_data'] = array (
+		'name'	=>	'userpass',
+		'class'	=>	'form-control');
+        $data['but1'] = array (
+        'name'  =>  'sent',
+        'type'  =>  'submit',
+        'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
+        'class' =>  'btn btn-warning',
+        'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');

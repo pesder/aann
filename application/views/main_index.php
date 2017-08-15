@@ -3,7 +3,7 @@
         $rep_str = array('普通','重要','急件');
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
-    <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/atom">atom</a> <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/rss">rss</a>
+    <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/atom" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-signal"></span> atom</a> <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/rss" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-signal"></span> rss</a>
     <table class="table table-condensed">
     <tr><td>
     <?=form_open('Main/selectPart','class="form-inline"');?>
@@ -36,15 +36,15 @@
     echo form_error('ann_list_days');
     echo form_input($days);
     echo form_label('天前公告');
-    echo form_button($but1);
+    echo form_button($but3);
     echo '</div>';
     ?>
     <?=form_close()?>
     </td>
     <td>
     <div class="text-right">
-    <a href="<?=config_item('base_url');?>/index.php/Post_ann/postAnnForm" class="btn btn-success">發布公告</a> 
-    <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning">管理功能</a>
+    <a href="<?=config_item('base_url');?>/index.php/Post_ann/postAnnForm" class="btn btn-success"><span class="glyphicon glyphicon-comment"> 發布公告</a> 
+    <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning"><span class="glyphicon glyphicon-cog"> 管理功能</a>
     </div>
     </td></tr>
  </table>
