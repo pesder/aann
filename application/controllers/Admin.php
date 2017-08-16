@@ -86,10 +86,10 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '新增',
+        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 新增',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -150,10 +150,10 @@ class Admin extends CI_Controller
             $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '選擇',
+        'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
             // 表單驗證
         $this->form_validation->set_message('required', '{field}未選');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -202,10 +202,10 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '送出',
+        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -302,10 +302,10 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '新增',
+        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
