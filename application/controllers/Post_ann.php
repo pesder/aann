@@ -232,7 +232,8 @@ class Post_ann extends CI_Controller
         $data['body'] = $this->anntb_model->query($tid);
         $pid = $data['head']->partid;
         $uid = $data['body']->userid;
-        $urlpath = '/Post_ann/modify/' . $tid;
+        //$urlpath = '/Post_ann/modify/' . $tid;
+        $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -301,7 +302,7 @@ class Post_ann extends CI_Controller
             $data['but1'] = array (
                 'name'  =>  'sent',
                 'type'  =>  'submit',
-                'content' =>  '更新公告',
+                'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新公告',
                 'class' =>  'btn btn-primary',
                 'accesskey'     =>  's');
             
@@ -365,7 +366,7 @@ class Post_ann extends CI_Controller
                     $this->load->view('postann_modify_file');
                 }
                 $this->load->view('postann_modify_url');
-                $this->load->view('postann_modify_date');
+                $this->load->view('postann_postannform_edit_date');
                 $this->load->view('postann_postannform_edit_bott');
                 $this->load->view('footer');
             } else {
@@ -377,6 +378,7 @@ class Post_ann extends CI_Controller
                 $this->load->view('footer');
             }
         } else {
+            $login = $this->session->userdata('userlogin');
             $data['urlnum'] = $this->config_model->queryValue('urlnum');
             $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
             $data['fileuploadable'] = $this->config_model->queryValue('uploadable');
@@ -394,7 +396,7 @@ class Post_ann extends CI_Controller
             $data['partname'] = $this->parttb_model->queryPartname($pid);
             $urllist = "";
             if ($formdata['html'] == 0) {
-                $formdata['comment'] = html_escape($formdata('comment'));
+                $formdata['comment'] = html_escape($formdata['comment']);
             } else {
                 $formdata['comment'] = trim($formdata['comment'], "\n\r");
             }
@@ -545,7 +547,7 @@ class Post_ann extends CI_Controller
         );
         $this->filetb_model->deleteFile($filenamedel);
         // 跳回公告編輯畫面
-        $returnmodify = "PostAnn/modify/" . $tid . "/" . $pid . "/" . $uid;
+        $returnmodify = "Post_ann/modify/" . $tid;
         redirect($returnmodify);
     }
 }
