@@ -1,7 +1,7 @@
      <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                相關附件
+                <h3 class="panel-title">相關附件</he>
             </div>
             <ul class="list-group">
                 <?php foreach ($annfile as $index => $row) :?>

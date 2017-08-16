@@ -2,13 +2,13 @@
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
     <div class="text-center">
-        <a href="<?=config_item('base_url');?>/index.php/Main/goPage/<?php echo $current?>" class="btn btn-primary">回上一頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary">回首頁</a>
+        <a href="<?=config_item('base_url');?>/index.php/Main/goPage/<?php echo $current?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"> 回上一頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary"><span class="glyphicon glyphicon-home"></span> 回首頁</a>
     </div>
     <div class="container">
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                標題
+                <h2 class="panel-title">標題</h2>
             </div>
             <div class="panel-body">
                 <?=$this->security->xss_clean($head->subject) ?>

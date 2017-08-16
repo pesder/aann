@@ -104,7 +104,7 @@ class Post_ann extends CI_Controller
             $data['but1'] = array (
                 'name'  =>  'sent',
                 'type'  =>  'submit',
-                'content' =>  '送出公告',
+                'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出公告',
                 'class' =>  'btn btn-primary',
                 'accesskey'     =>  's');
             //開始載入表單
