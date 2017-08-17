@@ -376,10 +376,10 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '選擇',
+        'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -463,11 +463,11 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '新增',
+        'content' =>  '<span class="glyphicon glyphicon-pencil"></span>  修改',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
-        $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin/updateMember1" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-wrench"></span> 回處室選單</a> ';
+        $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('username', '帳號', 'trim|required|alpha_dash|is_unique[usertb.username]');
@@ -594,10 +594,10 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '啟用選擇的組員',
+        'content' =>  '<span class="glyphicon glyphicon-ok-circle"></span> 啟用選擇的組員',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -637,7 +637,7 @@ class Admin extends CI_Controller
         'content' =>  '更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->queryBy('cat', 2);
         $data['settings2'] = $this->config_model->queryBy('cat', 1);
@@ -713,7 +713,7 @@ class Admin extends CI_Controller
         'content' =>  '更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->queryBy('cat', 3);
         
@@ -784,7 +784,7 @@ class Admin extends CI_Controller
         'content' =>  '更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->queryBy('cat', 4);
         
@@ -865,7 +865,7 @@ class Admin extends CI_Controller
             'content' =>  '修改',
             'class' =>  'btn btn-primary',
             'accesskey'     =>  's');
-            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
@@ -954,7 +954,7 @@ class Admin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         $data['list'] = $this->openidbind_model->showUser();
         // 載入 View
         $this->load->view('header', $data);
@@ -969,7 +969,7 @@ class Admin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         $data['list'] = $this->openidbind_model->showBindUser();
         // 載入 View
         $this->load->view('header', $data);
@@ -984,7 +984,7 @@ class Admin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         $data['list'] = $this->openidbind_model->queryBy('banned', '1');
         // 載入 View
         $this->load->view('header', $data);
