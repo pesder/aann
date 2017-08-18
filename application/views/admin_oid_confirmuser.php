@@ -5,8 +5,8 @@
   <label class="col-md-4 control-label">使用者單一登入帳號：</label>
     <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
-		<?php echo form_label($newuser->openid_id,'openid_id',array('class' => 'form-control'));?>
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-user"></i></span>
+		<?=form_label($newuser->openid_id,'openid_id',array('class' => 'form-control'));?>
   </div>
 </div>
 </div>
@@ -14,8 +14,8 @@
   <label class="col-md-4 control-label">使用者姓名：</label>
     <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
-		<?php echo form_label($newuser->fullname,'fullname',array('class' => 'form-control'));?>
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-user"></i></span>
+		<?=form_label($newuser->fullname,'fullname',array('class' => 'form-control'));?>
   </div>
 </div>
 </div>
@@ -23,8 +23,65 @@
   <label class="col-md-4 control-label">使用者電子郵件：</label>
     <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-mail"></i></span>
+		<?=form_label($newuser->email,'email',array('class' => 'form-control'));?>
+  </div>
+</div>
+</div>
+<div class="form-group"> 
+  <label class="col-md-4 control-label">使用者單位：</label>
+    <div class="col-md-4 inputGroupContainer">
+    <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
-		<?php echo form_label($newuser->email,'email',array('class' => 'form-control'));?>
+		<?=form_label($newuser->school_number,'school_number',array('class' => 'form-control'));?>
+  </div>
+</div>
+</div>
+<div class="form-group"> 
+  <label class="col-md-4 control-label">使用者身分：</label>
+    <div class="col-md-4 inputGroupContainer">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-user"></i></span>
+		<?=form_label($newuser->job,'job',array('class' => 'form-control'));?>
+  </div>
+</div>
+</div>
+<div class="form-group"> 
+  <label class="col-md-4 control-label">新建帳號確認？</label>
+    <div class="col-md-4 inputGroupContainer">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
+		<?php
+	if ($newuser->new == 1) {
+	echo form_radio('new',0 , FALSE);
+	echo form_label('確認');
+	echo form_radio('new',1 , TRUE);
+	echo form_label('未確認');
+	} else {
+	echo form_radio('new',0 , TRUE);
+	echo form_label('確認');
+	echo form_radio('new',1 , FALSE);
+	echo form_label('未確認');
+	}
+	?>
+  </div>
+</div>
+</div>
+<div class="form-group"> 
+  <label class="col-md-4 control-label">綁定系統內帳號：</label>
+    <div class="col-md-4 selectContainer">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-user"></i></span>
+		<?=form_dropdown($userid_data);?>
+  </div>
+</div>
+</div>
+<div class="form-group"> 
+  <label class="col-md-4 control-label"><?=form_checkbox($acc_data)?><?=form_label('直接以oid帳號建立系統內帳號','create',array('class' => 'form-control'));?></label>
+    <div class="col-md-4 selectContainer">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-user"></i></span>
+		<?=form_dropdown($partid_data);?>
   </div>
 </div>
 </div>
