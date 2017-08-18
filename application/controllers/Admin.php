@@ -858,11 +858,11 @@ class Admin extends CI_Controller
             'id'    =>  'use_same_account',
             'value'     =>  '1',
             'checked'   =>  FALSE,
-            'class'     =>  'form-control' );
+            'class'     =>  '' );
             $data['but1'] = array (
             'name'  =>  'sent',
             'type'  =>  'submit',
-            'content' =>  '修改',
+            'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 修改',
             'class' =>  'btn btn-primary',
             'accesskey'     =>  's');
             $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
