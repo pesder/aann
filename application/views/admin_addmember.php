@@ -12,7 +12,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">發佈公告的帳號：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
     <?=form_error('username')?>
@@ -23,7 +23,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">中文真實姓名：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
     <?=form_error('realname')?>
@@ -34,7 +34,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">發佈消息的密碼：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
     <?=form_error('userpass')?>
@@ -45,7 +45,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">電子信箱：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
     <?=form_error('emal')?>
@@ -55,7 +55,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">備註資料：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
     <?=form_input($userident_data);?>
@@ -64,7 +64,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">是否為此處室的管理者：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
     <?php
 	echo '<div class="raido">';

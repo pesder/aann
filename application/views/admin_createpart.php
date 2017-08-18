@@ -3,7 +3,7 @@
 <?=form_open($function_key,'class="well form-horizontal"');?>
 <div class="form-group"> 
   <label class="col-md-4 control-label">處室簡碼：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
     <?=form_input($pid_data);?>

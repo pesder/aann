@@ -634,7 +634,7 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '更新',
+        'content' =>  '<span class="glyphicon glyphicon-save-file"></span> 更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
@@ -710,7 +710,7 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '更新',
+        'content' =>  '<span class="glyphicon glyphicon-save-file"></span> 更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
@@ -781,7 +781,7 @@ class Admin extends CI_Controller
         $data['but1'] = array (
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '更新',
+        'content' =>  '<span class="glyphicon glyphicon-save-file"></span> 更新',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';

@@ -13,7 +13,7 @@
 </div>
 <div class="form-group"> 
   <label class="col-md-4 control-label">所有目前停用的組員：</label>
-    <div class="col-md-4 selectContainer">
+    <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 		<?php if (!empty($userdata)) : ?>

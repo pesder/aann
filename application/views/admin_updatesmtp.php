@@ -1,13 +1,13 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Admin/updateSMTP', 'class="form-inline"');?>
+<?=form_open('Admin/updateSMTP', 'class="well form-horizontal"');?>
 <table class="table .table-condensed">
-<tr><th>設定鍵</th><th>設定值</th><th>說明</th>
+<tr><th><span class="glyphicon glyphicon-cog"></span> 設定鍵</th><th><span class="glyphicon glyphicon-pencil"></span> 設定值</th><th><span class="glyphicon glyphicon-list-alt"></span> 說明</th>
 <?php foreach($settings as $set) : ?>
 <tr>
 	<td class="text-center"><?=$set->configkey?></td>
 	<td>
-	<div class="col-xs-3">
+	<div class="col-md-12">
 	<?php
 	$set_data = array (
 		'name'	=>	$set->configkey,
@@ -23,7 +23,7 @@
 <?php endforeach; ?>
 </table>
 <div class="text-center">
-    <?php echo form_button($but1);?> ｜ 
-    <?php echo $button ?>
+    <?=form_button($but1);?> ｜ 
+    <?=$button ?>
 </div>
 <?=form_close()?>
