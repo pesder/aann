@@ -1,7 +1,7 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h1><?=$function_name?></h1></div>
 <h1><?=$h1?></h1>
-<div class="text-right"><a href="<?=$classname?>/logout" class="btn btn-warning">登出並回到首頁</a></div>
+<div class="text-right"><a href="<?=$classname?>/logout" class="btn btn-warning"><span class="glyphicon glyphicon-logout"> 登出並回到首頁</a></div>
 <?php foreach ($h1group as $index => $name): ?>
 <a href="<?=config_item('base_url');?>/index.php<?=$index?>" class="btn btn-info"><?=$name?></a> 
 <?php endforeach; ?>
@@ -35,8 +35,8 @@
             <td><?=$row->email?></td>
             <td><?=$row->school_number?></td>
             <td><?=$row->job?></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Admin/confirmNewuser/<?=$row->oid?>" class="btn btn-success">編輯</a></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$row->oid?>" class="btn btn-danger">刪除</a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Admin/confirmNewuser/<?=$row->oid?>" class="btn btn-success"><span class="glyphicon glyphicon-pencil"> 編輯</a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Admin/deleteOidUser/<?=$row->oid?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"> 刪除</a></td>
           </tr>
         <?php endforeach; ?>
         </tbody>

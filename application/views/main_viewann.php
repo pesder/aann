@@ -12,7 +12,7 @@
                 <h2 class="panel-title">標題</h2>
             </div>
             <div class="panel-body">
-                <?=$this->security->xss_clean($head->subject) ?>
+                <?=html_escape($this->security->xss_clean($head->subject)) ?>
             </div>
             <table class="table">
                 <tr>
