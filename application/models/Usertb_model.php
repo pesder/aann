@@ -46,6 +46,7 @@ class Usertb_model extends CI_Model {
             $query = $this->db->get();
             return $query->result();
         }
+        
         //依條件查詢
         public function queryBy($cd1, $cd2) 
         {

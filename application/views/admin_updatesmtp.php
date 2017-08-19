@@ -13,8 +13,15 @@
 		'name'	=>	$set->configkey,
 		'class'	=>	'form-control',
 		'value'	=>	$set->configvalue);
-	echo form_error($set->configkey);
-	echo form_input($set_data);
+	
+	if ($set->sort == 4) {
+		echo form_error($set->configkey);
+		echo form_password($set_data);
+	} else
+	{
+		echo form_error($set->configkey);
+		echo form_input($set_data);
+	}
 	?>
 	</div>
 	</td>

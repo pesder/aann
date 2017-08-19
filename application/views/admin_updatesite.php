@@ -29,30 +29,21 @@
 	<?php
 	$set2_data = array (
 		'name'	=>	$set2->configkey,
-		'class'	=>	'form-control',
-		'value'	=>	$set2->configvalue);
-	echo form_error($set2->configkey);
-	echo form_input($set2_data);
+		'class'	=>	'form-control');
+	
+	if ($set2->sort == 2) {
+		echo form_password($set2_data);
+	} else
+	{
+		$set2_data['value'] = $set2->configvalue;
+		echo form_error($set2->configkey);
+		echo form_input($set2_data);
+	}
+	
 	?>
 	</div>
 	</td>
 	<td><?=$set2->desc?></td>
-</tr>
-<?php endforeach; ?>
-<?php foreach($settings3 as $set3) : ?>
-<tr>
-	<td class="text-center"><?=$set3->configkey?></td>
-	<td>
-	<div class="col-md-12">
-	<?php
-	$set3_data = array (
-		'name'	=>	$set3->configkey,
-		'class'	=>	'form-control');
-	echo form_password($set3_data);
-	?>
-	</div>
-	</td>
-	<td><?=$set3->desc?></td>
 </tr>
 <?php endforeach; ?>
 </table>

@@ -17,9 +17,9 @@
             <table class="table">
                 <tr>
                 <th width = "6%">單位</th>
-                <th width = "49%"><?=$head->partname ?></th>
+                <th width = "49%"><?=$this->security->xss_clean($head->partname) ?></th>
                 <th width = "10%">發公告者</th>
-                <th width = "10%"><a href="mailto:<?=$user->email?>"><?=$user->realname ?></a></th>
+                <th width = "10%"><a href="mailto:<?=$user->email?>"><?=$this->security->xss_clean($user->realname) ?></a></th>
                 <th width = "6%">來源</th>
                 <th width = "14%"><?=$body->ip?></th>
                 </tr>
@@ -49,7 +49,7 @@
             <th>相關附件</th>
             <th><?php print_r($hasfile);?></th>
             <th>管理</th>
-            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"> 編修</a>　　<a href="<?=config_item('base_url');?>/index.php/Post_ann/deleteAnn/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
+            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/deleteAnn/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
           </tr>
             </table>
         </div>

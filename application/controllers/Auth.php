@@ -25,9 +25,10 @@ class Auth extends CI_Controller {
         $data['function_name'] = "選擇登入帳號";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
-        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary" accesskey="l">系統帳號登入</a> ';
-        $data['but_Admin'] .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-success" accesskey="o">單一登入帳號登入</a>';
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h">回首頁</a>';
+        $data['message'] = $this->session->flashdata('message');
+        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary" accesskey="l"><span class="glyphicon glyphicon-log-in"></span> 系統帳號登入</a> ';
+        $data['but_Admin'] .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-success" accesskey="o"><span class="glyphicon glyphicon-globe"></span> 單一登入帳號登入</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-home"></span> 回首頁</a>';
         // 載入 View
         $this->load->view('header',$data);
 		$this->load->view('main_showmanage');
@@ -100,7 +101,7 @@ class Auth extends CI_Controller {
                 $denyreason = "您無法發布這個單位的公告。";
             }
 			// 比對密碼
-            if ((password_verify($php_crypt_password, $data['user']['userpass']) || ($formdata['userpass'] == $data['user']['userpass'])) && $formdata['partid'] == $data['user']['partid'])
+            if ((password_verify($php_crypt_password, $data['user']['userpass']) OR ($formdata['userpass'] == $data['user']['userpass'])) && $formdata['partid'] == $data['user']['partid'])
             {
                 $result = array (
                     'authpass' => "1",

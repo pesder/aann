@@ -641,16 +641,15 @@ class Admin extends CI_Controller
         //查詢用到的設定值
         $data['settings'] = $this->config_model->queryBy('cat', 2);
         $data['settings2'] = $this->config_model->queryBy('cat', 1);
-        $data['settings3'] = $this->config_model->queryBy('cat', -1);
         
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('myname', '網站名稱', 'trim|required');
-        $this->form_validation->set_rules('myhost', '網址', 'trim|required');
+        $this->form_validation->set_rules('myhost', '網址', 'trim|required|valid_url');
         $this->form_validation->set_rules('site_admin', '管理者', 'trim|required');
-        $this->form_validation->set_rules('site_mail', '電子郵件', 'trim|required');
-        $this->form_validation->set_rules('adminuser', '超級使用者', 'trim|required');
+        $this->form_validation->set_rules('site_mail', '電子郵件', 'trim|required|valid_email');
+        $this->form_validation->set_rules('adminuser', '超級使用者', 'trim|required|alpha_dash');
         // 表單判斷
         if ($this->form_validation->run() == FALSE) {
             // 載入 view
@@ -720,11 +719,11 @@ class Admin extends CI_Controller
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-        $this->form_validation->set_rules('uploadable', '可用副檔名', 'trim|required');
-        $this->form_validation->set_rules('ann_perpage', '每頁公告數', 'trim|required');
-        $this->form_validation->set_rules('annday', '公告天數', 'trim|required');
-        $this->form_validation->set_rules('ulfilenum', '附件數量', 'trim|required');
-        $this->form_validation->set_rules('urlnum', '網址數量', 'trim|required');
+        $this->form_validation->set_rules('uploadable', '可用副檔名', 'trim|required|numeric');
+        $this->form_validation->set_rules('ann_perpage', '每頁公告數', 'trim|required|numeric');
+        $this->form_validation->set_rules('annday', '公告天數', 'trim|required|numeric');
+        $this->form_validation->set_rules('ulfilenum', '附件數量', 'trim|required|numeric');
+        $this->form_validation->set_rules('urlnum', '網址數量', 'trim|required|numeric');
         // 表單判斷
         if ($this->form_validation->run() == FALSE) {
             // 載入 view
@@ -792,7 +791,7 @@ class Admin extends CI_Controller
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('smtp_host', '主機', 'trim|required');
-        $this->form_validation->set_rules('smtp_port', '連接埠', 'trim|required');
+        $this->form_validation->set_rules('smtp_port', '連接埠', 'trim|required|numeric');
         $this->form_validation->set_rules('smtp_user', '帳號', 'trim|required');
         $this->form_validation->set_rules('smtp_pass', '密碼', 'trim|required');
         

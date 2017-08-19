@@ -28,11 +28,21 @@ class Post_ann extends CI_Controller
     public function auth()
     {
         $login = $this->session->userdata('userlogin');
+        $oiduser = $this->session->userdata('openid_user');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if (empty($login)) {
             redirect('/Auth/chooseAuth');
         } elseif ($login['authpass'] == 0) {
+            $message = "";
+            $this->session->set_flashdata('message', $message);
             redirect('/Auth/chooseAuth');
+        } elseif ($login['authpass'] == '') {
+            $message = "";
+            $this->session->set_flashdata('message', $message);
+            redirect('/Auth/chooseAuth');
+        } elseif (($login['authpass'] == '') && ($oiduser['oidpass'] == '1')) {
+            $message = "您的帳號並不具備發布公告資格。";
+            $this->session->set_flashdata('message', $message);
         }
     }
     public function postAnnForm()
@@ -49,7 +59,7 @@ class Post_ann extends CI_Controller
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('title', '標題', 'trim|required');
         $this->form_validation->set_rules('comment', '內容', 'trim|required');
-        $this->form_validation->set_rules('dueday', '內容', 'trim|required');
+        $this->form_validation->set_rules('dueday', '到期日', 'trim|required');
         // 表單判斷
         if ($this->form_validation->run() == FALSE) {
             $typelist = array (
@@ -285,6 +295,9 @@ class Post_ann extends CI_Controller
                 'class'     =>  'form-control',
                 'options'   => $serial
                 );
+            if ($this->checkHtml($data['body']->comment)) {
+                $data['html_data']['selected'] = '1';
+            }
             $data['comment_data'] = array (
                 'name'  =>  'comment',
                 'id'    =>  'comment',
@@ -549,5 +562,14 @@ class Post_ann extends CI_Controller
         // 跳回公告編輯畫面
         $returnmodify = "Post_ann/modify/" . $tid;
         redirect($returnmodify);
+    }
+    // 檢查是否為 html
+    function checkHtml($str)
+    {
+        if ( $str != strip_tags($str) )
+        {
+            return TRUE;
+        }
+        return FALSE;
     }
 }

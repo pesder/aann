@@ -123,7 +123,7 @@ class Main extends CI_Controller
         $data['but1'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '確定',
+        'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
         $data['search'] = array(
@@ -133,7 +133,7 @@ class Main extends CI_Controller
         $data['but2'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '搜尋',
+        'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
         $data['days'] = array(
@@ -144,7 +144,7 @@ class Main extends CI_Controller
         $data['but3'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '確定',
+        'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
 
@@ -250,7 +250,7 @@ class Main extends CI_Controller
         $data['but1'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '確定',
+        'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
         $data['search'] = array(
@@ -260,7 +260,7 @@ class Main extends CI_Controller
         $data['but2'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '搜尋',
+        'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
         $data['days'] = array(
@@ -271,7 +271,7 @@ class Main extends CI_Controller
         $data['but3'] = array(
         'name'  =>  'sent',
         'type'  =>  'submit',
-        'content' =>  '確定',
+        'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
         

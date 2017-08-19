@@ -226,14 +226,14 @@ class Reset extends CI_Controller
             // 接收表單
             $formdata['username'] = $this->input->post('username', TRUE);
             $formdata['email'] = $this->input->post('email', TRUE);
-            $result = $this->usertb_model->queryValue('username', $formdata['username']);
+            $result = $this->usertb_model->queryBy('username', $formdata['username']);
             if (empty($result) || ($result->email != $formdata['email'])) {
-                $message = "帳號或電子郵件不符，請再試一次。";
+                $message = "<h2>帳號或電子郵件不符，請再試一次。</h2>";
                 $this->session->set_flashdata('message', $message);
                 redirect('/Reset/confirmDone');
             } else {
                 $this->session->set_userdata('updatemember', $result->userid);
-                $message = "密碼重設已受理，請到電子郵件信箱收信。";
+                $message = "<h2>密碼重設已受理，請到電子郵件信箱收信。</h2>";
                 $this->session->set_flashdata('message', $message);
                 $this->requestPassword($result->userid);
                 redirect('/Reset/confirmDone');

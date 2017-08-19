@@ -39,7 +39,7 @@ class Config_model extends CI_Model {
             $this->db->select('*');
             $this->db->from('config');
             $this->db->where($cd1, $cd2);
-            $this->db->order_by('id','asc');
+            $this->db->order_by('sort','asc');
             //$this->db->where();
             $query = $this->db->get();
             return $query->result();

@@ -37,5 +37,6 @@
 
     <?=form_button($but1);?> ｜ 
     <a href="<?=config_item('base_url');?>/index.php/Main/" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-home"></span> 回首頁</a>
+    <a href="<?=config_item('base_url');?>/index.php/Reset/userRequestPassword/" class="btn btn-primary btn-xm" accesskey="f"><span class="glyphicon glyphicon-question-sign"></span> 忘記密碼</a>
 </div>
 <?=form_close()?>

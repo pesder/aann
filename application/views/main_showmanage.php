@@ -13,4 +13,9 @@
             </div>
         </div>
     </div>
-<?=$button ?>
+    <div class="text-center">
+    <?=$button ?>
+    </div>
+    <?if (!empty($message)):?>
+    <h2><?=$message?></h2>
+    <? endif;?>
