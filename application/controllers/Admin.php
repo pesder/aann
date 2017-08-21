@@ -89,7 +89,7 @@ class Admin extends CI_Controller
         'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 新增',
         'class' =>  'btn btn-primary',
         'accesskey'     =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title=""><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -153,7 +153,7 @@ class Admin extends CI_Controller
         'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title=""><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
             // 表單驗證
         $this->form_validation->set_message('required', '{field}未選');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -968,7 +968,7 @@ class Admin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title=""><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         $data['list'] = $this->openidbind_model->show_bind_user();
         // 載入 View
         $this->load->view('header', $data);
@@ -983,7 +983,7 @@ class Admin extends CI_Controller
         $data['classname'] = $this->classname;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title=""><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         $data['list'] = $this->openidbind_model->query_by('banned', '1');
         // 載入 View
         $this->load->view('header', $data);
