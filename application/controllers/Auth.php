@@ -16,7 +16,7 @@ class Auth extends CI_Controller {
             $this->load->model('parttb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
+            $this->title = $this->config_model->query_value('myname');
             $this->classname = "Auth";
         }
     // 選擇登入帳號
@@ -44,7 +44,7 @@ class Auth extends CI_Controller {
         $nowurl = $this->session->userdata('nowurl');
         
         // 宣告陣列，利用 foreach 將查詢結果轉為陣列用於下接選單
-        $partlist = $this->parttb_model->queryList();
+        $partlist = $this->parttb_model->query_list();
         $result = $this->session->userdata('userlogin');
         $data['partid_data'] = array (
 		'name'	=>	'partid',
@@ -90,13 +90,13 @@ class Auth extends CI_Controller {
             $php_crypt_password = $formdata['userpass'];
             $denyreason = "";
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryValue('pwdsalt');
+            $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
             //取得使用者資料
-            $data['user'] = $this->usertb_model->matchPassword('username', $formdata['username']);
+            $data['user'] = $this->usertb_model->match_password('username', $formdata['username']);
             if ($formdata['partid'] != $data['user']['partid']) {
                 $denyreason = "您無法發布這個單位的公告。";
             }
@@ -183,9 +183,9 @@ class Auth extends CI_Controller {
 			$formdata['userpass'] = $this->input->post('userpass');
             $denyreason = "";
             // 超級使用者帳號驗證時自動在前面加入 "="
-            $adminuser = $this->config_model->queryValue('adminuser');
+            $adminuser = $this->config_model->query_value('adminuser');
             $adminuser = "=" . $adminuser;
-            $adminpass = $this->config_model->queryValue('adminpass');
+            $adminpass = $this->config_model->query_value('adminpass');
 			// 比對密碼
             if (password_verify($formdata['userpass'], $adminpass) && $formdata['username'] == $adminuser)
             {
@@ -223,7 +223,7 @@ class Auth extends CI_Controller {
         $oid_login = $this->session->userdata('openid_user');
         //載入 openid 帳號管理資料庫
         $this->load->model('openidbind_model');
-        $schoolnumber = $this->config_model->queryValue('schoolnumber');
+        $schoolnumber = $this->config_model->query_value('schoolnumber');
         // 檢查是否為本系統使用者，若不是則回到首頁
         if (($oid_login['school'] != $schoolnumber) || ($oid_login['job'] == 'student'))
         {
@@ -235,7 +235,7 @@ class Auth extends CI_Controller {
 			$this->load->view('footer');
         } else {
         // 查詢資料庫是否有相關資料
-        $olduser = $this->openidbind_model->checkUser('openid_id', $oid_login['openid_id']);
+        $olduser = $this->openidbind_model->check_user('openid_id', $oid_login['openid_id']);
         // 檢查是否曾登入過本系統，若無則提供登錄功能
         if (empty($olduser)) {
             $message = "您是第一次以" . $oid_login->fullname . "的身分登入，目前尚無法提供完整功能。系統會先記錄此次登入要求，等系統管理者完成設定後就可以使用完整公告功能。";

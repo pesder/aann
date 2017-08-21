@@ -19,7 +19,7 @@ class Post_ann extends CI_Controller
             $this->load->model('anntb_model');
             $this->load->model('filetb_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
+            $this->title = $this->config_model->query_value('myname');
             $this->classname = "Post_ann";
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
@@ -65,9 +65,9 @@ class Post_ann extends CI_Controller
                 "2.1" => "重要",
                 "3.1" => "急件"
             );
-            $data['urlnum'] = $this->config_model->queryValue('urlnum');
-            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
-            $annday = $this->config_model->queryValue('annday');
+            $data['urlnum'] = $this->config_model->query_value('urlnum');
+            $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
+            $annday = $this->config_model->query_value('annday');
             $data['user'] = $login;
             $data['type_data'] = array (
                 'name'  =>  'type',
@@ -126,10 +126,10 @@ class Post_ann extends CI_Controller
             $this->load->view('postann_postannform_edit_bott');
             $this->load->view('footer');
         } else {
-            $data['urlnum'] = $this->config_model->queryValue('urlnum');
-            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
-            $data['annday'] = $this->config_model->queryValue('annday');
-            $data['fileuploadable'] = $this->config_model->queryValue('uploadable');
+            $data['urlnum'] = $this->config_model->query_value('urlnum');
+            $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
+            $data['annday'] = $this->config_model->query_value('annday');
+            $data['fileuploadable'] = $this->config_model->query_value('uploadable');
             
             $data['user'] = $login;
             // 接收表單
@@ -143,7 +143,7 @@ class Post_ann extends CI_Controller
             $formdata['html'] = $this->input->post('html');
             $pid = $login['partid'];
             $uid = $login['userid'];
-            $data['partname'] = $this->parttb_model->queryPartname($pid);
+            $data['partname'] = $this->parttb_model->query_partname($pid);
             $filelist = "";
             $urllist = "";
             if ($formdata['html'] == 0) {
@@ -183,7 +183,7 @@ class Post_ann extends CI_Controller
                             'filelist'  => $newfilename,
                             'origname'  => $_FILES[$key]["name"]
                         );
-                        $this->filetb_model->writeFile($addfilelist);
+                        $this->filetb_model->write_file($addfilelist);
                         $filelist = $filelist . $newfilename . " ";
                     }
                 }
@@ -211,7 +211,7 @@ class Post_ann extends CI_Controller
                 'type'      =>  $formdata['type'],
                 'local'     =>  $formdata['local']
             );
-            $tid = $this->titletb_model->writeTitle($titletb);
+            $tid = $this->titletb_model->write_title($titletb);
             $anntb = array (
                 'tid'   =>  $tid,
                 'userid'    =>  $uid,
@@ -220,7 +220,7 @@ class Post_ann extends CI_Controller
                 'url'       =>  rtrim($urllist),
                 'comment'   =>  $formdata['comment']
             );
-            $this->anntb_model->writeAnn($anntb);
+            $this->anntb_model->write_ann($anntb);
             // 寫入完資料庫，判斷是否為連續公告
             if ($formdata['serial'] == 0) {
                 redirect('/Main');
@@ -257,8 +257,8 @@ class Post_ann extends CI_Controller
                 "3.1" => "急件"
             );
             $login = $this->session->userdata('userlogin');
-            $data['urlnum'] = $this->config_model->queryValue('urlnum');
-            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
+            $data['urlnum'] = $this->config_model->query_value('urlnum');
+            $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
             $data['user'] = $login;
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
@@ -340,7 +340,7 @@ class Post_ann extends CI_Controller
                 $data['annfilereadable'] = $data['annfile'];
                 $data['filenotthere'] = [];
                 foreach ($data['annfilereadable'] as $index => $name) {
-                    $query = $this->filetb_model->mathFile($data['head']->partid, $data['body']->userid, $name);
+                    $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
                     if (empty($query)) {
                         $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                         if (is_file($filelocation)) {
@@ -390,9 +390,9 @@ class Post_ann extends CI_Controller
             }
         } else {
             $login = $this->session->userdata('userlogin');
-            $data['urlnum'] = $this->config_model->queryValue('urlnum');
-            $data['ulfilenum'] = $this->config_model->queryValue('ulfilenum');
-            $data['fileuploadable'] = $this->config_model->queryValue('uploadable');
+            $data['urlnum'] = $this->config_model->query_value('urlnum');
+            $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
+            $data['fileuploadable'] = $this->config_model->query_value('uploadable');
             $data['user'] = $login;
             // 載入 titletb anntb
             $data['head'] = $this->titletb_model->query($tid);
@@ -404,7 +404,7 @@ class Post_ann extends CI_Controller
             $formdata['comment'] = $this->input->post('comment', TRUE);
             $formdata['annday'] = $this->input->post('dueday', TRUE);
             $formdata['html'] = $this->input->post('html');
-            $data['partname'] = $this->parttb_model->queryPartname($pid);
+            $data['partname'] = $this->parttb_model->query_partname($pid);
             $urllist = "";
             if ($formdata['html'] == 0) {
                 $formdata['comment'] = html_escape($formdata['comment']);
@@ -447,7 +447,7 @@ class Post_ann extends CI_Controller
                             'filelist'  => $newfilename,
                             'origname'  => $_FILES[$key]["name"]
                         );
-                        $this->filetb_model->writeFile($addfilelist);
+                        $this->filetb_model->write_file($addfilelist);
                         $filelist = $filelist . $newfilename . " ";
                     }
                 }
@@ -515,7 +515,7 @@ class Post_ann extends CI_Controller
                     'userid'    =>  $uid,
                     'filelist'  =>  $filename
                 );
-                $this->filetb_model->deleteFile($filenamedel);
+                $this->filetb_model->delete_file($filenamedel);
             }
             // 刪除資料庫
             $this->anntb_model->delete($tid);
@@ -532,7 +532,7 @@ class Post_ann extends CI_Controller
         }
     }
     // 附件檔案刪除功能
-    public function deleteFile($tid, $pid, $uid, $filename)
+    public function delete_file($tid, $pid, $uid, $filename)
     {
         $this->load->helper('file');
         $data['body'] = $this->anntb_model->query($tid);
@@ -556,7 +556,7 @@ class Post_ann extends CI_Controller
             'userid'    =>  $uid,
             'filelist'  =>  $filename
         );
-        $this->filetb_model->deleteFile($filenamedel);
+        $this->filetb_model->delete_file($filenamedel);
         // 跳回公告編輯畫面
         $returnmodify = "Post_ann/modify/" . $tid;
         redirect($returnmodify);

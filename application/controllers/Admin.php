@@ -16,7 +16,7 @@ class Admin extends CI_Controller
             $this->load->model('config_model');
             $this->load->model('openidbind_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
+            $this->title = $this->config_model->query_value('myname');
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
@@ -40,7 +40,7 @@ class Admin extends CI_Controller
         $data['function_name'] = "管理功能";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
-        $data['newuser'] = $this->openidbind_model->queryBy('new', '1');
+        $data['newuser'] = $this->openidbind_model->query_by('new', '1');
         $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
@@ -141,7 +141,7 @@ class Admin extends CI_Controller
             $data['site'] = $this->title;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            $options = $this->parttb_model->queryList();
+            $options = $this->parttb_model->query_list();
                 
         $data['partid_data'] = array (
             'name'  =>  'partid',
@@ -260,7 +260,7 @@ class Admin extends CI_Controller
         delete_files($partpath, TRUE);
         $this->filetb_model->delete($sessionpartid);
         // 刪除使用者貼文本體
-        $userlist = $this->usertb_model->queryMember($sessionpartid);
+        $userlist = $this->usertb_model->query_member($sessionpartid);
         foreach ($userlist as $key => $name) {
             $this->anntb_model->destory($key);
         }
@@ -278,7 +278,7 @@ class Admin extends CI_Controller
         $data['function_key'] = $this->classname . "/addMember";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -330,7 +330,7 @@ class Admin extends CI_Controller
             $formdata['userident'] = $this->input->post('userident', TRUE);
             $formdata['rootuid'] = $this->input->post('rootuid');
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryValue('pwdsalt');
+            $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
@@ -368,7 +368,7 @@ class Admin extends CI_Controller
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
         //$nowurl = $this->session->userdata('nowurl');
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -390,7 +390,7 @@ class Admin extends CI_Controller
             if (empty($part)) {
                 $data['message'] = "尚未選擇處室";
             } else {
-                $data['userlist'] = $this->usertb_model->queryMember($part);
+                $data['userlist'] = $this->usertb_model->query_member($part);
                 $this->session->set_userdata('partid', "");
                 if (empty($data['userlist'])) {
                     $data['message'] = "找不到成員";
@@ -399,7 +399,7 @@ class Admin extends CI_Controller
                 }
             }
             if (!empty($part)) {
-                $data['userlist'] = $this->usertb_model->queryMember($part);
+                $data['userlist'] = $this->usertb_model->query_member($part);
             }
             // 載入 view
             $this->load->view('header', $data);
@@ -435,7 +435,7 @@ class Admin extends CI_Controller
         }
         $data['userdata'] = $this->usertb_model->query($uid);
         $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -512,7 +512,7 @@ class Admin extends CI_Controller
             // 判斷，若密碼欄位有填寫，則進行密碼變更
             if (!empty($formdata['userpass'])) {
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-            $md5key = $this->config_model->queryValue('pwdsalt');
+            $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
             if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
@@ -585,8 +585,8 @@ class Admin extends CI_Controller
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         //查詢被設定為停用的使用者
-        $data['userdata'] = $this->usertb_model->queryMember('0');
-        $options = $this->parttb_model->queryList();
+        $data['userdata'] = $this->usertb_model->query_member('0');
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -639,8 +639,8 @@ class Admin extends CI_Controller
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
-        $data['settings'] = $this->config_model->queryBy('cat', 2);
-        $data['settings2'] = $this->config_model->queryBy('cat', 1);
+        $data['settings'] = $this->config_model->query_by('cat', 2);
+        $data['settings2'] = $this->config_model->query_by('cat', 1);
         
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -694,7 +694,7 @@ class Admin extends CI_Controller
                     'configvalue'   =>  $formdata['adminuser']
                 )
             );
-            $this->config_model->modifyMulti($update, 'configkey');
+            $this->config_model->modify_multi($update, 'configkey');
             // 動作結束，回選單
             redirect('/Admin');
         }
@@ -714,7 +714,7 @@ class Admin extends CI_Controller
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
-        $data['settings'] = $this->config_model->queryBy('cat', 3);
+        $data['settings'] = $this->config_model->query_by('cat', 3);
         
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -765,7 +765,7 @@ class Admin extends CI_Controller
                     'configvalue'   =>  $formdata['schoolnumber']
                 )
             );
-            $this->config_model->modifyMulti($update, 'configkey');
+            $this->config_model->modify_multi($update, 'configkey');
             // 動作結束，回選單
             redirect('/Admin');
         }
@@ -785,7 +785,7 @@ class Admin extends CI_Controller
         'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
-        $data['settings'] = $this->config_model->queryBy('cat', 4);
+        $data['settings'] = $this->config_model->query_by('cat', 4);
         
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -826,7 +826,7 @@ class Admin extends CI_Controller
                     'configvalue'   =>  $formdata['smtp_pass']
                 )
             );
-            $this->config_model->modifyMulti($update, 'configkey');
+            $this->config_model->modify_multi($update, 'configkey');
             // 動作結束，回選單
             redirect('/Admin');
         }
@@ -840,13 +840,13 @@ class Admin extends CI_Controller
             $data['classname'] = $this->classname;
             $urlpath = current_url();
             $this->session->set_userdata('nowurl', $urlpath);
-            $options = $this->usertb_model->queryUser();
+            $options = $this->usertb_model->query_user();
             $data['userid_data'] = array (
             'name'  =>  'userid',
             'class'     =>  'form-control',
             'options'   =>  $options
             );
-            $parts = $this->parttb_model->queryList();
+            $parts = $this->parttb_model->query_list();
             $data['partid_data'] = array (
                 'name'  =>  'partid',
                 'class'     =>  'form-control',
@@ -939,7 +939,7 @@ class Admin extends CI_Controller
             $this->session->set_userdata('deleteuser', $oid);
         }
         $deleteid = $this->session->userdata('deleteuser');
-        $user = $this->openidbind_model->querySingleName($deleteid);
+        $user = $this->openidbind_model->query_single_name($deleteid);
         $this->openidbind_model->delete($deleteid);
         $message = "已刪除" . $user->fullname . "以單一登入申請的帳號";
         $this->session->set_flashdata('message', $message);
@@ -954,7 +954,7 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
-        $data['list'] = $this->openidbind_model->showUser();
+        $data['list'] = $this->openidbind_model->show_user();
         // 載入 View
         $this->load->view('header', $data);
         $this->load->view('admin_oid_showuser');
@@ -969,7 +969,7 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
-        $data['list'] = $this->openidbind_model->showBindUser();
+        $data['list'] = $this->openidbind_model->show_bind_user();
         // 載入 View
         $this->load->view('header', $data);
         $this->load->view('admin_oid_showuser');
@@ -984,7 +984,7 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
-        $data['list'] = $this->openidbind_model->queryBy('banned', '1');
+        $data['list'] = $this->openidbind_model->query_by('banned', '1');
         // 載入 View
         $this->load->view('header', $data);
         $this->load->view('admin_oid_showuser');

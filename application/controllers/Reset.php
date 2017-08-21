@@ -17,14 +17,14 @@ class Reset extends CI_Controller
             $this->load->model('sessions_model');
             
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
-            $this->admin = $this->config_model->queryValue('site_admin');
-            $this->mail = $this->config_model->queryValue('site_mail');
+            $this->title = $this->config_model->query_value('myname');
+            $this->admin = $this->config_model->query_value('site_admin');
+            $this->mail = $this->config_model->query_value('site_mail');
             
-            $this->smtphost = $this->config_model->queryValue('smtp_host');
-            $this->smtpuser = $this->config_model->queryValue('smtp_user');
-            $this->smtppass = $this->config_model->queryValue('smtp_pass');
-            $this->smtpport = $this->config_model->queryValue('smtp_port');
+            $this->smtphost = $this->config_model->query_value('smtp_host');
+            $this->smtpuser = $this->config_model->query_value('smtp_user');
+            $this->smtppass = $this->config_model->query_value('smtp_pass');
+            $this->smtpport = $this->config_model->query_value('smtp_port');
             
             // 設定目前網址，供認證後跳回
             $urlpath = current_url();
@@ -133,9 +133,9 @@ class Reset extends CI_Controller
         $data['site'] = $this->title;
         
         // 刪除過期的 session
-        $this->sessions_model->queryExpire();
+        $this->sessions_model->query_expire();
         // 查詢 session
-        $pass_session = $this->sessions_model->retriveSession($id);
+        $pass_session = $this->sessions_model->retrive_session($id);
         $pass_session['session_value'] = unserialize($pass_session['session_value']);
         $confirm_session = $pass_session['session_value'];
         if ($pass != $confirm_session['pass_code']) {
@@ -170,7 +170,7 @@ class Reset extends CI_Controller
                 $formdata['session_key'] = $this->input->post('session_key');
                 $uid = $formdata['userid'];
                 /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
-                $md5key = $this->config_model->queryValue('pwdsalt');
+                $md5key = $this->config_model->query_value('pwdsalt');
                 $ismd5 = $md5key;
                 if (!empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
@@ -226,7 +226,7 @@ class Reset extends CI_Controller
             // 接收表單
             $formdata['username'] = $this->input->post('username', TRUE);
             $formdata['email'] = $this->input->post('email', TRUE);
-            $result = $this->usertb_model->queryBy('username', $formdata['username']);
+            $result = $this->usertb_model->query_by('username', $formdata['username']);
             if (empty($result) || ($result->email != $formdata['email'])) {
                 $message = "<h2>帳號或電子郵件不符，請再試一次。</h2>";
                 $this->session->set_flashdata('message', $message);

@@ -12,8 +12,8 @@ class Feed_ann extends CI_Controller
             $this->load->model('titletb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
-            $this->site = $this->config_model->queryValue('myhost');
+            $this->title = $this->config_model->query_value('myname');
+            $this->site = $this->config_model->query_value('myhost');
     }
 
     public function index()
@@ -23,7 +23,7 @@ class Feed_ann extends CI_Controller
     public function feed($rss = 'atom')
     {
     // creating rss feed with our most recent 20 posts in variable $post
-        $posts = $this->titletb_model->joinFeedAnn(14);
+        $posts = $this->titletb_model->join_feed_ann(14);
     // first load the library
         $this->load->library('feed');
 

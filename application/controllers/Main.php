@@ -14,9 +14,9 @@ class Main extends CI_Controller
             $this->load->model('titletb_model');
             $this->load->model('config_model');
             // 讀取網站名稱
-            $this->title = $this->config_model->queryValue('myname');
+            $this->title = $this->config_model->query_value('myname');
             // 讀取每頁顯示文章數
-            $this->annpp = $this->config_model->queryValue('ann_perpage');
+            $this->annpp = $this->config_model->query_value('ann_perpage');
             $this->classname = "Main";
     }
 
@@ -40,7 +40,7 @@ class Main extends CI_Controller
         $this->session->set_userdata('adminlogin', $emptyadmin);
         // 檢測如果顯示公告日數未設定則使用資料庫中的預設值
         if (empty($this->session->userdata('ann_list_days'))) {
-            $show_days = $this->config_model->queryValue('ann_list_days');
+            $show_days = $this->config_model->query_value('ann_list_days');
             $this->session->set_userdata('ann_list_days', $show_days);
         }
         
@@ -51,11 +51,11 @@ class Main extends CI_Controller
         $data['site'] = $this->title;
         $ann_list_days = $this->session->userdata('ann_list_days');
         //$data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
-        $data['list'] = $this->titletb_model->joinSearch($this->annpp, '0');
+        $data['list'] = $this->titletb_model->join_search($this->annpp, '0');
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -111,10 +111,10 @@ class Main extends CI_Controller
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
         $ann_list_days = $this->session->userdata('ann_list_days');
-        $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
+        $data['list'] = $this->titletb_model->join_search($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -238,10 +238,10 @@ class Main extends CI_Controller
         $data['function_name'] = "第 $page 頁";
         $data['site'] = $this->title;
         $ann_list_days = $this->session->userdata('ann_list_days');
-        $data['list'] = $this->titletb_model->joinSearch($this->annpp, $gooffset);
+        $data['list'] = $this->titletb_model->join_search($this->annpp, $gooffset);
         $data['pages'] = $this->session->userdata('TotalPages');
         $data['current'] = $this->session->userdata('CurrentPage');
-        $options = $this->parttb_model->queryList();
+        $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
         'name'  =>  'partid',
         'class'     =>  'form-control',
@@ -307,12 +307,12 @@ class Main extends CI_Controller
         $data['site'] = $this->title;
         $data['head'] = $this->titletb_model->query($id);
         $data['body'] = $this->anntb_model->query($id);
-        $data['user'] = $this->usertb_model->queryBy('userid', $data['body']->userid);
-        //$data['realname'] = $this->usertb_model->querySingleName($data['body']->userid);
+        $data['user'] = $this->usertb_model->query_by('userid', $data['body']->userid);
+        //$data['realname'] = $this->usertb_model->query_single_name($data['body']->userid);
         //讀取目前所在頁
         $data['current'] = $this->session->userdata('CurrentPage');
         //增加點閱計數
-        $this->titletb_model->addHit($id, $data['head']);
+        $this->titletb_model->add_hit($id, $data['head']);
         // 遮蔽 IP 資料
         if (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                $data['body']->ip = preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '?', $data['body']->ip);
@@ -349,7 +349,7 @@ class Main extends CI_Controller
             $data['annfilereadable'] = $data['annfile'];
             $data['filenotthere'] = [];
             foreach ($data['annfilereadable'] as $index => $name) {
-                $query = $this->filetb_model->mathFile($data['head']->partid, $data['body']->userid, $name);
+                $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
                 if (empty($query)) {
                     $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                     if (is_file($filelocation)) {
