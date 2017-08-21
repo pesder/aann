@@ -49,7 +49,7 @@
             <th>相關附件</th>
             <th><?php print_r($hasfile);?></th>
             <th>管理</th>
-            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_ann/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
+            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm" onclick="return confirm('確定要編輯公告嗎？')"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_ann/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除公告嗎？')"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
           </tr>
             </table>
         </div>

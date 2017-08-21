@@ -109,7 +109,7 @@
   <label class="col-md-4 control-label"></label>
     <div class="col-md-4 selectContainer">
     <div class="input-group">
-		<a href="<?=config_item('base_url');?>/index.php/<?=$classname?>/delete_oid_user/<?=$newuser->oid?> " class="btn btn-danger" title="刪除"><i class="glyphicon glyphicon-trash"></i> 刪除</a>
+		<a href="<?=config_item('base_url');?>/index.php/<?=$classname?>/delete_oid_user/<?=$newuser->oid?> " class="btn btn-danger" title="刪除" onclick="return confirm('確定要刪除組員嗎？')"><i class="glyphicon glyphicon-trash"></i> 刪除</a>
   </div>
 </div>
 </div>
