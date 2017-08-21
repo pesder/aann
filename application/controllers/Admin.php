@@ -147,12 +147,12 @@ class Admin extends CI_Controller
             'name'  =>  'partid',
             'class'     =>  'form-control',
             'options'   =>  $options);
-            $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+        $data['but1'] = array (
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
             // 表單驗證
         $this->form_validation->set_message('required', '{field}未選');
