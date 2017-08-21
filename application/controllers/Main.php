@@ -23,16 +23,19 @@ class Main extends CI_Controller
     public function index()
     {
         $this->session->set_userdata('CurrentPage', '1');
+        // 初始化登入狀態
         $emptyuser = array (
             'authpass' => "",
             'denyreason' => ""
         );
         $this->session->set_userdata('userlogin', $emptyuser);
+        // 初始化 OpenID 登入狀態
         $emptyoiduser = array (
             'oidpass' => "",
             'denyreason' => ""
         );
         $this->session->set_userdata('openid_user', $emptyoiduser);
+        // 初始化管理者登入狀態
         $emptyadmin = array (
             'adminauthpass' => "",
             'denyreason' => ""
@@ -50,7 +53,6 @@ class Main extends CI_Controller
         $data['function_name'] = "";
         $data['site'] = $this->title;
         $ann_list_days = $this->session->userdata('ann_list_days');
-        //$data['list'] = $this->titletb_model->queryLimitHome($this->annpp, '0');
         $data['list'] = $this->titletb_model->join_search($this->annpp, '0');
         $data['pages'] = $this->session->userdata('TotalPages');
         //讀取目前所在頁

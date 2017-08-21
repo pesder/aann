@@ -3,7 +3,7 @@
         $rep_str = array('普通','重要','急件');
     ?>
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
-    <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/atom" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-signal"></span> atom</a> <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/rss" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-signal"></span> rss</a>
+    <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/atom" class="btn btn-xs btn-warning" title="atom"><span class="glyphicon glyphicon-signal"></span> atom</a> <a href="<?=config_item('base_url');?>/index.php/Feed_ann/feed/rss" class="btn btn-xs btn-warning" title="rss"><span class="glyphicon glyphicon-signal"></span> rss</a>
     <table class="table table-condensed">
     <tr><td>
     <?=form_open('Main/selectPart','class="form-inline"');?>
@@ -43,8 +43,8 @@
     </td>
     <td>
     <div class="text-right">
-    <a href="<?=config_item('base_url');?>/index.php/Post_ann/postAnnForm" class="btn btn-success"><span class="glyphicon glyphicon-comment"> 發布公告</a> 
-    <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning"><span class="glyphicon glyphicon-cog"> 管理功能</a>
+    <a href="<?=config_item('base_url');?>/index.php/Post_ann/postAnnForm" class="btn btn-success"><span class="glyphicon glyphicon-comment" title="發布公告"> 發布公告</a> 
+    <a href="<?=config_item('base_url');?>/index.php/Main/showManage" class="btn btn-warning"><span class="glyphicon glyphicon-cog" title="管理功能"> 管理功能</a>
     </div>
     </td></tr>
  </table>
@@ -63,7 +63,7 @@
           <?php foreach ($list as $row): ?>
           <tr>
             <td><?=str_replace($orig_str, $rep_str, $row->type)?></td>
-            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>"><?=html_escape($this->security->xss_clean($row->subject));?></a></td>
+            <td><a href="<?=config_item('base_url');?>/index.php/Main/viewAnn/<?=$row->tid?>" title="<?=html_escape($this->security->xss_clean($row->subject));?>"><?=html_escape($this->security->xss_clean($row->subject));?></a></td>
             <td><?=$this->security->xss_clean($row->partname)?></td>
             <td><?=$row->posttime?></td>
             <td><?=$row->hits?></td>
