@@ -33,20 +33,20 @@ class Post_ann extends CI_Controller
         if ($login['authpass'] == 0) {
             $message = "";
             $this->session->set_flashdata('message', $message);
-            redirect('/Auth/chooseAuth');
+            redirect('/Auth/choose_auth');
         } elseif ($login['authpass'] == '') {
             $message = "";
             $this->session->set_flashdata('message', $message);
-            redirect('/Auth/chooseAuth');
+            redirect('/Auth/choose_auth');
         } elseif (($login['authpass'] == '') && ($oiduser['oidpass'] == '1')) {
             $message = "您的帳號並不具備發布公告資格。";
             $this->session->set_flashdata('message', $message);
         }
     }
-    public function postAnnForm()
+    public function post_ann_form()
     {
         $data['function_name'] = "發布公告表單";
-        $data['function_key'] = $this->classname . "/postAnnForm";
+        $data['function_key'] = $this->classname . "/post_ann_form";
         $data['site'] = $this->title;
         
         $login = $this->session->userdata('userlogin');
@@ -225,7 +225,7 @@ class Post_ann extends CI_Controller
             if ($formdata['serial'] == 0) {
                 redirect('/Main');
             } elseif ($formdata['serial'] == 1) {
-                redirect('/Post_ann/postAnnForm');
+                redirect('/Post_ann/post_ann_form');
             }
         }
     }
@@ -293,7 +293,7 @@ class Post_ann extends CI_Controller
                 'class'     =>  'form-control',
                 'options'   => $serial
                 );
-            if ($this->checkHtml($data['body']->comment)) {
+            if ($this->check_html($data['body']->comment)) {
                 $data['html_data']['selected'] = '1';
             }
             $data['comment_data'] = array (
@@ -490,11 +490,11 @@ class Post_ann extends CI_Controller
         }
     }
     // 刪除公告功能
-    public function deleteAnn($tid, $pid, $uid)
+    public function delete_ann($tid, $pid, $uid)
     {
         $data['site'] = $this->title;
         $login = $this->session->userdata('userlogin');
-        $urlpath = '/Post_ann/deleteAnn/' . $tid . "/" . $pid . "/" . $uid;
+        $urlpath = '/Post_ann/delete_ann/' . $tid . "/" . $pid . "/" . $uid;
         $this->session->set_userdata('nowurl', $urlpath);
             $this->auth();
             $login = $this->session->userdata('userlogin');
@@ -562,7 +562,7 @@ class Post_ann extends CI_Controller
         redirect($returnmodify);
     }
     // 檢查是否為 html
-    function checkHtml($str)
+    function check_html($str)
     {
         if ( $str != strip_tags($str) )
         {

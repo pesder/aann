@@ -37,7 +37,7 @@ class Openid extends CI_Controller
             // 資訊存入 session
             $this->session->set_userdata('openid_user', $return_data);
             // 導向驗證畫面
-            redirect('/Auth/openidAuth');
+            redirect('/Auth/openid_auth');
         } else {
             $this->load->library('oid_ylc');
             $conty = "ylc";

@@ -32,11 +32,11 @@ class Part_admin extends CI_Controller
         $this->session->set_userdata('part', $part);
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if (empty($login)) {
-            redirect('/Auth/chooseAuth');
+            redirect('/Auth/choose_auth');
         } elseif ($login['authpass'] == 0) {
-            redirect('/Auth/chooseAuth');
+            redirect('/Auth/choose_auth');
         } elseif ($part->rootuid != $login['userid']) {
-            redirect('/Auth/chooseAuth');
+            redirect('/Auth/choose_auth');
         }
     }
     public function index()
@@ -48,8 +48,8 @@ class Part_admin extends CI_Controller
         $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
-                '/Part_admin/addMember'  =>  "新增一位組員",
-                '/Part_admin/updateMember1'  =>  "修改組員資料",
+                '/Part_admin/add_member'  =>  "新增一位組員",
+                '/Part_admin/update_member1'  =>  "修改組員資料",
         );
         $data['h2'] = "";
         $data['h2group'] = array (
@@ -57,9 +57,9 @@ class Part_admin extends CI_Controller
         );
         $data['h3'] = "單一登入功能";
         $data['h3group'] = array (
-                '/Part_admin/showOiduser' =>  "顯示單一登入使用者",
-                '/Part_admin/showBinduser' =>  "顯示單一登入使用者(已綁定)",
-                '/Part_admin/showBanneduser' =>  "顯示被封鎖使用者",
+                '/Part_admin/show_oid_user' =>  "顯示單一登入使用者",
+                '/Part_admin/show_bind_user' =>  "顯示單一登入使用者(已綁定)",
+                '/Part_admin/show_banned_user' =>  "顯示被封鎖使用者",
         );
         // 載入 view
         $this->load->view('header', $data);
@@ -68,10 +68,10 @@ class Part_admin extends CI_Controller
     }
 
     // 新增一位組員
-    public function addMember()
+    public function add_member()
     {
         $data['function_name'] = "新增組員";
-        $data['function_key'] = $this->classname . "/addMember";
+        $data['function_key'] = $this->classname . "/add_member";
         $data['site'] = $this->title;
         $selectPart = $this->session->userdata('part');
         //$nowurl = $this->session->userdata('nowurl');
@@ -158,12 +158,12 @@ class Part_admin extends CI_Controller
         }
     }
         // 修改組員資料
-    public function updateMember1()
+    public function update_member1()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "選擇組員處室";
-        $data['function_key'] = $this->classname . "/updateMember1";
+        $data['function_key'] = $this->classname . "/update_member1";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
         //$nowurl = $this->session->userdata('nowurl');
@@ -218,12 +218,12 @@ class Part_admin extends CI_Controller
         }
     }
     // 修改組員資料
-    public function updateMember2($id = 0)
+    public function update_member2($id = 0)
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "修改組員資料";
-        $data['function_key'] = $this->classname . "/updateMember2/" . $id;
+        $data['function_key'] = $this->classname . "/update_member2/" . $id;
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
         //$nowurl = $this->session->userdata('nowurl');
@@ -271,7 +271,7 @@ class Part_admin extends CI_Controller
         'content' =>  '新增',
         'class' =>  'btn btn-primary',
         'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin/updateMember1" class="btn btn-primary" accesskey="h">回處室選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin/update_member1" class="btn btn-primary" accesskey="h">回處室選單</a>';
         $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-primary" accesskey="h">回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -337,7 +337,7 @@ class Part_admin extends CI_Controller
         }
     }
     // 刪除組員資料
-    public function deleteMember()
+    public function delete_member()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
@@ -347,13 +347,13 @@ class Part_admin extends CI_Controller
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
         if (empty($uid)) {
-            redirect('/Part_admin/updateMember1');
+            redirect('/Part_admin/update_member1');
         }
         $this->usertb_model->delete($uid);
         redirect('Admin');
     }
         // 停用組員資料
-    public function disableMember()
+    public function disable_member()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
@@ -380,14 +380,14 @@ class Part_admin extends CI_Controller
             $this->usertb_model->modify($uid, $userpass);
             redirect('Admin');
         } else {
-            redirect('/Part_admin/updateMember1');
+            redirect('/Part_admin/update_member1');
         }
     }
         // 啟用一位組員
-    public function enableMember()
+    public function enable_member()
     {
         $data['function_name'] = "啟用一位組員";
-        $data['function_key'] = $this->classname . "/enableMember";
+        $data['function_key'] = $this->classname . "/enable_member";
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         //查詢被設定為停用的使用者
@@ -435,10 +435,10 @@ class Part_admin extends CI_Controller
     }
     
     // 確認單一登入使用者
-    public function confirmNewuser($oid = 0)
+    public function confirm_newuser($oid = 0)
     {
         $data['function_name'] = "確認單一登入使用者";
-        $data['function_key'] = $this->classname . "/confirmNewuser";
+        $data['function_key'] = $this->classname . "/confirm_newuser";
             $data['site'] = $this->title;
             $data['classname'] = $this->classname;
             $urlpath = current_url();
@@ -539,7 +539,7 @@ class Part_admin extends CI_Controller
         }
     }
     // 刪除 openid 使用者
-    public function deleteOidUser($oid = 0)
+    public function delete_oid_user($oid = 0)
     {
         if ($oid> 0) {
             $this->session->set_userdata('deleteuser', $oid);
@@ -552,7 +552,7 @@ class Part_admin extends CI_Controller
         redirect('/Part_admin');
     }
     // 顯示單一登入使用者
-    public function showOiduser()
+    public function show_oid_user()
     {
         $data['function_name'] = "顯示單一登入使用者";
         $data['site'] = $this->title;
@@ -567,7 +567,7 @@ class Part_admin extends CI_Controller
         $this->load->view('footer');
     }
     // 顯示單一登入使用者(已綁定)
-    public function showBinduser()
+    public function show_bind_user()
     {
         $data['function_name'] = "顯示單一登入使用者(已綁定)";
         $data['site'] = $this->title;
@@ -582,7 +582,7 @@ class Part_admin extends CI_Controller
         $this->load->view('footer');
     }
     // 顯示被封鎖使用者
-    public function showBanneduser()
+    public function show_banned_user()
     {
         $data['function_name'] = "顯示被封鎖使用者";
         $data['site'] = $this->title;

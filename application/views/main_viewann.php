@@ -2,7 +2,7 @@
     <div class="bg-primary text-center"><h1><?=$site?></h1></div>
     <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
     <div class="text-center">
-        <a href="<?=config_item('base_url');?>/index.php/Main/goPage/<?php echo $current?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"> 回上一頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary"><span class="glyphicon glyphicon-home"></span> 回首頁</a>
+        <a href="<?=config_item('base_url');?>/index.php/Main/go_page/<?php echo $current?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"> 回上一頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary"><span class="glyphicon glyphicon-home"></span> 回首頁</a>
     </div>
     
     <div class="container">
@@ -49,7 +49,7 @@
             <th>相關附件</th>
             <th><?php print_r($hasfile);?></th>
             <th>管理</th>
-            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/deleteAnn/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
+            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_ann/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
           </tr>
             </table>
         </div>

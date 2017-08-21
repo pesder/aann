@@ -1,6 +1,6 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Admin/updateSite', 'class="well form-horizontal"');?>
+<?=form_open('Admin/update_site', 'class="well form-horizontal"');?>
 <table class="table .table-condensed">
 <tr><th><span class="glyphicon glyphicon-cog"></span> 設定鍵</th><th><span class="glyphicon glyphicon-pencil"></span> 設定值</th><th><span class="glyphicon glyphicon-list-alt"></span> 說明</th>
 <?php foreach($settings as $set) : ?>

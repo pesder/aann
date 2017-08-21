@@ -101,7 +101,7 @@ class Main extends CI_Controller
         $this->load->view('footer');
     }
         // 下一頁功能
-    public function goPage($page)
+    public function go_page($page)
     {
         $this->session->set_userdata('CurrentPage', $page);
         //判斷，第1頁與其他頁的偏移量不同
@@ -169,7 +169,7 @@ class Main extends CI_Controller
         $this->load->view('footer');
     }
     // 設定顯示日數功能
-    public function setDays()
+    public function set_days()
     {
         
         // 表單驗證
@@ -183,11 +183,11 @@ class Main extends CI_Controller
             $data['site'] = $this->title;
             $formdata['ann_list_days'] = $this->input->post('ann_list_days');
             $this->session->set_userdata('ann_list_days', $formdata['ann_list_days']);
-            $this->showList('1');
+            $this->show_list('1');
         }
     }
     // 處室選擇功能
-    public function selectPart()
+    public function select_part()
     {
         
         // 表單驗證
@@ -202,12 +202,12 @@ class Main extends CI_Controller
             $formdata['partid'] = $this->input->post('partid');
             if (!empty($formdata['partid'])) {
                 $this->session->set_userdata('selected_part', $formdata['partid']);
-                $this->showList('1');
+                $this->show_list('1');
             }
         }
     }
     // 搜尋功能
-    public function searchKeyword()
+    public function search_keyword()
     {
         
         // 表單驗證
@@ -224,10 +224,10 @@ class Main extends CI_Controller
             $data['site'] = $this->title;
             $formdata['search'] = $this->input->post('search', TRUE);
             $this->session->set_userdata('serach_keyword', $formdata['search']);
-            $this->showList('1');
+            $this->show_list('1');
         }
     }
-    public function showList($page)
+    public function show_list($page)
     {
         $this->session->set_userdata('CurrentPage', $page);
         //判斷，第1頁與其他頁的偏移量不同
@@ -295,7 +295,7 @@ class Main extends CI_Controller
         }
         $this->load->view('footer');
     }
-    public function viewAnn($id)
+    public function view_ann($id)
     {
         
         $data['function_name'] = "瀏覽公告";
@@ -378,7 +378,7 @@ class Main extends CI_Controller
         $oidlogin = $this->session->userdata('openid_user');
         $islocal = $this->session->tempdata('readlocal');
         if (($data['head']->local == 'yes') && ($islocal != 1)) {
-            $this->warnLocal();
+            $this->warn_local();
         } elseif (($data['head']->local == 'no') || ($islocal = 1)) {
         // 載入 view
             $this->load->view('header', $data);
@@ -400,12 +400,12 @@ class Main extends CI_Controller
         }
     }
     // 內部文件警告
-    public function warnLocal()
+    public function warn_local()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $message = "<div class=\"btn btn-info\"><h2>本文為內部文件，必須為本系統內有帳號的使用者或單一登入帳號才能觀看，請";
-        $message .= '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary">登入本系統帳號</a>';
+        $message .= '<a href="' . config_item('base_url') . '/index.php/Auth/post_ann_auth" class="btn btn-primary">登入本系統帳號</a>';
         $message .= "或是";
         $message .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-primary">登入單一登入帳號</a>';
         $message .= "以取得觀看權限。</h2></div>";
@@ -427,7 +427,7 @@ class Main extends CI_Controller
         force_download($filename, $data);
     }
     // 顯示管理區
-    public function showManage()
+    public function show_manage()
     {
         $data['function_name'] = "顯示管理區";
         $data['site'] = $this->title;

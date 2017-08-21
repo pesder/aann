@@ -35,16 +35,16 @@ class Reset extends CI_Controller
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
         if (empty($login)) {
-            redirect('/Auth/adminAuth');
+            redirect('/Auth/admin_auth');
         } elseif ($login['adminauthpass'] == 0) {
-            redirect('/Auth/adminAuth');
+            redirect('/Auth/admin_auth');
         }
     }
     public function index()
     {
     }
     // 產生通關密碼並寄出密碼信
-    public function requestPassword($id = 0)
+    public function request_password($id = 0)
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
@@ -193,7 +193,7 @@ class Reset extends CI_Controller
         }
     }
     // 使用者要求重設密碼
-    public function userRequestPassword()
+    public function user_request_password()
     {
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
@@ -235,7 +235,7 @@ class Reset extends CI_Controller
                 $this->session->set_userdata('updatemember', $result->userid);
                 $message = "<h2>密碼重設已受理，請到電子郵件信箱收信。</h2>";
                 $this->session->set_flashdata('message', $message);
-                $this->requestPassword($result->userid);
+                $this->request_password($result->userid);
                 redirect('/Reset/confirmDone');
             }
         }

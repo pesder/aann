@@ -20,13 +20,13 @@ class Auth extends CI_Controller {
             $this->classname = "Auth";
         }
     // 選擇登入帳號
-    public function chooseAuth()
+    public function choose_auth()
     {
         $data['function_name'] = "選擇登入帳號";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
         $data['message'] = $this->session->flashdata('message');
-        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/postAnnAuth" class="btn btn-primary" accesskey="l"><span class="glyphicon glyphicon-log-in"></span> 系統帳號登入</a> ';
+        $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Auth/post_ann_auth" class="btn btn-primary" accesskey="l"><span class="glyphicon glyphicon-log-in"></span> 系統帳號登入</a> ';
         $data['but_Admin'] .= '<a href="' . config_item('base_url') . '/index.php/Openid/get_ylc" class="btn btn-success" accesskey="o"><span class="glyphicon glyphicon-globe"></span> 單一登入帳號登入</a>';
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-home"></span> 回首頁</a>';
         // 載入 View
@@ -35,7 +35,7 @@ class Auth extends CI_Controller {
 		$this->load->view('footer');
     }
 
-    public function postAnnAuth()
+    public function post_ann_auth()
     {
         $data['function_name'] = "發布公告檢驗帳號";
         $data['site'] = $this->title;
@@ -132,7 +132,7 @@ class Auth extends CI_Controller {
 			// 回首頁
             if (empty($nowurl))
             {
-                redirect('/Post_ann/postAnnForm');
+                redirect('/Post_ann/post_ann_form');
             } else
             {
                 redirect($nowurl);
@@ -140,7 +140,7 @@ class Auth extends CI_Controller {
 			
 		}
     }
-    public function adminAuth()
+    public function admin_auth()
     {
         $data['function_name'] = "超級總管檢驗帳號";
         $data['site'] = $this->title;
@@ -207,7 +207,7 @@ class Auth extends CI_Controller {
 			// 回首頁
             if (empty($nowurl))
             {
-                redirect('/Auth/adminAuth');
+                redirect('/Auth/admin_auth');
             } else
             {
                 redirect($nowurl);
@@ -215,7 +215,7 @@ class Auth extends CI_Controller {
 			
 		}
     }
-    public function openidAuth()
+    public function openid_auth()
     {
         $data['function_name'] = "單一登入檢驗帳號";
         $data['site'] = $this->title;
@@ -292,7 +292,7 @@ class Auth extends CI_Controller {
         // 回首頁
         if (empty($nowurl))
         {
-            redirect('/Auth/postAnnAuth');
+            redirect('/Auth/post_ann_auth');
         } else
         {
             redirect($nowurl);

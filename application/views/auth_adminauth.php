@@ -1,6 +1,6 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Auth/adminAuth','class="well form-horizontal"');?>
+<?=form_open('Auth/admin_auth','class="well form-horizontal"');?>
 <div class="form-group">
   <label class="col-md-4 control-label">使用者帳號</label>  
   <div class="col-md-4 inputGroupContainer">

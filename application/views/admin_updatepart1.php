@@ -1,6 +1,6 @@
 <div class="bg-primary text-center"><h1><?=$site?></h1></div>
 <div class="bg-info text-center"><h2><?=$function_name?></h2></div>
-<?=form_open('Admin/updatePart1','class="well form-horizontal"');?>
+<?=form_open('Admin/update_part1','class="well form-horizontal"');?>
 <div class="form-group"> 
   <label class="col-md-4 control-label">選擇要修改的處室</label>
     <div class="col-md-4 selectContainer">

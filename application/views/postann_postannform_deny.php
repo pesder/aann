@@ -1,2 +1,2 @@
 <div class="bg-warning text-center"><h1><?php echo $message?></h1></div>
-<div class="text-center">   <a href="<?=config_item('base_url');?>/index.php/Auth/postAnnAuth" class="btn btn-primary"><span class="glyphicon glyphicon-repeat"> 回到帳號密碼認證頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary"><span class="glyphicon glyphicon-home"> 回首頁</a></div>
+<div class="text-center">   <a href="<?=config_item('base_url');?>/index.php/Auth/post_ann_auth" class="btn btn-primary"><span class="glyphicon glyphicon-repeat"> 回到帳號密碼認證頁</a> <a href="<?=config_item('base_url');?>/index.php/Main" class="btn btn-primary"><span class="glyphicon glyphicon-home"> 回首頁</a></div>
