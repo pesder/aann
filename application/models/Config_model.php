@@ -22,7 +22,7 @@ class Config_model extends CI_Model {
             return $query->result();
         }
         //有限查詢
-        public function queryLimit($limit) 
+        public function query_limit($limit) 
         {
 
             $this->db->select('*');

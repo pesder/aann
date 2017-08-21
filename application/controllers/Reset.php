@@ -152,7 +152,7 @@ class Reset extends CI_Controller
                 'type'  =>  'submit',
                 'content' =>  '修改',
                 'class' =>  'btn btn-primary',
-                'accesskey'	=>	's');
+                'accesskey'     =>  's');
         // 表單驗證
             $this->form_validation->set_message('required', '{field}未填');
             $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -200,17 +200,17 @@ class Reset extends CI_Controller
         $data['function_name'] = "使用者要求重設密碼";
         $data['site'] = $this->title;
         $data['username_data'] = array (
-            'name'	=>	'username',
-            'class'	=>	'form-control');
+            'name'  =>  'username',
+            'class'     =>  'form-control');
         $data['email_data'] = array (
-            'name'	=>	'email',
-            'class'	=>	'form-control');
+            'name'  =>  'email',
+            'class'     =>  'form-control');
         $data['but1'] = array (
             'name'  =>  'sent',
             'type'  =>  'submit',
             'content' =>  '送出',
             'class' =>  'btn btn-primary',
-            'accesskey'	=>	's');
+            'accesskey'     =>  's');
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');

@@ -30,9 +30,7 @@ class Post_ann extends CI_Controller
         $login = $this->session->userdata('userlogin');
         $oiduser = $this->session->userdata('openid_user');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if (empty($login)) {
-            redirect('/Auth/chooseAuth');
-        } elseif ($login['authpass'] == 0) {
+        if ($login['authpass'] == 0) {
             $message = "";
             $this->session->set_flashdata('message', $message);
             redirect('/Auth/chooseAuth');
