@@ -437,6 +437,7 @@ class Main extends CI_Controller
         $data['but_Admin'] = '<a href="' . config_item('base_url') . '/index.php/Part_admin" class="btn btn-warning" accesskey="p">處室管理員選單</a> ';
         $data['but_Admin'] .= '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-danger" accesskey="a">超級總管選單</a>';
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Main" class="btn btn-primary" accesskey="h"><span class="glyphicon glyphicon-home"></span> 回首頁</a>';
+        $data['message'] = $this->session->userdata('message');
         // 載入 View
         $this->load->view('header', $data);
         $this->load->view('main_showmanage');

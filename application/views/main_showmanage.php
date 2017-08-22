@@ -16,6 +16,6 @@
     <div class="text-center">
     <?=$button ?>
     </div>
-    <?if (!empty($message)):?>
+    <?if ( ! empty($message)):?>
     <h2><?=$message?></h2>
     <? endif;?>

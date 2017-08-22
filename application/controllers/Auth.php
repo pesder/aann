@@ -74,7 +74,7 @@ class Auth extends CI_Controller {
             // 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('auth_postannauth');
-            if ($result['authpass'] === 0 )
+            if ($result['authpass'] === '0' )
             {
                 $this->load->view('admin_deny');
             }
@@ -170,7 +170,7 @@ class Auth extends CI_Controller {
             // 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('auth_adminauth');
-            if ($result['adminauthpass'] === 0 )
+            if ($result['adminauthpass'] === '0' )
             {
                 $this->load->view('admin_deny');
             }
