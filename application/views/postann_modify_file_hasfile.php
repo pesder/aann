@@ -18,7 +18,7 @@
             <div class="form-control"><?=$annfilereadable[$index]?></div>
             <?php endif;?>
                 <span class="input-group-btn">
-            <a href="<?=config_item('base_url');?>/index.php/Post_ann/deleteFile/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>/<?=$row?>" class="btn btn-danger">刪除</a>
+            <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_file/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>/<?=$row?>" class="btn btn-danger">刪除</a>
                 </span>
                     
                 </div>
