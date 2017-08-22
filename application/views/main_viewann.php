@@ -9,19 +9,19 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="panel-title">標題</h2>
+                <h3 class="panel-title">標題</h3>
             </div>
             <div class="panel-body">
-                <?=html_escape($this->security->xss_clean($head->subject)) ?>
+                <h3><?=html_escape($this->security->xss_clean($head->subject))?></h3>
             </div>
             <table class="table">
                 <tr>
-                <th width = "6%">單位</th>
-                <th width = "49%"><?=$this->security->xss_clean($head->partname) ?></th>
-                <th width = "10%">發公告者</th>
-                <th width = "10%"><a href="mailto:<?=$user->email?>"><?=$this->security->xss_clean($user->realname) ?></a></th>
-                <th width = "6%">來源</th>
-                <th width = "14%"><?=$body->ip?></th>
+                <th class="col-md-1">單位</th>
+                <th class="col-md-6"><?=$this->security->xss_clean($head->partname)?></th>
+                <th class="col-md-1">發公告者</th>
+                <th class="col-md-1"><a href="mailto:<?=$user->email?>" title="寄信給<?=$this->security->xss_clean($user->realname)?>"><?=$this->security->xss_clean($user->realname)?></a></th>
+                <th class="col-md-1">來源</th>
+                <th class="col-md-2"><?=$body->ip?></th>
                 </tr>
                 <tr>
             <th>時間</th>
@@ -37,7 +37,7 @@
             ?>
             </th>
             <th>相關網址</th>
-            <th><?php print_r($hasurl);?></th>
+            <th><?=$hasurl?></th>
             <th>人氣</th>
             <th><?=$head->hits?></th>
           </tr>
@@ -47,9 +47,9 @@
             
             </th>
             <th>相關附件</th>
-            <th><?php print_r($hasfile);?></th>
+            <th><?=$hasfile?></th>
             <th>管理</th>
-            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm" onclick="return confirm('確定要編輯公告嗎？')"><span class="glyphicon glyphicon-pencil"> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_ann/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除公告嗎？')"><span class="glyphicon glyphicon-trash"> 刪除</a></th>
+            <th><a href="<?=config_item('base_url');?>/index.php/Post_ann/modify/<?=$head->tid?>" class="btn btn-warning btn-sm" onclick="return confirm('確定要編輯公告嗎？')"><span class="glyphicon glyphicon-pencil"></span> 編修</a> <a href="<?=config_item('base_url');?>/index.php/Post_ann/delete_ann/<?=$head->tid?>/<?=$head->partid?>/<?=$body->userid?>" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除公告嗎？')"><span class="glyphicon glyphicon-trash"></span> 刪除</a></th>
           </tr>
             </table>
         </div>
@@ -58,7 +58,9 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                內文
+            <div class="panel-heading">
+                <h3 class="panel-title">內文</h3>
+            </div>
             </div>
                 <div class="panel-body">
                 <?=$this->security->xss_clean(nl2br($body->comment)); ?>
