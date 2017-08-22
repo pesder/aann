@@ -30,15 +30,15 @@ class Post_ann extends CI_Controller
         $login = $this->session->userdata('userlogin');
         $oiduser = $this->session->userdata('openid_user');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if ($login['authpass'] == 0) {
+        if ($login['authpass'] === 0) {
             $message = "";
             $this->session->set_flashdata('message', $message);
             redirect('/Auth/choose_auth');
-        } elseif ($login['authpass'] == '') {
+        } elseif ($login['authpass'] === '') {
             $message = "";
             $this->session->set_flashdata('message', $message);
             redirect('/Auth/choose_auth');
-        } elseif (($login['authpass'] == '') && ($oiduser['oidpass'] == '1')) {
+        } elseif (($login['authpass'] === '') && ($oiduser['oidpass'] === '1')) {
             $message = "您的帳號並不具備發布公告資格。";
             $this->session->set_flashdata('message', $message);
         }
@@ -161,7 +161,7 @@ class Post_ann extends CI_Controller
 
             foreach ($_FILES as $key => $value) {
                 // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
-                if (!empty($_FILES[$key]["name"])) {
+                if ( ! empty($_FILES[$key]["name"])) {
                     $filename_ar = explode(".", $_FILES[$key]["name"]);
                     $filename_ext = $filename_ar[count($filename_ar) - 1];
                     $file_index = substr($key, -1);
@@ -171,8 +171,8 @@ class Post_ann extends CI_Controller
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 //開始上傳檔案動作
-                if (!empty($value['name'])) {
-                    if (!$this->upload->do_upload($key)) {
+                if ( ! empty($value['name'])) {
+                    if ( ! $this->upload->do_upload($key)) {
                         $data["error"] = $this->upload->display_errors();
                     } else {
                         $fInfo = $this->upload->data();
@@ -195,7 +195,7 @@ class Post_ann extends CI_Controller
                 $url = "url" . $j;
                 $inurl = "url" . $j;
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
-                if (!empty($this->input->post($inurl))) {
+                if ( ! empty($this->input->post($inurl))) {
                     $formdata[$url] = str_replace(' ', '', $this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
@@ -271,16 +271,16 @@ class Post_ann extends CI_Controller
                 'value' =>  $data['head']->type);
             $serial = array ('0' => '否', '1' => '是');
             $data['serialpost_data'] = array (
-                    'name'  =>  'serial',
-                    'class'     =>  'form-control',
-                    'options'   => $serial
+                'name'  =>  'serial',
+                'class'     =>  'form-control',
+                'options'   => $serial
                 );
             $local = array ('no' => '否', 'yes' => '是');
             $data['local_data'] = array (
-                    'name'  =>  'local',
-                    'class'     =>  'form-control',
-                    'options'   => $local,
-                    'selected' =>  $data['head']->local
+                'name'  =>  'local',
+                'class'     =>  'form-control',
+                'options'   => $local,
+                'selected' =>  $data['head']->local
                 );
             $data['title_data'] = array (
                 'name'  =>  'title',
@@ -371,7 +371,7 @@ class Post_ann extends CI_Controller
                 $this->load->view('header-jquery', $data);
                 $this->load->view('postann_postannform_edit');
             // 有附件則載入相關 view
-                if (!empty($data['body']->filename)) {
+                if ( ! empty($data['body']->filename)) {
                     $this->load->view('postann_modify_file_hasfile');
                 } else {
                     $this->load->view('postann_modify_file');
@@ -420,12 +420,12 @@ class Post_ann extends CI_Controller
             //$config['encrypt_name']         = TRUE;
             //取回現有的檔案列表
             $filelist = $data['body']->filename;
-            if (!empty($filelist)) {
+            if ( ! empty($filelist)) {
                 $filelist = $filelist . " ";
             }
             foreach ($_FILES as $key => $value) {
                 // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
-                if (!empty($_FILES[$key]["name"])) {
+                if ( ! empty($_FILES[$key]["name"])) {
                     $filename_ar = explode(".", $_FILES[$key]["name"]);
                     $filename_ext = $filename_ar[count($filename_ar) - 1];
                     $file_index = substr($key, -1);
@@ -435,8 +435,8 @@ class Post_ann extends CI_Controller
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 //開始上傳檔案動作
-                if (!empty($value['name'])) {
-                    if (!$this->upload->do_upload($key)) {
+                if ( ! empty($value['name'])) {
+                    if ( ! $this->upload->do_upload($key)) {
                         $data["error"] = $this->upload->display_errors();
                     } else {
                         $fInfo = $this->upload->data();
@@ -459,7 +459,7 @@ class Post_ann extends CI_Controller
                 $url = "url" . $j;
                 $inurl = "url" . $j;
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
-                if (!empty($this->input->post($inurl))) {
+                if ( ! empty($this->input->post($inurl))) {
                     $formdata[$url] = str_replace(' ', '', $this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }

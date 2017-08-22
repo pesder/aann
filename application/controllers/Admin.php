@@ -106,7 +106,7 @@ class Admin extends CI_Controller
             $formdata['pid'] = $this->input->post('pid');
             $formdata['partname'] = $this->input->post('partname', TRUE);
             $formdata['partident'] = $this->input->post('partident', TRUE);
-            if (!empty($formdata['pid'])) {
+            if ( ! empty($formdata['pid'])) {
                 $parttb = array (
                     'pid'   =>  $formdata['pid'],
                     'partname'  =>  $formdata['partname'],
@@ -332,7 +332,7 @@ class Admin extends CI_Controller
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
-            if (!empty($ismd5)) {
+            if ( ! empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }*/
             // 新設定之密碼改用 php 加密方式
@@ -398,7 +398,7 @@ class Admin extends CI_Controller
                     $data['message'] = "請點選成員進入修改";
                 }
             }
-            if (!empty($part)) {
+            if ( ! empty($part)) {
                 $data['userlist'] = $this->usertb_model->query_member($part);
             }
             // 載入 view
@@ -510,11 +510,11 @@ class Admin extends CI_Controller
                 $this->parttb_model->modify($formdata['partid'], $root);
             }
             // 判斷，若密碼欄位有填寫，則進行密碼變更
-            if (!empty($formdata['userpass'])) {
+            if ( ! empty($formdata['userpass'])) {
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
-            if (!empty($ismd5)) {
+            if ( ! empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }*/
             // 新設定之密碼改用 php 加密方式
@@ -556,7 +556,7 @@ class Admin extends CI_Controller
         // 從 session 取回要刪除的 userid
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
-        if (!empty($uid)) {
+        if ( ! empty($uid)) {
             $this->load->helper('security');
             $disable = array (
             'partid'    =>  '0'
@@ -613,7 +613,7 @@ class Admin extends CI_Controller
             $formdata['partid'] = $this->input->post('partid');
             $formdata['userid'] = $this->input->post('userid');
             //$formdata['partident'] = $this->input->post('partident');
-            if (!empty($formdata['userid'])) {
+            if ( ! empty($formdata['userid'])) {
                 $uid = $formdata['userid'];
                 $usertb = array (
                     'partid'   =>  $formdata['partid']
@@ -664,7 +664,7 @@ class Admin extends CI_Controller
             $formdata['site_mail'] = $this->input->post('site_mail', TRUE);
             $formdata['adminuser'] = $this->input->post('adminuser', TRUE);
             $formdata['adminpass'] = $this->input->post('adminpass', TRUE);
-            if (!empty($formdata['adminpass'])) {
+            if ( ! empty($formdata['adminpass'])) {
                 $pass = $formdata['adminpass'];
                 $pass = password_hash($pass, PASSWORD_DEFAULT);
                 $config = array (

@@ -58,9 +58,7 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-            <div class="panel-heading">
                 <h3 class="panel-title">內文</h3>
-            </div>
             </div>
                 <div class="panel-body">
                 <?=$this->security->xss_clean(nl2br($body->comment)); ?>

@@ -200,7 +200,7 @@ class Main extends CI_Controller
         } else {
             $data['site'] = $this->title;
             $formdata['partid'] = $this->input->post('partid');
-            if (!empty($formdata['partid'])) {
+            if ( ! empty($formdata['partid'])) {
                 $this->session->set_userdata('selected_part', $formdata['partid']);
                 $this->show_list('1');
             }
@@ -388,11 +388,11 @@ class Main extends CI_Controller
             }
             $this->load->view('main_viewann');
         // 有網址則載入相關 view
-            if (!empty($data['body']->url)) {
+            if ( ! empty($data['body']->url)) {
                 $this->load->view('main_viewann_url');
             }
         // 有附件則載入相關 view
-            if (!empty($data['body']->filename)) {
+            if ( ! empty($data['body']->filename)) {
                 $this->load->view('main_viewann_file');
             }
             $this->load->view('main_viewann_end');

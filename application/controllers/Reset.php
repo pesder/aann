@@ -172,7 +172,7 @@ class Reset extends CI_Controller
                 /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
                 $md5key = $this->config_model->query_value('pwdsalt');
                 $ismd5 = $md5key;
-                if (!empty($ismd5)) {
+                if ( ! empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
                 }*/
                 // 新設定之密碼改用 php 加密方式

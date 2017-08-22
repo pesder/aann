@@ -72,9 +72,9 @@ class Auth extends CI_Controller {
 		{
 			$data['message'] = $result['denyreason'];
             // 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('auth_postannauth');
-            if ($result['authpass'] == 0 )
+            if ($result['authpass'] === 0 )
             {
                 $this->load->view('admin_deny');
             }
@@ -92,7 +92,7 @@ class Auth extends CI_Controller {
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
-            if (!empty($ismd5)) {
+            if ( ! empty($ismd5)) {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
             //取得使用者資料
@@ -168,9 +168,9 @@ class Auth extends CI_Controller {
 		{
 			$data['message'] = $result['denyreason'];
             // 載入 view
-			$this->load->view('header-jquery',$data);
+			$this->load->view('header',$data);
 			$this->load->view('auth_adminauth');
-            if ($result['adminauthpass'] == 0 )
+            if ($result['adminauthpass'] === 0 )
             {
                 $this->load->view('admin_deny');
             }
@@ -270,7 +270,7 @@ class Auth extends CI_Controller {
 			$this->load->view('footer');
         }
         // 通過前列檢查後，如有綁定帳號，則將綁定帳號的身分寫入 session
-        if (!empty($olduser->bind_userid)) {
+        if ( ! empty($olduser->bind_userid)) {
             $annuser = $this->usertb_model->query($olduser->bind_userid);
             $result = array (
                     'authpass' => "1",
