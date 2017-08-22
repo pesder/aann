@@ -136,10 +136,15 @@ class Reset extends CI_Controller
         $this->sessions_model->query_expire();
         // 查詢 session
         $pass_session = $this->sessions_model->retrive_session($id);
+        if (empty($pass_session)) {
+            $message = "<h2>重設密碼已逾期，請檢查您的連結或重新申請。</h2>";
+            $this->session->set_flashdata('message', $message);
+            redirect('/Reset/confirmDone');
+        }
         $pass_session['session_value'] = unserialize($pass_session['session_value']);
         $confirm_session = $pass_session['session_value'];
-        if ($pass != $confirm_session['pass_code']) {
-            $message = "認證失敗，使用的通關密碼有誤或重設密碼已逾期，請檢查您的連結或重新申請。";
+        if ($pass !== $confirm_session['pass_code']) {
+            $message = "<h2>認證失敗，使用的通關密碼有誤或重設密碼已逾期，請檢查您的連結或重新申請。</h2>";
             $this->session->set_flashdata('message', $message);
             redirect('/Reset/confirmDone');
         } else {

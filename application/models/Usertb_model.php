@@ -120,7 +120,9 @@ class Usertb_model extends CI_Model
         // 查詢使用者資料，排除已停用或已綁定之使用者
         $this->db->select('*');
         $this->db->from('usertb');
-        $this->db->where_not_in('userid', $except);
+        if ( ! empty($except)) {
+            $this->db->where_not_in('userid', $except);
+        }
         $this->db->order_by('partid', 'asc');
         $query = $this->db->get();
         $data = array('' => '請選擇使用者' );

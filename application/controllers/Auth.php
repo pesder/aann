@@ -252,14 +252,14 @@ class Auth extends CI_Controller {
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
-        } elseif ($olduser->new == '1') {
+        } elseif ($olduser->new === '1') {
             $message = "您的資料已建立，但使用者尚未設定相關資料，請稍候系統管理者確認。";
             $data['message'] = $message;
             // 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
-        } elseif ($olduser->banned == '1') {
+        } elseif ($olduser->banned === '1') {
             $message = "系統發生錯誤，暫時無法讓您以這個身分登入，抱歉。";
             $data['message'] = $message;
             // 清除認證資料

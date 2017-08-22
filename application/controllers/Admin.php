@@ -226,11 +226,10 @@ class Admin extends CI_Controller
             $formdata['partname'] = $this->input->post('partname', TRUE);
             $formdata['partident'] = $this->input->post('partident', TRUE);
             $parttb = array(
-                    'pid'   =>  $formdata['pid'],
-                    'partname'  =>  $formdata['partname'],
-                    'partident' =>  $formdata['partident']
+                'pid'   =>  $formdata['pid'],
+                'partname'  =>  $formdata['partname'],
+                'partident' =>  $formdata['partident']
             );
-            print_r($parttb);
             $this->parttb_model->modify($sessionpartid, $parttb);
             redirect('/Admin');
             $this->session->set_userdata("modifypartid", "");
@@ -836,23 +835,23 @@ class Admin extends CI_Controller
     {
         $data['function_name'] = "確認單一登入使用者";
         $data['function_key'] = $this->classname . "/confirm_newuser";
-            $data['site'] = $this->title;
-            $data['classname'] = $this->classname;
-            $urlpath = current_url();
-            $this->session->set_userdata('nowurl', $urlpath);
-            $options = $this->usertb_model->query_user();
-            $data['userid_data'] = array (
+        $data['site'] = $this->title;
+        $data['classname'] = $this->classname;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $options = $this->usertb_model->query_user();
+        $data['userid_data'] = array (
             'name'  =>  'userid',
             'class'     =>  'form-control',
             'options'   =>  $options
             );
-            $parts = $this->parttb_model->query_list();
-            $data['partid_data'] = array (
+        $parts = $this->parttb_model->query_list();
+        $data['partid_data'] = array (
                 'name'  =>  'partid',
                 'class'     =>  'form-control',
                 'options'   =>  $parts
             );
-            $data['acc_data'] = array(
+        $data['acc_data'] = array(
             'name' => 'use_same_account',
             'id'    =>  'use_same_account',
             'value'     =>  '1',
@@ -864,7 +863,7 @@ class Admin extends CI_Controller
             'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 修改',
             'class' =>  'btn btn-primary',
             'accesskey'     =>  's');
-            $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         if ($oid > 0) {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
@@ -890,7 +889,7 @@ class Admin extends CI_Controller
             $oiduser = $this->session->userdata('oiduser');
             // 優先處理以此設定新建帳號動作
             if ($formdata['use_same_account'] == 1) {
-                if ($formdata['partid'] == '') {
+                if ($formdata['partid'] === '') {
                     $formdata['partid'] = '0';
                 }
                 $newuser = $this->session->userdata('oiduser');

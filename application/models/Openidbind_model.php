@@ -58,7 +58,7 @@ class Openidbind_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('openidbind');
-        $this->db->where('bind_userid', '');
+        $this->db->where('bind_userid', NULL);
         $this->db->where('new', '0');
         $this->db->where('banned', '0');
         $this->db->order_by('oid', 'desc');
