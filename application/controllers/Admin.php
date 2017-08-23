@@ -6,32 +6,35 @@ class Admin extends CI_Controller
 
     public function __construct()
     {
-            parent::__construct();
-            $this->load->library('session');
-            $this->load->helper('form');
-            $this->load->helper('url');
-            // 載入列表 model
-            $this->load->model('usertb_model');
-            $this->load->model('parttb_model');
-            $this->load->model('config_model');
-            $this->load->model('openidbind_model');
-            // 讀取網站名稱
-            $this->title = $this->config_model->query_value('myname');
-            // 設定目前網址，供認證後跳回
-            $urlpath = current_url();
-            $this->session->set_userdata('nowurl', $urlpath);
-            $this->classname = "Admin";
-            //進行認證
-            $this->auth();
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('form');
+        $this->load->helper('url');
+        // 載入列表 model
+        $this->load->model('usertb_model');
+        $this->load->model('parttb_model');
+        $this->load->model('config_model');
+        $this->load->model('openidbind_model');
+        // 讀取網站名稱
+        $this->title = $this->config_model->query_value('myname');
+        // 設定目前網址，供認證後跳回
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $this->classname = "Admin";
+        //進行認證
+        $this->auth();
     }
 
     public function auth()
     {
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if (empty($login)) {
+        if (empty($login)) 
+        {
             redirect('/Auth/admin_auth');
-        } elseif ($login['adminauthpass'] == 0) {
+        } 
+        elseif ($login['adminauthpass'] === '0') 
+        {
             redirect('/Auth/admin_auth');
         }
     }
@@ -44,23 +47,23 @@ class Admin extends CI_Controller
         $data['message'] = $this->session->flashdata('message');
         $data['h1'] = "使用者功能";
         $data['h1group'] = array (
-                '/Admin/create_part' =>  "新增一個處室",
-                '/Admin/update_part1' =>  "修改處室資料",
-                '/Admin/add_member'  =>  "新增一位組員",
-                '/Admin/update_member1'  =>  "修改組員資料",
-                '/Admin/enable_member'   => "啟用一位組員"
+            '/Admin/create_part' =>  "新增一個處室",
+            '/Admin/update_part1' =>  "修改處室資料",
+            '/Admin/add_member'  =>  "新增一位組員",
+            '/Admin/update_member1'  =>  "修改組員資料",
+            '/Admin/enable_member'   => "啟用一位組員"
         );
         $data['h2'] = "網站功能";
         $data['h2group'] = array (
-                '/Admin/update_site' =>  "變更網站設定",
-                '/Admin/update_ann' =>  "變更公告設定",
-                '/Admin/update_smtp' =>  "變更郵件設定",
+            '/Admin/update_site' =>  "變更網站設定",
+            '/Admin/update_ann' =>  "變更公告設定",
+            '/Admin/update_smtp' =>  "變更郵件設定",
         );
         $data['h3'] = "單一登入功能";
         $data['h3group'] = array (
-                '/Admin/show_oid_user' =>  "顯示單一登入使用者",
-                '/Admin/show_bind_user' =>  "顯示單一登入使用者(已綁定)",
-                '/Admin/show_banned_user' =>  "顯示被封鎖使用者",
+            '/Admin/show_oid_user' =>  "顯示單一登入使用者",
+            '/Admin/show_bind_user' =>  "顯示單一登入使用者(已綁定)",
+            '/Admin/show_banned_user' =>  "顯示被封鎖使用者",
         );
         // 載入 view
         $this->load->view('header', $data);
@@ -75,45 +78,51 @@ class Admin extends CI_Controller
         $data['site'] = $this->title;
         //$nowurl = $this->session->userdata('nowurl');
         $data['pid_data'] = array (
-        'name'  =>  'pid',
-        'class'     =>  'form-control');
+            'name'  =>  'pid',
+            'class'     =>  'form-control');
         $data['partname_data'] = array (
-        'name'  =>  'partname',
-        'class'     =>  'form-control');
+            'name'  =>  'partname',
+            'class'     =>  'form-control');
         $data['partident_data'] = array (
-        'name'  =>  'partident',
-        'class'     =>  'form-control');
+            'name'  =>  'partident',
+            'class'     =>  'form-control');
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 新增',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 新增',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_createpart');
             $this->load->view('admin_updatepart_end');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['pid'] = $this->input->post('pid');
             $formdata['partname'] = $this->input->post('partname', TRUE);
             $formdata['partident'] = $this->input->post('partident', TRUE);
-            if ( ! empty($formdata['pid'])) {
+            if ( ! empty($formdata['pid'])) 
+            {
                 $parttb = array (
                     'pid'   =>  $formdata['pid'],
                     'partname'  =>  $formdata['partname'],
                     'partident' =>  $formdata['partident']
                 );
                 $partid = $this->parttb_model->add_id($parttb);
-            } elseif (empty($formdata['pid'])) {
+            } 
+            elseif (empty($formdata['pid'])) 
+            {
                 $parttb = array (
                     'partname'  =>  $formdata['partname'],
                     'partident' =>  $formdata['partident']
@@ -136,13 +145,12 @@ class Admin extends CI_Controller
     // 修改處室
     public function update_part1()
     {
-            $data['function_name'] = "選擇要修改處室";
-            $data['function_key'] = $this->classname . "/update_part1";
-            $data['site'] = $this->title;
-            $urlpath = current_url();
-            $this->session->set_userdata('nowurl', $urlpath);
-            $options = $this->parttb_model->query_list();
-                
+        $data['function_name'] = "選擇要修改處室";
+        $data['function_key'] = $this->classname . "/update_part1";
+        $data['site'] = $this->title;
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
+        $options = $this->parttb_model->query_list();    
         $data['partid_data'] = array (
             'name'  =>  'partid',
             'class'     =>  'form-control',
@@ -159,13 +167,15 @@ class Admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('partid', '處室', 'trim|required');
             // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_updatepart1');
-            
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['partid'] = $this->input->post('partid', TRUE);
             $this->session->set_userdata("modifypartid", $formdata['partid']);
@@ -182,30 +192,33 @@ class Admin extends CI_Controller
         $this->session->set_userdata('nowurl', $urlpath);
         $sessionpartid = $this->session->userdata('modifypartid');
             
-        if (empty($sessionpartid)) {
+        if (empty($sessionpartid)) 
+        {
             redirect('/Admin');
-        } else {
+        } 
+        else 
+        {
             $data['parttb'] = $this->parttb_model->query($sessionpartid);
         }
         $data['pid_data'] = array (
-        'name'  =>  'pid',
-        'class'     =>  'form-control',
-        'value' =>  $data['parttb']->pid);
+            'name'  =>  'pid',
+            'class'     =>  'form-control',
+            'value' =>  $data['parttb']->pid);
         $data['partname_data'] = array (
-        'name'  =>  'partname',
-        'class'     =>  'form-control',
-        'value' =>  $data['parttb']->partname);
+            'name'  =>  'partname',
+            'class'     =>  'form-control',
+            'value' =>  $data['parttb']->partname);
         $data['partident_data'] = array (
-        'name'  =>  'partident',
-        'class'     =>  'form-control',
-        'value' =>  $data['parttb']->partident);
+            'name'  =>  'partident',
+            'class'     =>  'form-control',
+            'value' =>  $data['parttb']->partident);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
-        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回?"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
+        $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -213,14 +226,17 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('partname', '中文名稱', 'trim|required');
         
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_createpart');
             $this->load->view('admin_updatepart2');
             $this->load->view('admin_updatepart_end');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['pid'] = $this->input->post('pid');
             $formdata['partname'] = $this->input->post('partname', TRUE);
@@ -245,7 +261,8 @@ class Admin extends CI_Controller
         // 從 session 取回要刪除的 partid
         $sessionpartid = $this->session->userdata('modifypartid');
         // 若檢查不到 partid 則跳回處室選擇畫面
-        if (empty($sessionpartid)) {
+        if (empty($sessionpartid)) 
+        {
             redirect('/Admin/update_part1');
         }
         $this->load->model('titletb_model');
@@ -260,7 +277,8 @@ class Admin extends CI_Controller
         $this->filetb_model->delete($sessionpartid);
         // 刪除使用者貼文本體
         $userlist = $this->usertb_model->query_member($sessionpartid);
-        foreach ($userlist as $key => $name) {
+        foreach ($userlist as $key => $name) 
+        {
             $this->anntb_model->destory($key);
         }
         // 刪除處室所有使用者
@@ -276,34 +294,33 @@ class Admin extends CI_Controller
         $data['function_name'] = "新增組員";
         $data['function_key'] = $this->classname . "/add_member";
         $data['site'] = $this->title;
-        //$nowurl = $this->session->userdata('nowurl');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options
         );
         $data['username_data'] = array (
-        'name'  =>  'username',
-        'class'     =>  'form-control');
+            'name'  =>  'username',
+            'class'     =>  'form-control');
         $data['realname_data'] = array (
-        'name'  =>  'realname',
-        'class'     =>  'form-control');
+            'name'  =>  'realname',
+            'class'     =>  'form-control');
         $data['userpass_data'] = array (
-        'name'  =>  'userpass',
-        'class'     =>  'form-control');
+            'name'  =>  'userpass',
+            'class'     =>  'form-control');
         $data['email_data'] = array (
-        'name'  =>  'email',
-        'class'     =>  'form-control');
+            'name'  =>  'email',
+            'class'     =>  'form-control');
         $data['userident_data'] = array (
-        'name'  =>  'userident',
-        'class'     =>  'form-control');
+            'name'  =>  'userident',
+            'class'     =>  'form-control');
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-floppy-save"></span> 儲存',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
@@ -313,13 +330,16 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
         $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_addmember');
             $this->load->view('admin_addmember_end');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
             $formdata['username'] = $this->input->post('username', TRUE);
@@ -347,7 +367,8 @@ class Admin extends CI_Controller
             );
             $newid = $this->usertb_model->add($usertb);
             // 設定處室管理者
-            if ($formdata['rootuid'] == 1) {
+            if ($formdata['rootuid'] == 1) 
+            {
                 $root = array(
                     'rootuid'   =>  $newid
                 );
@@ -366,38 +387,45 @@ class Admin extends CI_Controller
         $data['function_key'] = $this->classname . "/update_member1";
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
-        //$nowurl = $this->session->userdata('nowurl');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options);
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-ok"></span> 選擇',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('partid', '處室', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             $part = $this->session->userdata('partid');
-            if (empty($part)) {
+            if (empty($part)) 
+            {
                 $data['message'] = "尚未選擇處室";
-            } else {
+            } 
+            else 
+            {
                 $data['userlist'] = $this->usertb_model->query_member($part);
                 $this->session->set_userdata('partid', "");
-                if (empty($data['userlist'])) {
+                if (empty($data['userlist'])) 
+                {
                     $data['message'] = "找不到成員";
-                } else {
+                } 
+                else 
+                {
                     $data['message'] = "請點選成員進入修改";
                 }
             }
-            if ( ! empty($part)) {
+            if ( ! empty($part)) 
+            {
                 $data['userlist'] = $this->usertb_model->query_member($part);
             }
             // 載入 view
@@ -405,9 +433,12 @@ class Admin extends CI_Controller
             $this->load->view('admin_updatemember1');
             $this->load->view('admin_updatemember1_list');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             $part = $this->session->userdata('partid');
-            if (empty($part)) {
+            if (empty($part)) 
+            {
                 $inputpart = $this->input->post('partid');
                 $this->session->set_userdata('partid', $inputpart);
             }
@@ -423,48 +454,49 @@ class Admin extends CI_Controller
         $data['function_key'] = $this->classname . "/update_member2/" . $id;
         $data['site'] = $this->title;
         $data['classname'] = $this->classname;
-        //$nowurl = $this->session->userdata('nowurl');
-        if ($id != 0) {
+        if ($id != '0') 
+        {
             $this->session->set_userdata('updatemember', $id);
         }
         $uid = $this->session->userdata('updatemember');
         // 若沒有 userid 值，則跳回管理頁面
-        if (empty($uid)) {
+        if (empty($uid)) 
+        {
             redirect('/Admin');
         }
         $data['userdata'] = $this->usertb_model->query($uid);
         $data['partdata'] = $this->parttb_model->query($data['userdata']->partid)->rootuid;
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options,
-        'selected'  =>  $data['userdata']->partid);
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options,
+            'selected'  =>  $data['userdata']->partid);
         $data['username_data'] = array (
-        'name'  =>  'username',
-        'class'     =>  'form-control',
-        'value' =>  $data['userdata']->username);
+            'name'  =>  'username',
+            'class'     =>  'form-control',
+            'value' =>  $data['userdata']->username);
         $data['realname_data'] = array (
-        'name'  =>  'realname',
-        'class'     =>  'form-control',
-        'value' =>  $data['userdata']->realname);
+            'name'  =>  'realname',
+            'class'     =>  'form-control',
+            'value' =>  $data['userdata']->realname);
         $data['userpass_data'] = array (
-        'name'  =>  'userpass',
-        'class'     =>  'form-control');
+            'name'  =>  'userpass',
+            'class'     =>  'form-control');
         $data['email_data'] = array (
-        'name'  =>  'email',
-        'class'     =>  'form-control',
-        'value' =>  $data['userdata']->email);
+            'name'  =>  'email',
+            'class'     =>  'form-control',
+            'value' =>  $data['userdata']->email);
         $data['userident_data'] = array (
-        'name'  =>  'userident',
-        'class'     =>  'form-control',
-        'value' =>  $data['userdata']->userident);
+            'name'  =>  'userident',
+            'class'     =>  'form-control',
+            'value' =>  $data['userdata']->userident);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-pencil"></span>  修改',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-pencil"></span>  修改',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin/update_member1" class="btn btn-primary" accesskey="h" title="回處室選單"><span class="glyphicon glyphicon-wrench"></span> 回處室選單</a> ';
         $data['button'] .= '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
@@ -474,13 +506,16 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('userpass', '密碼', 'trim');
         $this->form_validation->set_rules('email', '電子郵件', 'trim|required|valid_email');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_addmember');
             $this->load->view('admin_updatemember2');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             $uid = $this->session->userdata('updatemember');
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
@@ -502,14 +537,16 @@ class Admin extends CI_Controller
             $this->usertb_model->modify($uid, $usertb);
             $newid = $uid;
             // 設定處室管理者
-            if ($formdata['rootuid'] == 1) {
+            if ($formdata['rootuid'] === '1') 
+            {
                 $root = array(
                     'rootuid'   =>  $newid
                 );
                 $this->parttb_model->modify($formdata['partid'], $root);
             }
             // 判斷，若密碼欄位有填寫，則進行密碼變更
-            if ( ! empty($formdata['userpass'])) {
+            if ( ! empty($formdata['userpass'])) 
+            {
             /* 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
@@ -539,7 +576,8 @@ class Admin extends CI_Controller
         // 從 session 取回要刪除的 userid
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
-        if (empty($uid)) {
+        if (empty($uid)) 
+        {
             redirect('/Admin/update_member1');
         }
         $this->usertb_model->delete($uid);
@@ -555,7 +593,8 @@ class Admin extends CI_Controller
         // 從 session 取回要刪除的 userid
         $uid = $this->session->userdata('updatemember');
         // 若檢查不到 userid 則跳回處室選擇畫面
-        if ( ! empty($uid)) {
+        if ( ! empty($uid)) 
+        {
             $this->load->helper('security');
             $disable = array (
             'partid'    =>  '0'
@@ -572,7 +611,9 @@ class Admin extends CI_Controller
         //設定一個亂數做為使用者密碼，使其無法登入
             $this->usertb_model->modify($uid, $userpass);
             redirect('Admin');
-        } else {
+        } 
+        else 
+        {
             redirect('/Admin/update_member1');
         }
     }
@@ -582,37 +623,39 @@ class Admin extends CI_Controller
         $data['function_name'] = "啟用一位組員";
         $data['function_key'] = $this->classname . "/enable_member";
         $data['site'] = $this->title;
-        //$nowurl = $this->session->userdata('nowurl');
         //查詢被設定為停用的使用者
         $data['userdata'] = $this->usertb_model->query_member('0');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options);
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-ok-circle"></span> 啟用選擇的組員',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-ok-circle"></span> 啟用選擇的組員',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('userid', '組員', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_enablemember');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['partid'] = $this->input->post('partid');
             $formdata['userid'] = $this->input->post('userid');
-            //$formdata['partident'] = $this->input->post('partident');
-            if ( ! empty($formdata['userid'])) {
+            if ( ! empty($formdata['userid'])) 
+            {
                 $uid = $formdata['userid'];
                 $usertb = array (
                     'partid'   =>  $formdata['partid']
@@ -631,11 +674,11 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->query_by('cat', 2);
@@ -650,12 +693,15 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('site_mail', '電子郵件', 'trim|required|valid_email');
         $this->form_validation->set_rules('adminuser', '超級使用者', 'trim|required|alpha_dash');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_updatesite');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['myname'] = $this->input->post('myname', TRUE);
             $formdata['myhost'] = $this->input->post('myhost', TRUE);
@@ -663,7 +709,8 @@ class Admin extends CI_Controller
             $formdata['site_mail'] = $this->input->post('site_mail', TRUE);
             $formdata['adminuser'] = $this->input->post('adminuser', TRUE);
             $formdata['adminpass'] = $this->input->post('adminpass', TRUE);
-            if ( ! empty($formdata['adminpass'])) {
+            if ( ! empty($formdata['adminpass'])) 
+            {
                 $pass = $formdata['adminpass'];
                 $pass = password_hash($pass, PASSWORD_DEFAULT);
                 $config = array (
@@ -706,11 +753,11 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->query_by('cat', 3);
@@ -724,12 +771,15 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('ulfilenum', '附件數量', 'trim|required|numeric');
         $this->form_validation->set_rules('urlnum', '網址數量', 'trim|required|numeric');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_updateann');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['uploadable'] = $this->input->post('uploadable', TRUE);
             $formdata['ann_perpage'] = $this->input->post('ann_perpage', TRUE);
@@ -777,11 +827,11 @@ class Admin extends CI_Controller
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
-        'class' =>  'btn btn-primary',
-        'accesskey'   =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-pencil"></span> 更新',
+            'class' =>  'btn btn-primary',
+            'accesskey'   =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
         //查詢用到的設定值
         $data['settings'] = $this->config_model->query_by('cat', 4);
@@ -795,12 +845,15 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('smtp_pass', '密碼', 'trim|required');
         
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_updatesmtp');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['smtp_host'] = $this->input->post('smtp_host', TRUE);
             $formdata['smtp_port'] = $this->input->post('smtp_port', TRUE);
@@ -847,9 +900,9 @@ class Admin extends CI_Controller
             );
         $parts = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-                'name'  =>  'partid',
-                'class'     =>  'form-control',
-                'options'   =>  $parts
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $parts
             );
         $data['acc_data'] = array(
             'name' => 'use_same_account',
@@ -864,22 +917,26 @@ class Admin extends CI_Controller
             'class' =>  'btn btn-primary',
             'accesskey'     =>  's');
         $data['button'] = '<a href="' . config_item('base_url') . '/index.php/Admin" class="btn btn-primary" accesskey="h" title="回管理選單"><span class="glyphicon glyphicon-cog"></span> 回管理選單</a>';
-        if ($oid > 0) {
+        if ($oid > 0) 
+        {
             $data['newuser'] = $this->openidbind_model->query($oid);
             $this->session->set_userdata('oiduser', $data['newuser']);
         }
-            // 表單驗證
+        // 表單驗證
         $this->form_validation->set_message('required', '{field}未選');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('new', '新建帳號', 'trim|required');
         $this->form_validation->set_rules('banned', '阻擋帳號', 'trim|required');
-            // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        // 表單判斷
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('admin_oid_confirmuser');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['new'] = $this->input->post('new');
             $formdata['userid'] = $this->input->post('userid');
@@ -888,8 +945,10 @@ class Admin extends CI_Controller
             $formdata['banned'] = $this->input->post('banned');
             $oiduser = $this->session->userdata('oiduser');
             // 優先處理以此設定新建帳號動作
-            if ($formdata['use_same_account'] == 1) {
-                if ($formdata['partid'] === '') {
+            if ($formdata['use_same_account'] === '1') 
+            {
+                if ($formdata['partid'] === '') 
+                {
                     $formdata['partid'] = '0';
                 }
                 $newuser = $this->session->userdata('oiduser');
@@ -905,26 +964,29 @@ class Admin extends CI_Controller
                 $newid = $this->usertb_model->add($usertb);
             // 處理本筆 oid 帳號
                 $openidbind_data = array(
-                'bind_userid'   =>  $newid,
-                'new'   =>  '0'
+                    'bind_userid'   =>  $newid,
+                    'new'   =>  '0'
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
                 redirect('/Admin');
             } // 若非直接建立帳號，則採綁定帳號處理
-            elseif ($formdata['userid'] != '') {
+            elseif ($formdata['userid'] != '') 
+            {
             // 處理本筆 oid 帳號
                 $openidbind_data = array(
-                'bind_userid'   =>  $formdata['userid'],
-                'new'   =>  '0'
+                    'bind_userid'   =>  $formdata['userid'],
+                    'new'   =>  '0'
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
                 redirect('/Admin');
-            } else {
+            } 
+            else 
+            {
             // 若非前兩種動作，則只處理確認或阻擋
             // 處理本筆 oid 帳號
                 $openidbind_data = array(
-                'new'   =>  $formdata['new'],
-                'banned'   =>   $formdata['banned']
+                    'new'   =>  $formdata['new'],
+                    'banned'   =>   $formdata['banned']
                 );
                 $this->openidbind_model->modify($oiduser->oid, $openidbind_data);
                 redirect('/Admin');
@@ -934,7 +996,8 @@ class Admin extends CI_Controller
     // 刪除 openid 使用者
     public function delete_oid_user($oid = 0)
     {
-        if ($oid> 0) {
+        if ($oid> 0) 
+        {
             $this->session->set_userdata('deleteuser', $oid);
         }
         $deleteid = $this->session->userdata('deleteuser');
