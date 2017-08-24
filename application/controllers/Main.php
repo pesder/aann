@@ -6,18 +6,18 @@ class Main extends CI_Controller
 
     public function __construct()
     {
-            parent::__construct();
-            $this->load->library('session');
-            $this->load->helper('url');
-            // 載入列表 model
-            $this->load->model('parttb_model');
-            $this->load->model('titletb_model');
-            $this->load->model('config_model');
-            // 讀取網站名稱
-            $this->title = $this->config_model->query_value('myname');
-            // 讀取每頁顯示文章數
-            $this->annpp = $this->config_model->query_value('ann_perpage');
-            $this->classname = "Main";
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
+        // 載入列表 model
+        $this->load->model('parttb_model');
+        $this->load->model('titletb_model');
+        $this->load->model('config_model');
+        // 讀取網站名稱
+        $this->title = $this->config_model->query_value('myname');
+        // 讀取每頁顯示文章數
+        $this->annpp = $this->config_model->query_value('ann_perpage');
+        $this->classname = "Main";
     }
 
     public function index()
@@ -42,7 +42,8 @@ class Main extends CI_Controller
         );
         $this->session->set_userdata('adminlogin', $emptyadmin);
         // 檢測如果顯示公告日數未設定則使用資料庫中的預設值
-        if (empty($this->session->userdata('ann_list_days'))) {
+        if (empty($this->session->userdata('ann_list_days'))) 
+        {
             $show_days = $this->config_model->query_value('ann_list_days');
             $this->session->set_userdata('ann_list_days', $show_days);
         }
@@ -59,41 +60,42 @@ class Main extends CI_Controller
         $data['current'] = $this->session->userdata('CurrentPage');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options
         );
         $data['but1'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'p');
         $data['search'] = array(
-        'name'  =>  'search',
-        'class' =>  'form-control'
+            'name'  =>  'search',
+            'class' =>  'form-control'
         );
         $data['but2'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  's');
         $data['days'] = array(
-        'name'  =>  'ann_list_days',
-        'class' =>  'form-control',
-        'value' =>  $ann_list_days
+            'name'  =>  'ann_list_days',
+            'class' =>  'form-control',
+            'value' =>  $ann_list_days
         );
         $data['but3'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'd');
         // 載入 view
         $this->load->view('header', $data);
         // 檢查是否存在 list ，若無則顯示相關資訊
-        if (empty($data['list'])) {
+        if (empty($data['list'])) 
+        {
             $this->load->view('main_nolist');
         }
         $this->load->view('main_index');
@@ -105,9 +107,12 @@ class Main extends CI_Controller
     {
         $this->session->set_userdata('CurrentPage', $page);
         //判斷，第1頁與其他頁的偏移量不同
-        if ($page == 1) {
+        if ($page == 1) 
+        {
             $gooffset = 0;
-        } else {
+        } 
+        else 
+        {
             $gooffset = 1 + ($page - 1) * $this->annpp;
         }
         $data['function_name'] = "第 $page 頁";
@@ -118,52 +123,56 @@ class Main extends CI_Controller
         $data['current'] = $this->session->userdata('CurrentPage');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options
         );
         $data['but1'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'p');
         $data['search'] = array(
-        'name'  =>  'search',
-        'class' =>  'form-control'
+            'name'  =>  'search',
+            'class' =>  'form-control'
         );
         $data['but2'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  's');
         $data['days'] = array(
-        'name'  =>  'ann_list_days',
-        'class' =>  'form-control',
-        'value' =>  $ann_list_days
+            'name'  =>  'ann_list_days',
+            'class' =>  'form-control',
+            'value' =>  $ann_list_days
         );
         $data['but3'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
-
-
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'd');
         // 載入 view
         $this->load->view('header', $data);
         // 檢查是否存在 list ，若無則顯示相關資訊
-        if (empty($data['list'])) {
+        if (empty($data['list'])) 
+        {
             $this->load->view('main_nolist');
         }
         $this->load->view('main_index');
         // 判斷目前所在頁面，使用對應的導覽列
-        if ($page == 1) {
+        if ($page == 1) 
+        {
             $this->load->view('main_index_bott_home');
-        } elseif ($page < $this->session->userdata('TotalPages')['pages']) {
+        } 
+        elseif ($page < $this->session->userdata('TotalPages')['pages']) 
+        {
             $this->load->view('main_index_bott_mid');
-        } else {
+        } 
+        else 
+        {
             $this->load->view('main_index_bott_end');
         }
         $this->load->view('footer');
@@ -171,15 +180,17 @@ class Main extends CI_Controller
     // 設定顯示日數功能
     public function set_days()
     {
-        
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('ann_list_days', '顯示日數', 'trim|required|numeric');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == false) 
+        {
             $this->index();
-        } else {
+        } 
+        else 
+        {
             $data['site'] = $this->title;
             $formdata['ann_list_days'] = $this->input->post('ann_list_days');
             $this->session->set_userdata('ann_list_days', $formdata['ann_list_days']);
@@ -189,18 +200,21 @@ class Main extends CI_Controller
     // 處室選擇功能
     public function select_part()
     {
-        
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('partid', '處室選擇', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() == false) 
+        {
             $this->index();
-        } else {
+        } 
+        else 
+        {
             $data['site'] = $this->title;
             $formdata['partid'] = $this->input->post('partid');
-            if ( ! empty($formdata['partid'])) {
+            if ( ! empty($formdata['partid'])) 
+            {
                 $this->session->set_userdata('selected_part', $formdata['partid']);
                 $this->show_list('1');
             }
@@ -209,7 +223,6 @@ class Main extends CI_Controller
     // 搜尋功能
     public function search_keyword()
     {
-        
         // 表單驗證
         $this->form_validation->set_message('required', '{field}未填');
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -231,9 +244,12 @@ class Main extends CI_Controller
     {
         $this->session->set_userdata('CurrentPage', $page);
         //判斷，第1頁與其他頁的偏移量不同
-        if ($page == 1) {
+        if ($page == 1) 
+        {
             $gooffset = 0;
-        } else {
+        } 
+        else 
+        {
             $gooffset = 1 + ($page - 1) * $this->annpp;
         }
         
@@ -245,59 +261,63 @@ class Main extends CI_Controller
         $data['current'] = $this->session->userdata('CurrentPage');
         $options = $this->parttb_model->query_list();
         $data['partid_data'] = array (
-        'name'  =>  'partid',
-        'class'     =>  'form-control',
-        'options'   =>  $options
+            'name'  =>  'partid',
+            'class'     =>  'form-control',
+            'options'   =>  $options
         );
         $data['but1'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-check"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'p');
         $data['search'] = array(
-        'name'  =>  'search',
-        'class' =>  'form-control'
+            'name'  =>  'search',
+            'class' =>  'form-control'
         );
         $data['but2'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-search"></span> 搜尋',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  's');
         $data['days'] = array(
-        'name'  =>  'ann_list_days',
-        'class' =>  'form-control',
-        'value' =>  $ann_list_days
+            'name'  =>  'ann_list_days',
+            'class' =>  'form-control',
+            'value' =>  $ann_list_days
         );
         $data['but3'] = array(
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
-        'class' =>  'btn btn-primary',
-        'accesskey'     =>  's');
-        
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-calendar"></span> 確定',
+            'class' =>  'btn btn-primary',
+            'accesskey'     =>  'd');
         
         // 載入 view
         $this->load->view('header', $data);
         // 檢查是否存在 list ，若無則顯示相關資訊
-        if (empty($data['list'])) {
+        if (empty($data['list'])) 
+        {
             $this->load->view('main_nolist');
         }
         $this->load->view('main_index');
         // 判斷目前所在頁面，使用對應的導覽列
-        if ($page == 1) {
+        if ($page == 1) 
+        {
             $this->load->view('main_index_bott_home');
-        } elseif ($page < $this->session->userdata('TotalPages')['pages']) {
+        } 
+        elseif ($page < $this->session->userdata('TotalPages')['pages']) 
+        {
             $this->load->view('main_index_bott_mid');
-        } else {
+        } 
+        else 
+        {
             $this->load->view('main_index_bott_end');
         }
         $this->load->view('footer');
     }
     public function view_ann($id)
     {
-        
         $data['function_name'] = "瀏覽公告";
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
@@ -316,24 +336,34 @@ class Main extends CI_Controller
         //增加點閱計數
         $this->titletb_model->add_hit($id, $data['head']);
         // 遮蔽 IP 資料
-        if (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        if (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) 
+        {
                $data['body']->ip = preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '?', $data['body']->ip);
-        } elseif (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        } 
+        elseif (filter_var($data['body']->ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) 
+        {
             $data['body']->ip = preg_replace('/(?!\d{1,4}\:)\d/', '?', $data['body']->ip);
         }
         //判斷 URL
-        if (empty($data['body']->url)) {
+        if (empty($data['body']->url)) 
+        {
             $data['hasurl'] = "無";
             $data['annurl'] = [];
-        } else {
+        } 
+        else 
+        {
             $data['hasurl'] = "有";
             $data['annurl'] = explode(" ", $data['body']->url);
             $data['annurlreadable'] = $data['annurl'];
-            foreach ($data['annurlreadable'] as $index => $name) {
+            foreach ($data['annurlreadable'] as $index => $name) 
+            {
                 $urlhascomment = strpos($name, "!");
-                if ($urlhascomment === false) {
+                if ($urlhascomment === false) 
+                {
                     $data['annurlreadable'][$index] = $name;
-                } else {
+                } 
+                else 
+                {
                     $newurl = explode("!", $name);
                     $data['annurl'][$index] = $newurl[0];
                     $data['annurlreadable'][$index] = $newurl[1];
@@ -341,32 +371,45 @@ class Main extends CI_Controller
             }
         }
         //判斷附件
-        if (empty($data['body']->filename)) {
+        if (empty($data['body']->filename)) 
+        {
             $data['hasfile'] = "無";
             $data['annfile'] = [];
-        } else {
+        } 
+        else 
+        {
             $data['hasfile'] = "有";
             $data['annfile'] = explode(" ", $data['body']->filename);
             //利用上面陣列複製出一個查詢檔名用陣列
             $data['annfilereadable'] = $data['annfile'];
             $data['filenotthere'] = [];
-            foreach ($data['annfilereadable'] as $index => $name) {
+            foreach ($data['annfilereadable'] as $index => $name) 
+            {
                 $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
-                if (empty($query)) {
+                if (empty($query)) 
+                {
                     $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
-                    if (is_file($filelocation)) {
+                    if (is_file($filelocation)) 
+                    {
                         $data['annfilereadable'][$index] = $name;
                         $data['filenotthere'][$index] = 1;
-                    } else {
+                    } 
+                    else 
+                    {
                         $data['annfilereadable'][$index] = $name . "(檔案遺失，無法正常下載)";
                         $data['filenotthere'][$index] = 0;
                     }
-                } else {
+                } 
+                else 
+                {
                     $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
-                    if (is_file($filelocation)) {
+                    if (is_file($filelocation)) 
+                    {
                         $data['annfilereadable'][$index] = $query->origname;
                         $data['filenotthere'][$index] = 1;
-                    } else {
+                    } 
+                    else 
+                    {
                         $data['annfilereadable'][$index] = $query->origname . "(檔案遺失，無法正常下載)";
                         $data['filenotthere'][$index] = 0;
                     }
@@ -377,22 +420,28 @@ class Main extends CI_Controller
         $login = $this->session->userdata('userlogin');
         $oidlogin = $this->session->userdata('openid_user');
         $islocal = $this->session->tempdata('readlocal');
-        if (($data['head']->local == 'yes') && ($islocal != 1)) {
+        if (($data['head']->local === 'yes') && ($islocal != '1')) 
+        {
             $this->warn_local();
-        } elseif (($data['head']->local == 'no') || ($islocal = 1)) {
+        } 
+        elseif (($data['head']->local === 'no') OR ($islocal = '1')) 
+        {
         // 載入 view
             $this->load->view('header', $data);
         // 檢查是否存在 list ，若無則顯示相關資訊
-            if (empty($data['body'])) {
+            if (empty($data['body'])) 
+            {
                 $this->load->view('viewann_nolist');
             }
             $this->load->view('main_viewann');
         // 有網址則載入相關 view
-            if ( ! empty($data['body']->url)) {
+            if ( ! empty($data['body']->url)) 
+            {
                 $this->load->view('main_viewann_url');
             }
         // 有附件則載入相關 view
-            if ( ! empty($data['body']->filename)) {
+            if ( ! empty($data['body']->filename)) 
+            {
                 $this->load->view('main_viewann_file');
             }
             $this->load->view('main_viewann_end');
@@ -413,9 +462,9 @@ class Main extends CI_Controller
         $data['site'] = $this->title;
         $data['message'] = $this->session->flashdata('message');
         // 載入 view
-            $this->load->view('header', $data);
-            $this->load->view('reset_confirm_message');
-            $this->load->view('footer');
+        $this->load->view('header', $data);
+        $this->load->view('reset_confirm_message');
+        $this->load->view('footer');
     }
     public function download($pid, $uid, $filename = null)
     {

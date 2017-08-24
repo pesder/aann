@@ -6,37 +6,40 @@ class Reset extends CI_Controller
 
     public function __construct()
     {
-            parent::__construct();
-            $this->load->library('session');
-            $this->load->helper('form');
-            $this->load->helper('url');
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('form');
+        $this->load->helper('url');
             
-            // 載入列表 model
-            $this->load->model('config_model');
-            $this->load->model('usertb_model');
-            $this->load->model('sessions_model');
+        // 載入列表 model
+        $this->load->model('config_model');
+        $this->load->model('usertb_model');
+        $this->load->model('sessions_model');
             
-            // 讀取網站名稱
-            $this->title = $this->config_model->query_value('myname');
-            $this->admin = $this->config_model->query_value('site_admin');
-            $this->mail = $this->config_model->query_value('site_mail');
+        // 讀取網站名稱
+        $this->title = $this->config_model->query_value('myname');
+        $this->admin = $this->config_model->query_value('site_admin');
+        $this->mail = $this->config_model->query_value('site_mail');
             
-            $this->smtphost = $this->config_model->query_value('smtp_host');
-            $this->smtpuser = $this->config_model->query_value('smtp_user');
-            $this->smtppass = $this->config_model->query_value('smtp_pass');
-            $this->smtpport = $this->config_model->query_value('smtp_port');
+        $this->smtphost = $this->config_model->query_value('smtp_host');
+        $this->smtpuser = $this->config_model->query_value('smtp_user');
+        $this->smtppass = $this->config_model->query_value('smtp_pass');
+        $this->smtpport = $this->config_model->query_value('smtp_port');
             
-            // 設定目前網址，供認證後跳回
-            $urlpath = current_url();
-            $this->session->set_userdata('nowurl', $urlpath);
+        // 設定目前網址，供認證後跳回
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
     }
     public function auth()
     {
         $login = $this->session->userdata('adminlogin');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if (empty($login)) {
+        if (empty($login)) 
+        {
             redirect('/Auth/admin_auth');
-        } elseif ($login['adminauthpass'] == 0) {
+        } 
+        elseif ($login['adminauthpass'] === '0') 
+        {
             redirect('/Auth/admin_auth');
         }
     }
@@ -50,12 +53,14 @@ class Reset extends CI_Controller
         $this->session->set_userdata('nowurl', $urlpath);
         $data['function_name'] = "重設密碼";
         $data['site'] = $this->title;
-        if ($id != 0) {
+        if ($id != 0) 
+        {
             //$this->session->set_userdata('updatemember', $id);
         }
         $uid = $this->session->userdata('updatemember');
         // 若沒有 userid 值，則跳回管理頁面
-        if (empty($uid)) {
+        if (empty($uid)) 
+        {
             redirect('/Admin');
         }
         $data['userdata'] = $this->usertb_model->query($uid);
@@ -113,13 +118,16 @@ class Reset extends CI_Controller
         $this->email->subject('密碼重設 - ' . $this->title);
         $this->email->message($message);
 
-        if ($this->email->send()) {
+        if ($this->email->send()) 
+        {
         //if (TRUE) {
         // 寫入資料庫
             $this->sessions_model->add($reset_session);
             redirect('/Admin');
-        } else {
-            echo "Faile send email";
+        } 
+        else 
+        {
+            echo "寄信失敗。";
         }
     }
 
@@ -136,18 +144,22 @@ class Reset extends CI_Controller
         $this->sessions_model->query_expire();
         // 查詢 session
         $pass_session = $this->sessions_model->retrive_session($id);
-        if (empty($pass_session)) {
+        if (empty($pass_session)) 
+        {
             $message = "<h2>重設密碼已逾期，請檢查您的連結或重新申請。</h2>";
             $this->session->set_flashdata('message', $message);
             redirect('/Reset/confirmDone');
         }
         $pass_session['session_value'] = unserialize($pass_session['session_value']);
         $confirm_session = $pass_session['session_value'];
-        if ($pass !== $confirm_session['pass_code']) {
+        if ($pass !== $confirm_session['pass_code']) 
+        {
             $message = "<h2>認證失敗，使用的通關密碼有誤或重設密碼已逾期，請檢查您的連結或重新申請。</h2>";
             $this->session->set_flashdata('message', $message);
             redirect('/Reset/confirmDone');
-        } else {
+        } 
+        else 
+        {
             $this->session->set_userdata('passid', $confirm_session['userid']);
             $uid = $this->session->userdata('passid');
             $data['userdata'] = $this->usertb_model->query($uid);
@@ -163,12 +175,15 @@ class Reset extends CI_Controller
             $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
             $this->form_validation->set_rules('userpass', '密碼', 'trim|required');
         // 表單判斷
-            if ($this->form_validation->run() == FALSE) {
+            if ($this->form_validation->run() == FALSE) 
+            {
                 // 載入 view
                 $this->load->view('header', $data);
                 $this->load->view('reset_confirm');
                 $this->load->view('footer');
-            } else {
+            } 
+            else 
+            {
                 // 接收表單
                 $formdata['userpass'] = $this->input->post('userpass', TRUE);
                 $formdata['userid'] = $this->input->post('userid', TRUE);
@@ -222,21 +237,27 @@ class Reset extends CI_Controller
         $this->form_validation->set_rules('username', '帳號', 'trim|required|alpha_dash');
         $this->form_validation->set_rules('email', '電子信箱', 'trim|required|valid_email');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             // 載入 view
             $this->load->view('header', $data);
             $this->load->view('reset_request');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             // 接收表單
             $formdata['username'] = $this->input->post('username', TRUE);
             $formdata['email'] = $this->input->post('email', TRUE);
             $result = $this->usertb_model->query_by('username', $formdata['username']);
-            if (empty($result) || ($result->email != $formdata['email'])) {
+            if (empty($result) OR ($result->email != $formdata['email'])) 
+            {
                 $message = "<h2>帳號或電子郵件不符，請再試一次。</h2>";
                 $this->session->set_flashdata('message', $message);
                 redirect('/Reset/confirmDone');
-            } else {
+            } 
+            else 
+            {
                 $this->session->set_userdata('updatemember', $result->userid);
                 $message = "<h2>密碼重設已受理，請到電子郵件信箱收信。</h2>";
                 $this->session->set_flashdata('message', $message);
@@ -253,9 +274,9 @@ class Reset extends CI_Controller
         $data['function_name'] = "使用者重設密碼訊息";
         $data['site'] = $this->title;
         $data['message'] = $this->session->flashdata('message');
-            // 載入 view
-            $this->load->view('header', $data);
-            $this->load->view('reset_confirm_message');
-            $this->load->view('footer');
+        // 載入 view
+        $this->load->view('header', $data);
+        $this->load->view('reset_confirm_message');
+        $this->load->view('footer');
     }
 }

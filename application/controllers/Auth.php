@@ -47,21 +47,21 @@ class Auth extends CI_Controller {
         $partlist = $this->parttb_model->query_list();
         $result = $this->session->userdata('userlogin');
         $data['partid_data'] = array (
-		'name'	=>	'partid',
-		'class'	=>	'form-control selectpicker',
-        'options' => $partlist);
+		    'name'	=>	'partid',
+		    'class'	=>	'form-control selectpicker',
+            'options' => $partlist);
         $data['username_data'] = array (
-		'name'	=>	'username',
-		'class'	=>	'form-control');
+		    'name'	=>	'username',
+		    'class'	=>	'form-control');
         $data['userpass_data'] = array (
-		'name'	=>	'userpass',
-		'class'	=>	'form-control');
+		    'name'	=>	'userpass',
+		    'class'	=>	'form-control');
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
-        'class' =>  'btn btn-primary',
-        'accesskey'	=>	's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
+            'class' =>  'btn btn-primary',
+            'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -92,12 +92,14 @@ class Auth extends CI_Controller {
 			// 判斷若有設定 sha1 加密字串，則密碼比對使用 sha1
             $md5key = $this->config_model->query_value('pwdsalt');
             $ismd5 = $md5key;
-            if ( ! empty($ismd5)) {
+            if ( ! empty($ismd5)) 
+            {
                 $formdata['userpass'] = sha1($ismd5 . '$|@' . $formdata['userpass']);
             }
             //取得使用者資料
             $data['user'] = $this->usertb_model->match_password('username', $formdata['username']);
-            if ($formdata['partid'] != $data['user']['partid']) {
+            if ($formdata['partid'] != $data['user']['partid']) 
+            {
                 $denyreason = "您無法發布這個單位的公告。";
             }
 			// 比對密碼
@@ -114,7 +116,8 @@ class Auth extends CI_Controller {
                 );
                 $this->session->set_userdata('userlogin', $result);
                 $this->session->set_tempdata('readlocal', '1', 600);
-            } else 
+            } 
+            else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
                 $result = array (
@@ -133,7 +136,8 @@ class Auth extends CI_Controller {
             if (empty($nowurl))
             {
                 redirect('/Post_ann/post_ann_form');
-            } else
+            } 
+            else
             {
                 redirect($nowurl);
             }
@@ -147,17 +151,17 @@ class Auth extends CI_Controller {
         $nowurl = $this->session->userdata('nowurl');
         $result = $this->session->userdata('adminlogin');
         $data['username_data'] = array (
-		'name'	=>	'username',
-		'class'	=>	'form-control');
+		    'name'	=>	'username',
+		    'class'	=>	'form-control');
         $data['userpass_data'] = array (
-		'name'	=>	'userpass',
-		'class'	=>	'form-control');
+		    'name'	=>	'userpass',
+		    'class'	=>	'form-control');
         $data['but1'] = array (
-        'name'  =>  'sent',
-        'type'  =>  'submit',
-        'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
-        'class' =>  'btn btn-warning',
-        'accesskey'	=>	's');
+            'name'  =>  'sent',
+            'type'  =>  'submit',
+            'content' =>  '<span class="glyphicon glyphicon-chevron-up"></span> 送出',
+            'class' =>  'btn btn-warning',
+            'accesskey'	=>	's');
         // 表單驗證
 		$this->form_validation->set_message('required','{field}未填');
 		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
@@ -194,7 +198,8 @@ class Auth extends CI_Controller {
                     'denyreason' => $denyreason
                 );
                 $this->session->set_userdata('adminlogin', $result);
-            } else 
+            } 
+            else 
             {
                 $denyreason = $denyreason . "帳號或密碼有誤，請再試一次";
                 $result = array (
@@ -208,7 +213,8 @@ class Auth extends CI_Controller {
             if (empty($nowurl))
             {
                 redirect('/Auth/admin_auth');
-            } else
+            } 
+            else
             {
                 redirect($nowurl);
             }
@@ -233,11 +239,14 @@ class Auth extends CI_Controller {
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
         // 查詢資料庫是否有相關資料
         $olduser = $this->openidbind_model->check_user('openid_id', $oid_login['openid_id']);
         // 檢查是否曾登入過本系統，若無則提供登錄功能
-        if (empty($olduser)) {
+        if (empty($olduser)) 
+        {
             $message = "您是第一次以" . $oid_login->fullname . "的身分登入，目前尚無法提供完整功能。系統會先記錄此次登入要求，等系統管理者完成設定後就可以使用完整公告功能。";
             // 將此次認證寫入資料庫
             $newuser_data = array(
@@ -252,14 +261,18 @@ class Auth extends CI_Controller {
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
-        } elseif ($olduser->new === '1') {
+        } 
+        elseif ($olduser->new === '1') 
+        {
             $message = "您的資料已建立，但使用者尚未設定相關資料，請稍候系統管理者確認。";
             $data['message'] = $message;
             // 載入 view
 			$this->load->view('header',$data);
 			$this->load->view('reset_confirm_message');
 			$this->load->view('footer');
-        } elseif ($olduser->banned === '1') {
+        } 
+        elseif ($olduser->banned === '1')
+        {
             $message = "系統發生錯誤，暫時無法讓您以這個身分登入，抱歉。";
             $data['message'] = $message;
             // 清除認證資料
@@ -270,16 +283,17 @@ class Auth extends CI_Controller {
 			$this->load->view('footer');
         }
         // 通過前列檢查後，如有綁定帳號，則將綁定帳號的身分寫入 session
-        if ( ! empty($olduser->bind_userid)) {
+        if ( ! empty($olduser->bind_userid)) 
+        {
             $annuser = $this->usertb_model->query($olduser->bind_userid);
             $result = array (
-                    'authpass' => "1",
-                    'denyreason' => '',
-                    'partid' => $annuser->partid,
-                    'username' => $annuser->username,
-                    'realname' => $annuser->realname,
-                    'userid'    =>  $annuser->userid,
-                    'rootuid'   =>  $annuser->rootuid
+                'authpass' => "1",
+                'denyreason' => '',
+                'partid' => $annuser->partid,
+                'username' => $annuser->username,
+                'realname' => $annuser->realname,
+                'userid'    =>  $annuser->userid,
+                'rootuid'   =>  $annuser->rootuid
                 );
         $this->session->set_userdata('userlogin', $result);
         
@@ -293,7 +307,8 @@ class Auth extends CI_Controller {
         if (empty($nowurl))
         {
             redirect('/Auth/post_ann_auth');
-        } else
+        } 
+        else
         {
             redirect($nowurl);
         }

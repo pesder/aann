@@ -6,39 +6,44 @@ class Post_ann extends CI_Controller
 
     public function __construct()
     {
-            parent::__construct();
-            $this->load->library('session');
-            $this->load->library('form_validation');
-            $this->load->helper('form');
-            $this->load->helper('url');
-            // 載入列表 model
-            $this->load->model('usertb_model');
-            $this->load->model('parttb_model');
-            $this->load->model('config_model');
-            $this->load->model('titletb_model');
-            $this->load->model('anntb_model');
-            $this->load->model('filetb_model');
-            // 讀取網站名稱
-            $this->title = $this->config_model->query_value('myname');
-            $this->classname = "Post_ann";
-            // 設定目前網址，供認證後跳回
-            $urlpath = current_url();
-            $this->session->set_userdata('nowurl', $urlpath);
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->library('form_validation');
+        $this->load->helper('form');
+        $this->load->helper('url');
+        // 載入列表 model
+        $this->load->model('usertb_model');
+        $this->load->model('parttb_model');
+        $this->load->model('config_model');
+        $this->load->model('titletb_model');
+        $this->load->model('anntb_model');
+        $this->load->model('filetb_model');
+        // 讀取網站名稱
+        $this->title = $this->config_model->query_value('myname');
+        $this->classname = "Post_ann";
+        // 設定目前網址，供認證後跳回
+        $urlpath = current_url();
+        $this->session->set_userdata('nowurl', $urlpath);
     }
     public function auth()
     {
         $login = $this->session->userdata('userlogin');
         $oiduser = $this->session->userdata('openid_user');
         //從 session 判斷登入狀態，未經登入回到密碼輸入畫面，登入錯誤則顯示訊息
-        if ($login['authpass'] === 0) {
+        if ($login['authpass'] === '0') 
+        {
             $message = "";
             $this->session->set_flashdata('message', $message);
             redirect('/Auth/choose_auth');
-        } elseif ($login['authpass'] === '') {
+        } 
+        elseif ($login['authpass'] === '') 
+        {
             $message = "";
             $this->session->set_flashdata('message', $message);
             redirect('/Auth/choose_auth');
-        } elseif (($login['authpass'] === '') && ($oiduser['oidpass'] === '1')) {
+        } 
+        elseif (($login['authpass'] === '') && ($oiduser['oidpass'] === '1')) 
+        {
             $message = "您的帳號並不具備發布公告資格。";
             $this->session->set_flashdata('message', $message);
         }
@@ -59,7 +64,8 @@ class Post_ann extends CI_Controller
         $this->form_validation->set_rules('comment', '內容', 'trim|required');
         $this->form_validation->set_rules('dueday', '到期日', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             $typelist = array (
                 "1.1" => "普通",
                 "2.1" => "重要",
@@ -75,15 +81,15 @@ class Post_ann extends CI_Controller
                 'options' => $typelist);
             $serial = array ('0' => '否', '1' => '是');
             $data['serialpost_data'] = array (
-                    'name'  =>  'serial',
-                    'class'     =>  'form-control',
-                    'options'   => $serial
+                'name'  =>  'serial',
+                'class'     =>  'form-control',
+                'options'   => $serial
                 );
             $local = array ('no' => '否', 'yes' => '是');
             $data['local_data'] = array (
-                    'name'  =>  'local',
-                    'class'     =>  'form-control',
-                    'options'   => $local
+                'name'  =>  'local',
+                'class'     =>  'form-control',
+                'options'   => $local
                 );
             $data['html_data'] = array (
                'name'  =>  'html',
@@ -125,7 +131,9 @@ class Post_ann extends CI_Controller
             $this->load->view('postann_postannform_edit_date');
             $this->load->view('postann_postannform_edit_bott');
             $this->load->view('footer');
-        } else {
+        } 
+        else 
+        {
             $data['urlnum'] = $this->config_model->query_value('urlnum');
             $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
             $data['annday'] = $this->config_model->query_value('annday');
@@ -146,9 +154,12 @@ class Post_ann extends CI_Controller
             $data['partname'] = $this->parttb_model->query_partname($pid);
             $filelist = "";
             $urllist = "";
-            if ($formdata['html'] == 0) {
+            if ($formdata['html'] === '0') 
+            {
                 $formdata['comment'] = html_escape($formdata('comment'));
-            } else {
+            } 
+            else 
+            {
                 $formdata['comment'] = trim($formdata['comment'], "\n\r");
             }
 
@@ -158,10 +169,15 @@ class Post_ann extends CI_Controller
             $config['overwrite']            = TRUE;
             $config['max_size']             = '10240';
             //$config['encrypt_name']         = TRUE;
-
+            //檢查目錄是否存在
+            if ( ! is_dir($config['upload_path'])) 
+            {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
             foreach ($_FILES as $key => $value) {
                 // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
-                if ( ! empty($_FILES[$key]["name"])) {
+                if ( ! empty($_FILES[$key]["name"])) 
+                {
                     $filename_ar = explode(".", $_FILES[$key]["name"]);
                     $filename_ext = $filename_ar[count($filename_ar) - 1];
                     $file_index = substr($key, -1);
@@ -171,10 +187,14 @@ class Post_ann extends CI_Controller
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 //開始上傳檔案動作
-                if ( ! empty($value['name'])) {
-                    if ( ! $this->upload->do_upload($key)) {
+                if ( ! empty($value['name'])) 
+                {
+                    if ( ! $this->upload->do_upload($key)) 
+                    {
                         $data["error"] = $this->upload->display_errors();
-                    } else {
+                    } 
+                    else 
+                    {
                         $fInfo = $this->upload->data();
                         // 將轉換好的檔名寫入 filetb 資料庫
                         $addfilelist = array (
@@ -190,12 +210,14 @@ class Post_ann extends CI_Controller
             }
 
             // 收集 URL
-            for ($i = 0; $i < $data['urlnum']; $i++) {
+            for ($i = 0; $i < $data['urlnum']; $i++) 
+            {
                 $j = $i + 1;
                 $url = "url" . $j;
                 $inurl = "url" . $j;
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
-                if ( ! empty($this->input->post($inurl))) {
+                if ( ! empty($this->input->post($inurl))) 
+                {
                     $formdata[$url] = str_replace(' ', '', $this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
@@ -222,9 +244,12 @@ class Post_ann extends CI_Controller
             );
             $this->anntb_model->write_ann($anntb);
             // 寫入完資料庫，判斷是否為連續公告
-            if ($formdata['serial'] == 0) {
+            if ($formdata['serial'] === '0') 
+            {
                 redirect('/Main');
-            } elseif ($formdata['serial'] == 1) {
+            } 
+            elseif ($formdata['serial'] === '1') 
+            {
                 redirect('/Post_ann/post_ann_form');
             }
         }
@@ -240,7 +265,6 @@ class Post_ann extends CI_Controller
         $data['body'] = $this->anntb_model->query($tid);
         $pid = $data['head']->partid;
         $uid = $data['body']->userid;
-        //$urlpath = '/Post_ann/modify/' . $tid;
         $urlpath = current_url();
         $this->session->set_userdata('nowurl', $urlpath);
         // 表單驗證
@@ -250,7 +274,8 @@ class Post_ann extends CI_Controller
         $this->form_validation->set_rules('comment', '內容', 'trim|required');
         $this->form_validation->set_rules('dueday', '內容', 'trim|required');
         // 表單判斷
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             $typelist = array (
                 "1.1" => "普通",
                 "2.1" => "重要",
@@ -293,7 +318,8 @@ class Post_ann extends CI_Controller
                 'class'     =>  'form-control',
                 'options'   => $serial
                 );
-            if ($this->check_html($data['body']->comment)) {
+            if ($this->check_html($data['body']->comment)) 
+            {
                 $data['html_data']['selected'] = '1';
             }
             $data['comment_data'] = array (
@@ -318,44 +344,60 @@ class Post_ann extends CI_Controller
                 'accesskey'     =>  's');
             
             //判斷 URL
-            if (empty($data['body']->url)) {
+            if (empty($data['body']->url)) 
+            {
                 $data['hasurl'] = "無";
                 $data['annurl'] = [];
-            } else {
+            } 
+            else 
+            {
                 $data['hasurl'] = "有";
                 $data['annurl'] = explode(" ", $data['body']->url);
                 //編輯介面無需判斷是否有網址註解
             }
             //判斷附件
             $file_empty = $data['ulfilenum'];
-            if (empty($data['body']->filename)) {
+            if (empty($data['body']->filename)) 
+            {
                 $data['hasfile'] = "無";
                 $data['annfile'] = [];
                 $data['file_empty'] = $file_empty;
-            } else {
+            } 
+            else 
+            {
                 $data['hasfile'] = "有";
                 $data['annfile'] = explode(" ", $data['body']->filename);
                 $data['file_empty'] = $file_empty - count($data['annfile']);
                 //利用上面陣列複製出一個查詢檔名用陣列
                 $data['annfilereadable'] = $data['annfile'];
                 $data['filenotthere'] = [];
-                foreach ($data['annfilereadable'] as $index => $name) {
+                foreach ($data['annfilereadable'] as $index => $name) 
+                {
                     $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
-                    if (empty($query)) {
+                    if (empty($query)) 
+                    {
                         $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
-                        if (is_file($filelocation)) {
+                        if (is_file($filelocation)) 
+                        {
                             $data['annfilereadable'][$index] = $name;
                             $data['filenotthere'][$index] = 1;
-                        } else {
+                        } 
+                        else 
+                        {
                             $data['annfilereadable'][$index] = $name . "(檔案遺失，無法正常下載)";
                             $data['filenotthere'][$index] = 0;
                         }
-                    } else {
+                    } 
+                    else 
+                    {
                         $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
-                        if (is_file($filelocation)) {
+                        if (is_file($filelocation)) 
+                        {
                             $data['annfilereadable'][$index] = $query->origname;
                             $data['filenotthere'][$index] = 1;
-                        } else {
+                        } 
+                        else 
+                        {
                             $data['annfilereadable'][$index] = $query->origname . "(檔案遺失，無法正常下載)";
                             $data['filenotthere'][$index] = 0;
                         }
@@ -366,21 +408,27 @@ class Post_ann extends CI_Controller
             $this->auth();
             $login = $this->session->userdata('userlogin');
             // 檢查認證者是否為原始發文者
-            if ($login['userid'] == $uid && $login['partid'] == $pid) {
+            if ($login['userid'] == $uid && $login['partid'] == $pid) 
+            {
             // 載入 view
                 $this->load->view('header-jquery', $data);
                 $this->load->view('postann_postannform_edit');
             // 有附件則載入相關 view
-                if ( ! empty($data['body']->filename)) {
+                if ( ! empty($data['body']->filename)) 
+                {
                     $this->load->view('postann_modify_file_hasfile');
-                } else {
+                } 
+                else 
+                {
                     $this->load->view('postann_modify_file');
                 }
                 $this->load->view('postann_modify_url');
                 $this->load->view('postann_postannform_edit_date');
                 $this->load->view('postann_postannform_edit_bott');
                 $this->load->view('footer');
-            } else {
+            } 
+            else 
+            {
             // 提示身分認證須為原發文者
                 $data['message'] = "必須是原始公告者才能修改公告";
             // 載入 view
@@ -388,7 +436,9 @@ class Post_ann extends CI_Controller
                 $this->load->view('postann_postannform_deny');
                 $this->load->view('footer');
             }
-        } else {
+        } 
+        else 
+        {
             $login = $this->session->userdata('userlogin');
             $data['urlnum'] = $this->config_model->query_value('urlnum');
             $data['ulfilenum'] = $this->config_model->query_value('ulfilenum');
@@ -406,9 +456,12 @@ class Post_ann extends CI_Controller
             $formdata['html'] = $this->input->post('html');
             $data['partname'] = $this->parttb_model->query_partname($pid);
             $urllist = "";
-            if ($formdata['html'] == 0) {
+            if ($formdata['html'] === '0') 
+            {
                 $formdata['comment'] = html_escape($formdata['comment']);
-            } else {
+            } 
+            else 
+            {
                 $formdata['comment'] = trim($formdata['comment'], "\n\r");
             }
 
@@ -420,12 +473,15 @@ class Post_ann extends CI_Controller
             //$config['encrypt_name']         = TRUE;
             //取回現有的檔案列表
             $filelist = $data['body']->filename;
-            if ( ! empty($filelist)) {
+            if ( ! empty($filelist)) 
+            {
                 $filelist = $filelist . " ";
             }
-            foreach ($_FILES as $key => $value) {
+            foreach ($_FILES as $key => $value) 
+            {
                 // 檢測是否有上傳檔案，將檔名拆解後，設定原始名稱及數字化名稱
-                if ( ! empty($_FILES[$key]["name"])) {
+                if ( ! empty($_FILES[$key]["name"])) 
+                {
                     $filename_ar = explode(".", $_FILES[$key]["name"]);
                     $filename_ext = $filename_ar[count($filename_ar) - 1];
                     $file_index = substr($key, -1);
@@ -435,10 +491,14 @@ class Post_ann extends CI_Controller
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 //開始上傳檔案動作
-                if ( ! empty($value['name'])) {
-                    if ( ! $this->upload->do_upload($key)) {
+                if ( ! empty($value['name'])) 
+                {
+                    if ( ! $this->upload->do_upload($key)) 
+                    {
                         $data["error"] = $this->upload->display_errors();
-                    } else {
+                    } 
+                    else 
+                    {
                         $fInfo = $this->upload->data();
                         // 將轉換好的檔名寫入 filetb 資料庫
                         $addfilelist = array (
@@ -454,12 +514,14 @@ class Post_ann extends CI_Controller
             }
 
             // 收集 URL
-            for ($i = 0; $i < $data['urlnum']; $i++) {
+            for ($i = 0; $i < $data['urlnum']; $i++) 
+            {
                 $j = $i + 1;
                 $url = "url" . $j;
                 $inurl = "url" . $j;
                 // 若欄位有填寫，則將欄位內容收入url列表，同時利用 str_replace 去除多餘空白避免影響判讀
-                if ( ! empty($this->input->post($inurl))) {
+                if ( ! empty($this->input->post($inurl))) 
+                {
                     $formdata[$url] = str_replace(' ', '', $this->input->post($inurl, TRUE));
                     $urllist = $urllist . $formdata[$url] . " ";
                 }
@@ -496,16 +558,18 @@ class Post_ann extends CI_Controller
         $login = $this->session->userdata('userlogin');
         $urlpath = '/Post_ann/delete_ann/' . $tid . "/" . $pid . "/" . $uid;
         $this->session->set_userdata('nowurl', $urlpath);
-            $this->auth();
-            $login = $this->session->userdata('userlogin');
-            // 檢查認證者是否為原始發文者
-        if ($login['userid'] == $uid && $login['partid'] == $pid) {
+        $this->auth();
+        $login = $this->session->userdata('userlogin');
+        // 檢查認證者是否為原始發文者
+        if ($login['userid'] == $uid && $login['partid'] == $pid) 
+        {
             $this->load->helper('file');
             // 載入 anntb
             $data['body'] = $this->anntb_model->query($tid);
             // 取出檔案列表
             $data['annfile'] = explode(" ", $data['body']->filename);
-            foreach ($data['annfile'] as $index => $filename) {
+            foreach ($data['annfile'] as $index => $filename) 
+            {
                 // 進行檔案刪除動作
                 $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
                 delete_files($filepath);
@@ -522,7 +586,9 @@ class Post_ann extends CI_Controller
             $this->titletb_model->delete($tid);
             // 跳回首頁
             redirect('Main/');
-        } else {
+        } 
+        else 
+        {
             // 提示身分認證須為原發文者
             $data['message'] = "必須是原始公告者才能刪除公告";
             // 載入 view
