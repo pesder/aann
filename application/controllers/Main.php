@@ -93,12 +93,12 @@ class Main extends CI_Controller
             'accesskey'     =>  'd');
         // 載入 view
         $this->load->view('header', $data);
+        $this->load->view('main_index');
         // 檢查是否存在 list ，若無則顯示相關資訊
         if (empty($data['list'])) 
         {
             $this->load->view('main_nolist');
         }
-        $this->load->view('main_index');
         $this->load->view('main_index_bott_home');
         $this->load->view('footer');
     }
@@ -156,12 +156,12 @@ class Main extends CI_Controller
             'accesskey'     =>  'd');
         // 載入 view
         $this->load->view('header', $data);
+        $this->load->view('main_index');
         // 檢查是否存在 list ，若無則顯示相關資訊
         if (empty($data['list'])) 
         {
             $this->load->view('main_nolist');
         }
-        $this->load->view('main_index');
         // 判斷目前所在頁面，使用對應的導覽列
         if ($page == 1) 
         {
@@ -296,11 +296,11 @@ class Main extends CI_Controller
         // 載入 view
         $this->load->view('header', $data);
         // 檢查是否存在 list ，若無則顯示相關資訊
+        $this->load->view('main_index');
         if (empty($data['list'])) 
         {
             $this->load->view('main_nolist');
         }
-        $this->load->view('main_index');
         // 判斷目前所在頁面，使用對應的導覽列
         if ($page == 1) 
         {
