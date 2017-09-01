@@ -164,10 +164,12 @@ class Post_ann extends CI_Controller
             }
 
             //處理附件
-            $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
+            $filepath = $this->config_model->query_value('filepath');
+            $filesize = $this->config_model->query_value('filesize');
+            $config['upload_path']          = './' . $filepath . '/' . $pid . "/" . $uid . "/";
             $config['allowed_types']        = $data['fileuploadable'];
             $config['overwrite']            = TRUE;
-            $config['max_size']             = '10240';
+            $config['max_size']             = $filesize;
             //$config['encrypt_name']         = TRUE;
             //檢查目錄是否存在
             if ( ! is_dir($config['upload_path'])) 
@@ -371,12 +373,13 @@ class Post_ann extends CI_Controller
                 //利用上面陣列複製出一個查詢檔名用陣列
                 $data['annfilereadable'] = $data['annfile'];
                 $data['filenotthere'] = [];
+                $filepath = $this->config_model->query_value('filepath');
                 foreach ($data['annfilereadable'] as $index => $name) 
                 {
                     $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
                     if (empty($query)) 
                     {
-                        $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                        $filelocation = './' . $filepath . '/' . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                         if (is_file($filelocation)) 
                         {
                             $data['annfilereadable'][$index] = $name;
@@ -390,7 +393,7 @@ class Post_ann extends CI_Controller
                     } 
                     else 
                     {
-                        $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                        $filelocation = './' . $filepath . '/' . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                         if (is_file($filelocation)) 
                         {
                             $data['annfilereadable'][$index] = $query->origname;
@@ -466,10 +469,12 @@ class Post_ann extends CI_Controller
             }
 
             //處理附件
-            $config['upload_path']          = './files/' . $pid . "/" . $uid . "/";
+            $filepath = $this->config_model->query_value('filepath');
+            $filesize = $this->config_model->query_value('filesize');
+            $config['upload_path']          = './' . $filepath . '/' . $pid . "/" . $uid . "/";
             $config['allowed_types']        = $data['fileuploadable'];
             $config['overwrite']            = TRUE;
-            $config['max_size']             = '10240';
+            $config['max_size']             = $filesize;
             //$config['encrypt_name']         = TRUE;
             //取回現有的檔案列表
             $filelist = $data['body']->filename;
@@ -571,8 +576,9 @@ class Post_ann extends CI_Controller
             foreach ($data['annfile'] as $index => $filename) 
             {
                 // 進行檔案刪除動作
-                $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
-                delete_files($filepath);
+                $filepath = $this->config_model->query_value('filepath');
+                $delfilepath = './' . $filepath . '/' . $pid . "/" . $uid . "/" . $filename;
+                delete_files($delfilepath);
                 // 刪除 filetb 中檔名對應資料
                 $filenamedel = array (
                     'partid'    =>  $pid,
@@ -614,8 +620,9 @@ class Post_ann extends CI_Controller
         // 條改 anntb 檔案列表
         $this->anntb_model->modify($tid, $data);
         // 進行檔案刪除動作
-        $filepath = "./files/" . $pid . "/" . $uid . "/" . $filename;
-        delete_files($filepath);
+        $filepath = $this->config_model->query_value('filepath');
+        $delfilepath = './' . $filepath . '/' . $pid . "/" . $uid . "/" . $filename;
+        delete_files($delfilepath);
         // 刪除 filetb 中檔名對應資料
         $filenamedel = array (
             'partid'    =>  $pid,

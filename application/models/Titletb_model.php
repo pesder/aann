@@ -105,10 +105,22 @@ class Titletb_model extends CI_Model
         $dueday->modify($offset);
         $querydate = $dueday->format('Y-m-d H:i:s');
             
-        $this->db->select('*');
-        $this->db->from('titletb');
-        $this->db->join('anntb', 'anntb.tid = titletb.tid');
         $this->db->where('posttime >=', $querydate);
+        $num = $this->db->count_all_results('titletb');
+        if ($num < $limitdays) 
+        {
+            $this->db->select('*');
+            $this->db->from('titletb');
+            $this->db->join('anntb', 'anntb.tid = titletb.tid');
+            $this->db->limit($limitdays);
+        }
+        else 
+        {
+            $this->db->select('*');
+            $this->db->from('titletb');
+            $this->db->join('anntb', 'anntb.tid = titletb.tid');
+            $this->db->where('posttime >=', $querydate);
+        }
         $this->db->order_by('posttime', 'desc');
         $query = $this->db->get();
         $result = $query->result();

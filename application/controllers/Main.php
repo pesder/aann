@@ -383,12 +383,13 @@ class Main extends CI_Controller
             //利用上面陣列複製出一個查詢檔名用陣列
             $data['annfilereadable'] = $data['annfile'];
             $data['filenotthere'] = [];
+            $filepath = $this->config_model->query_value('filepath');
             foreach ($data['annfilereadable'] as $index => $name) 
             {
                 $query = $this->filetb_model->math_file($data['head']->partid, $data['body']->userid, $name);
                 if (empty($query)) 
                 {
-                    $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                    $filelocation = './' . $filepath . '/' . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                     if (is_file($filelocation)) 
                     {
                         $data['annfilereadable'][$index] = $name;
@@ -402,7 +403,7 @@ class Main extends CI_Controller
                 } 
                 else 
                 {
-                    $filelocation = "./files/" . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
+                    $filelocation = './' . $filepath . '/' . $data['head']->partid . "/" . $data['body']->userid . "/" . $name;
                     if (is_file($filelocation)) 
                     {
                         $data['annfilereadable'][$index] = $query->origname;
