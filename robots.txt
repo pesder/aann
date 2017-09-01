@@ -1,0 +1,18 @@
+User-agent: Googlebot
+User-agent: Sogou web spider
+User-agent: Sogou inst spider
+User-agent: Sogou spider2
+User-agent: Sogou blog
+User-agent: Sogou News Spider
+User-agent: Sogou Orion spider
+User-agent: Bingbot
+User-agent: Baiduspider
+Disallow: /view_ann/
+Disallow: /Post_ann/
+Disallow: /Admin/
+Disallow: /Part_Admin/
+Disallow: /Main/download/
+Allow: /
+
+User-agent: *
+Disallow: /
