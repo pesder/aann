@@ -156,7 +156,7 @@ class Post_ann extends CI_Controller
             $urllist = "";
             if ($formdata['html'] === '0') 
             {
-                $formdata['comment'] = html_escape($formdata('comment'));
+                $formdata['comment'] = html_escape($formdata['comment']);
             } 
             else 
             {
